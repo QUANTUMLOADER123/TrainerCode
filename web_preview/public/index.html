@@ -3,42 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrainerCode 2000 — Среда изучения C и C++</title>
+  <title>TrainerCode 2000 — Dark Win32 Edition</title>
   <link rel="stylesheet" href="win2000.css">
 </head>
 <body>
 
   <!-- Desktop Icons -->
   <div class="desktop-icons">
-    <div class="desktop-icon" onclick="openMainWindow()">
-      <div class="icon-label">💻 TrainerCode</div>
+    <div class="desktop-icon" onclick="showWelcomeScreen()">
+      <div style="font-size: 24px;">👤</div>
+      <div class="icon-label">Профиль</div>
     </div>
-    <div class="desktop-icon" onclick="openWizardModal()">
-      <div class="icon-label">🎓 Мастер C/C++</div>
+    <div class="desktop-icon" onclick="showLessonScreen()">
+      <div style="font-size: 24px;">💻</div>
+      <div class="icon-label">Уроки C/C++</div>
     </div>
     <div class="desktop-icon" onclick="openTypesModal()">
-      <div class="icon-label">📊 Типы данных</div>
+      <div style="font-size: 24px;">📊</div>
+      <div class="icon-label">Типы данных</div>
     </div>
     <div class="desktop-icon" onclick="openSettingsModal()">
-      <div class="icon-label">⚙ Компилятор</div>
+      <div style="font-size: 24px;">⚙</div>
+      <div class="icon-label">Компилятор</div>
     </div>
     <div class="desktop-icon" onclick="downloadExe()">
-      <div class="icon-label">📥 Скачать .EXE</div>
+      <div style="font-size: 24px;">📥</div>
+      <div class="icon-label">Скачать .EXE</div>
     </div>
   </div>
 
-  <!-- Main Application Window -->
+  <!-- Main Window -->
   <div class="window-2000" id="mainWindow">
     <!-- Title Bar -->
     <div class="titlebar-2000">
       <div class="titlebar-title">
         <span>⚡</span>
-        <span id="windowTitleText">TrainerCode 2000 — Среда обучения языкам C и C++ (x86/x64 Edition)</span>
+        <span id="windowTitleText">TrainerCode 2000 — Академия Системного Программирования C & C++ (WinAPI Edition)</span>
       </div>
       <div class="titlebar-controls">
         <button class="titlebar-btn" title="Свернуть">_</button>
         <button class="titlebar-btn" title="Развернуть">□</button>
-        <button class="titlebar-btn" title="Закрыть" onclick="alert('Для выхода закройте вкладку браузера или сверните окно.')">✕</button>
+        <button class="titlebar-btn" title="Закрыть" onclick="alert('Закройте вкладку браузера для выхода.')">✕</button>
       </div>
     </div>
 
@@ -47,21 +52,23 @@
       <div class="menu-item">
         <span>Файл</span>
         <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="newSnippet()"><span>Новый код</span><small>Ctrl+N</small></div>
-          <div class="dropdown-entry" onclick="saveCode()"><span>Сохранить в кэш</span><small>Ctrl+S</small></div>
+          <div class="dropdown-entry" onclick="showWelcomeScreen()"><span>Профиль ученика</span></div>
+          <div class="dropdown-entry" onclick="saveCodeLocally()"><span>Сохранить код</span><small>Ctrl+S</small></div>
           <div class="dropdown-sep"></div>
           <div class="dropdown-entry" onclick="downloadExe()"><span>📥 Скачать TrainerCode.exe</span></div>
         </div>
       </div>
 
       <div class="menu-item">
-        <span>Обучение</span>
+        <span>Уроки</span>
         <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="prevLesson()"><span>Предыдущий урок</span><small>Alt+Left</small></div>
-          <div class="dropdown-entry" onclick="nextLesson()"><span>Следующий урок</span><small>Alt+Right</small></div>
+          <div class="dropdown-entry" onclick="prevLesson()"><span>Предыдущий урок</span></div>
+          <div class="dropdown-entry" onclick="nextLesson()"><span>Следующий урок</span></div>
           <div class="dropdown-sep"></div>
           <div class="dropdown-entry" onclick="resetLessonCode()"><span>Сбросить код к начальному</span></div>
           <div class="dropdown-entry" onclick="showSolution()"><span>Показать эталонное решение</span></div>
+          <div class="dropdown-sep"></div>
+          <div class="dropdown-entry" onclick="unlockAllLessons()"><span>Разблокировать все уроки</span></div>
         </div>
       </div>
 
@@ -77,11 +84,11 @@
       <div class="menu-item">
         <span>ИИ-Ассистент</span>
         <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="switchToAiTab(); askAi('Объясни код и концепции урока')"><span>Объяснить код</span></div>
-          <div class="dropdown-entry" onclick="switchToAiTab(); askAi('Найди ошибки и утечки памяти')"><span>Найти утечки и баги</span></div>
-          <div class="dropdown-entry" onclick="switchToAiTab(); askAi('Дай подсказку к текущему заданию')"><span>Подсказка к задаче</span></div>
+          <div class="dropdown-entry" onclick="askAi('Найди утечки памяти и ошибки в моем коде')"><span>Найти утечки и баги</span></div>
+          <div class="dropdown-entry" onclick="askAi('Объясни текущий код и как он работает в ОЗУ')"><span>Объяснить код в памяти</span></div>
+          <div class="dropdown-entry" onclick="askAi('Дай подсказку к текущей задаче')"><span>Подсказка к задаче</span></div>
           <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="openAiDownloaderModal()"><span>Менеджер загрузки моделей GGUF / Llama...</span></div>
+          <div class="dropdown-entry" onclick="openAiDownloaderModal()"><span>Менеджер моделей GGUF / Ollama...</span></div>
         </div>
       </div>
 
@@ -89,7 +96,7 @@
         <span>Справка</span>
         <div class="dropdown-menu">
           <div class="dropdown-entry" onclick="openTypesModal()"><span>Справочник типов C/C++</span><small>F1</small></div>
-          <div class="dropdown-entry" onclick="openWizardModal()"><span>Мастер приветствия и уровня...</span></div>
+          <div class="dropdown-entry" onclick="showWelcomeScreen()"><span>Инструкция по приложению</span></div>
           <div class="dropdown-sep"></div>
           <div class="dropdown-entry" onclick="aboutApp()"><span>О программе TrainerCode 2000</span></div>
         </div>
@@ -98,16 +105,28 @@
 
     <!-- Toolbar -->
     <div class="toolbar-2000">
-      <button class="btn-retro primary" onclick="compileAndRun()" title="Горячая клавиша: F5">
+      <button class="btn-retro primary" onclick="compileAndRun()" title="Горячая клавиша F5">
         <span>▶</span> <strong>Запуск (F5)</strong>
       </button>
-      <button class="btn-retro" onclick="saveCode()">
-        <span>💾</span> Сохранить
+
+      <div class="toolbar-sep"></div>
+
+      <button class="btn-retro" onclick="goToStep(1)" id="tbStep1">
+        <span>📖</span> Шаг 1: Теория
       </button>
-      <button class="btn-retro" onclick="resetLessonCode()">
+      <button class="btn-retro" onclick="goToStep(2)" id="tbStep2">
+        <span>❓</span> Шаг 2: Тест
+      </button>
+      <button class="btn-retro" onclick="goToStep(3)" id="tbStep3">
+        <span>💻</span> Шаг 3: Практика
+      </button>
+
+      <div class="toolbar-sep"></div>
+
+      <button class="btn-retro" onclick="resetLessonCode()" title="Сбросить код">
         <span>↺</span> Сброс
       </button>
-      <button class="btn-retro" onclick="showSolution()">
+      <button class="btn-retro" onclick="showSolution()" title="Показать готовое решение">
         <span>💡</span> Решение
       </button>
 
@@ -122,90 +141,191 @@
 
       <div class="toolbar-sep"></div>
 
-      <button class="btn-retro accent" onclick="switchToAiTab(); askAi('Найди утечки и баги в моем коде')">
-        <span>🔍</span> Найти баги
+      <button class="btn-retro accent" onclick="askAi('Найди утечки памяти и ошибки в коде')">
+        <span>🔍</span> Баги
       </button>
-      <button class="btn-retro accent" onclick="switchToAiTab(); askAi('Объясни, как работает этот код')">
-        <span>🤖</span> Спросить ИИ
+      <button class="btn-retro accent" onclick="askAi('Объясни код урока')">
+        <span>🤖</span> ИИ-Ментор
       </button>
 
       <div class="toolbar-sep"></div>
 
+      <button class="btn-retro" onclick="openTypesModal()">
+        <span>📊</span> Типы (F1)
+      </button>
       <button class="btn-retro" onclick="openSettingsModal()">
         <span>⚙</span> Настройки
       </button>
-      <button class="btn-retro" onclick="openTypesModal()">
-        <span>📊</span> Типы данных
-      </button>
-      <button class="btn-retro primary" onclick="downloadExe()" style="margin-left: auto;">
-        <span>📥</span> <strong>Скачать .EXE</strong>
+
+      <button class="btn-retro success" onclick="downloadExe()" style="margin-left: auto;">
+        <span>📥</span> <strong>Скачать TrainerCode.exe</strong>
       </button>
     </div>
 
-    <!-- Workspace -->
-    <div class="workspace-2000">
-      <!-- Left TreeView -->
-      <div class="left-pane">
-        <div class="treeview-container" id="treeViewContainer">
-          <!-- Populated dynamically -->
+    <!-- Main Dynamic Workspace -->
+    <div class="workspace-2000" id="mainWorkspace">
+
+      <!-- SCREEN 1: Welcome & Onboarding & Instructions -->
+      <div class="welcome-screen-container" id="viewWelcome">
+        <div class="welcome-card" id="welcomeCardForm">
+          <h1>⚡ Добро пожаловать в TrainerCode 2000</h1>
+          <p>Профессиональный тренажер для изучения системного программирования на языках <strong>C</strong> и <strong>Modern C++</strong>. Здесь вы изучите архитектуру памяти, указатели, стек, кучу, структуры, классы, а также системные механизмы Windows API (<strong>OpenProcess, ReadProcessMemory, WriteProcessMemory</strong>).</p>
+
+          <div class="form-group-dark">
+            <label>Ваше имя / позывной кодера:</label>
+            <input type="text" class="input-dark" id="inputUserName" value="Александр" placeholder="Введите ваше имя...">
+          </div>
+
+          <div class="form-group-dark">
+            <label>Ваш текущий уровень:</label>
+            <select class="select-dark" id="selectUserLevel">
+              <option value="Абсолютный новичок">🟢 Абсолютный новичок (С нуля, без опыта в C/C++)</option>
+              <option value="Базовый опыт">🟡 Базовый опыт (Знаю Python / JS / C#, хочу в системное)</option>
+              <option value="Senior / Реверсер">🔴 Опытный программист (Хочу в низкоуровневый C++, WinAPI и трейнеры)</option>
+            </select>
+          </div>
+
+          <div class="form-group-dark">
+            <label>Основная цель обучения:</label>
+            <select class="select-dark" id="selectUserGoal">
+              <option value="WinAPI & Reverse">💻 Написание системных утилит, трейнеров и работа с WinAPI</option>
+              <option value="Systems Programming">⚙ Системное программирование, ОС и высокопроизводительный софт</option>
+              <option value="Complete Master">🚀 Полное освоение C и C++ от типов данных до архитектора</option>
+            </select>
+          </div>
+
+          <button class="btn-retro primary" style="font-size: 14px; padding: 10px; margin-top: 10px;" onclick="submitWelcomeForm()">
+            🚀 НАЧАТЬ ОБУЧЕНИЕ &gt;&gt;
+          </button>
+        </div>
+
+        <!-- Instructions Card (Shown after name is entered) -->
+        <div class="welcome-card" id="welcomeCardInstructions" style="display: none;">
+          <h1 id="praiseTitle">✨ Добро пожаловать в высшую лигу, Александр!</h1>
+          <p id="praiseText">«Тот, кто понимает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны регистры, страницы оперативной памяти и системные дескрипторы Windows.»</p>
+
+          <div class="instruction-box">
+            <h3>📖 Как устроен процесс обучения в TrainerCode:</h3>
+            <ul>
+              <li><strong>Шаг 1: Теория</strong> — фундаментальное объяснение принципов работы памяти, архитектуры x86_64 и синтаксиса.</li>
+              <li><strong>Шаг 2: Проверочный тест</strong> — интерактивный опрос на закрепление материала. Выберите правильный вариант, чтобы активировать практику!</li>
+              <li><strong>Шаг 3: Практика в Редакторе Кода</strong> — напишите код, нажмите <code>F5</code> для реальной компиляции (GCC/MSVC) и выполните задание.</li>
+            </ul>
+          </div>
+
+          <div class="instruction-box">
+            <h3>⌨ Горячие клавиши и управление:</h3>
+            <ul>
+              <li><code>F5</code> — Скомпилировать и Запустить код</li>
+              <li><code>Enter</code> — Новая строка (перевод строки в редакторе)</li>
+              <li><code>Tab</code> — Табуляция (4 пробела)</li>
+              <li><code>F1</code> — Справочник типов данных C/C++</li>
+              <li><code>Баги</code> / <code>ИИ-Ментор</code> — аудит утечек памяти и подсказки от TrainerAI</li>
+            </ul>
+          </div>
+
+          <button class="btn-retro success" style="font-size: 14px; padding: 10px;" onclick="startFirstLesson()">
+            ⚡ ПЕРЕЙТИ К УРОКУ 1: АРХИТЕКТУРА ЭВМ И HELLO WORLD &gt;&gt;
+          </button>
         </div>
       </div>
 
-      <!-- Right Content Area -->
-      <div class="content-pane">
-        <!-- Top Pane: Editor & Theory -->
-        <div class="pane-top">
-          <div class="tabs-header">
-            <button class="tab-btn active" id="tabBtnCode" onclick="switchMainTab('code')">💻 Редактор Кода & Решение</button>
-            <button class="tab-btn" id="tabBtnTheory" onclick="switchMainTab('theory')">📚 Учебник и Теория Урока</button>
+      <!-- SCREEN 2: Interactive Lesson Workspace -->
+      <div class="workspace-2000" id="viewLesson" style="display: none; padding: 0; width: 100%;">
+        <!-- Left Pane: Lessons Sidebar -->
+        <div class="left-pane">
+          <div class="sidebar-header">
+            <span>📚 УРОКИ C / C++</span>
+            <span id="progressPercentBadge" style="font-size: 10px; color: #4ec9b0;">0%</span>
           </div>
-
-          <div class="tab-content">
-            <!-- Code Editor View -->
-            <div class="editor-container" id="codeEditorView">
-              <div class="editor-line-numbers" id="lineNumbers">1<br>2<br>3<br>4<br>5</div>
-              <textarea class="code-textarea" id="codeEditor" spellcheck="false" placeholder="// Введите ваш код на C или C++..."></textarea>
-            </div>
-
-            <!-- Theory Guide View -->
-            <div class="theory-reader" id="theoryView" style="display: none;">
-              <!-- Populated dynamically -->
-            </div>
+          <div class="treeview-container" id="lessonsListContainer">
+            <!-- Populated dynamically -->
           </div>
         </div>
 
-        <!-- Bottom Pane: Console & AI -->
-        <div class="pane-bottom">
-          <div class="tabs-header">
-            <button class="tab-btn active" id="tabBtnConsole" onclick="switchBottomTab('console')">📟 Консоль вывода / Лог компилятора</button>
-            <button class="tab-btn" id="tabBtnAi" onclick="switchBottomTab('ai')">🤖 ИИ-Ассистент (TrainerAI C/C++ Tutor)</button>
+        <!-- Right Content Area -->
+        <div class="content-pane">
+          <!-- Sequential Steps Navigator Bar -->
+          <div class="lesson-steps-bar">
+            <span style="font-weight: bold; color: #569cd6;" id="lessonTitleHeader">Урок 1</span>
+            <div style="display: flex; gap: 4px; margin-left: auto;">
+              <div class="step-indicator active" id="stepTab1" onclick="goToStep(1)">
+                <span>1</span> Теория
+              </div>
+              <div class="step-indicator" id="stepTab2" onclick="goToStep(2)">
+                <span>2</span> Тест
+              </div>
+              <div class="step-indicator" id="stepTab3" onclick="goToStep(3)">
+                <span>3</span> Практика в Коде
+              </div>
+            </div>
           </div>
 
-          <div class="tab-content">
-            <!-- Console View -->
+          <!-- Top Pane: Changes based on Step 1, 2, or 3 -->
+          <div class="pane-top">
+            <!-- Step 1: Theory View -->
+            <div class="theory-container" id="stageTheory">
+              <div id="theoryContentPart1"></div>
+              <button class="btn-retro primary" style="font-size: 13px; padding: 8px 16px; margin-top: 16px;" onclick="goToStep(2)">
+                ПЕРЕЙТИ К ТЕСТУ (ШАГ 2) &gt;&gt;
+              </button>
+            </div>
+
+            <!-- Step 2: Quiz View -->
+            <div class="quiz-container" id="stageQuiz" style="display: none;">
+              <div class="quiz-card">
+                <h3 id="quizQuestionText">Вопрос теста</h3>
+                <div class="quiz-options" id="quizOptionsList">
+                  <!-- Options injected here -->
+                </div>
+                <div class="quiz-feedback" id="quizFeedbackBox" style="display: none;"></div>
+                <button class="btn-retro success" id="btnQuizProceed" style="display: none; font-size: 13px; padding: 8px 16px; align-self: flex-start;" onclick="goToStep(3)">
+                  ПЕРЕЙТИ К РЕДАКТОРУ КОДА (ШАГ 3) &gt;&gt;
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3: Editor & Task View -->
+            <div id="stageEditor" style="display: none; flex: 1; flex-direction: column; min-height: 0;">
+              <!-- Task Banner -->
+              <div style="background: #1b2631; border-bottom: 1px solid #2874a6; padding: 8px 12px; font-size: 12px; color: #d4d4d4;">
+                <strong style="color: #4ec9b0;">🎯 ЗАДАНИЕ:</strong> <span id="editorTaskText"></span>
+              </div>
+              <!-- Code Editor Wrapper -->
+              <div class="editor-wrapper">
+                <div class="editor-line-numbers" id="lineNumbers">1</div>
+                <textarea class="code-textarea" id="codeEditor" spellcheck="false" placeholder="// Введите ваш код на C / C++..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Pane: Console & AI Chat -->
+          <div class="pane-bottom">
+            <div class="bottom-tabs-header">
+              <button class="bot-tab-btn active" id="btnBotTabConsole" onclick="switchBottomTab('console')">📟 Консоль вывода / Компилятор</button>
+              <button class="bot-tab-btn" id="btnBotTabAi" onclick="switchBottomTab('ai')">🤖 ИИ-Ассистент TrainerAI</button>
+            </div>
+
+            <!-- Console Output -->
             <div class="console-box" id="consoleOutput">
-[TrainerCode 2000 Compiler Subsystem Initialized]
-GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
-Готов к компиляции. Нажмите '▶ Запуск (F5)' для сборки текущего задания.
+[TrainerCode 2000 Subsystem Initialized]
+GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
+Нажмите '▶ Запуск (F5)' для сборки и выполнения текущего кода.
             </div>
 
             <!-- AI Chat View -->
             <div class="ai-chat-box" id="aiChatView" style="display: none;">
               <div class="ai-messages-list" id="aiMessagesList">
                 <div class="ai-msg bot">
-<strong>[TrainerAI • Системный наставник по C и C++]</strong>
-Приветствую! Я готов сопровождать вас в изучении системного программирования.
-Задайте любой вопрос по указателям, адресам, памяти, виртуальным функциям или нажмите:
-• "Найти баги" — для глубокого аудита утечек и разыменования NULL.
-• "Объяснить" — для пошагового разбора текущего кода урока.
+<strong>[TrainerAI • Системный наставник]</strong>
+Готов помочь! Я умею анализировать память, находить утечки malloc/free, разыменования NULL и объяснять, как код работает в регистрах процессора и ОЗУ.
                 </div>
               </div>
               <div class="ai-input-bar">
-                <input type="text" class="ai-prompt-input" id="aiPromptInput" placeholder="Спросить ИИ-наставника (например: почему падает с segfault?)...">
-                <button class="btn-retro primary" onclick="sendAiPrompt()">Отправить</button>
-                <button class="btn-retro" onclick="askAi('Найди утечки и баги')">Баги</button>
+                <input type="text" class="ai-prompt-input" id="aiPromptInput" placeholder="Спросите ИИ-наставника (например: почему ReadProcessMemory возвращает 0?)...">
+                <button class="btn-retro primary" onclick="sendAiPrompt()">Спросить</button>
+                <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">Баги</button>
                 <button class="btn-retro" onclick="askAi('Объясни код урока')">Объяснить</button>
-                <button class="btn-retro" onclick="openAiDownloaderModal()">📥 Модели</button>
               </div>
             </div>
           </div>
@@ -215,47 +335,11 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
 
     <!-- Status Bar -->
     <div class="statusbar-2000">
-      <div class="status-segment" id="sbLesson" style="flex: 2;">Урок 1/25: Загрузка...</div>
-      <div class="status-segment" id="sbLang" style="width: 100px;">C11 / C++20</div>
-      <div class="status-segment" id="sbCompiler" style="width: 180px;">GCC / MSVC Ready</div>
-      <div class="status-segment" id="sbAi" style="width: 150px;">ИИ: TrainerAI Active</div>
+      <div class="status-segment" id="sbLesson" style="flex: 2;">Урок 1/17</div>
+      <div class="status-segment" id="sbLang" style="width: 90px;">C11 / C++20</div>
+      <div class="status-segment" id="sbCompiler" style="width: 170px;">GCC / MSVC Ready</div>
+      <div class="status-segment" id="sbAi" style="width: 140px;">ИИ: TrainerAI Active</div>
       <div class="status-segment" id="sbUser" style="flex: 1.2;">Ученик: Александр (Новичок)</div>
-    </div>
-  </div>
-
-  <!-- Onboarding Wizard Modal -->
-  <div class="modal-overlay" id="wizardModal">
-    <div class="modal-dialog">
-      <div class="titlebar-2000">
-        <div class="titlebar-title"><span>🎓</span> Мастер начальной настройки TrainerCode 2000</div>
-        <button class="titlebar-btn" onclick="closeWizardModal()">✕</button>
-      </div>
-      <div class="dialog-body">
-        <h3 style="font-size: 14px; color: #000080;">Добро пожаловать в Академию Системного Программирования!</h3>
-        <p>TrainerCode — это профессиональный тренажер для глубокого освоения языков C и Modern C++ от фундаментальных основ до низкоуровневых регистров, управления памятью и архитектуры ПО.</p>
-        
-        <div class="form-group">
-          <label>Как к вам обращаться, будущий системный инженер?</label>
-          <input type="text" class="input-retro" id="wizUserName" value="Александр">
-        </div>
-
-        <div class="form-group">
-          <label>Ваш текущий уровень программирования:</label>
-          <select class="select-retro" id="wizUserLevel">
-            <option value="Новичок">🟢 Абсолютный новичок (С нуля, без опыта в кодинге)</option>
-            <option value="Базовый">🟡 Базовый опыт (Знаю основы Python / JS / C#)</option>
-            <option value="Продвинутый">🔴 Хочу стать Senior C++ разработчиком / архитектором</option>
-          </select>
-        </div>
-
-        <div style="background: #ffffcc; border: 1px solid #cc9900; padding: 10px; font-size: 11px;">
-          <strong>✨ НАПУТСТВИЕ СИСТЕМНОГО НАСТАВНИКА:</strong><br>
-          "Программист на C и C++ не просто пишет код — он командует транзисторами и байтами памяти напрямую. Вас ждут 25 насыщенных практических уроков. Ошибки и предупреждения компилятора — ваши лучшие друзья, обучающие дисциплине ума!"
-        </div>
-      </div>
-      <div class="dialog-footer">
-        <button class="btn-retro primary" onclick="saveWizardSettings()">Начать обучение! &gt;&gt;</button>
-      </div>
     </div>
   </div>
 
@@ -263,54 +347,37 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-dialog">
       <div class="titlebar-2000">
-        <div class="titlebar-title"><span>⚙</span> Настройки компилятора и среды сборки</div>
+        <div class="titlebar-title"><span>⚙</span> Настройки компилятора и путей</div>
         <button class="titlebar-btn" onclick="closeSettingsModal()">✕</button>
       </div>
       <div class="dialog-body">
-        <div class="form-group">
+        <div class="form-group-dark">
           <label>Тип компилятора:</label>
-          <select class="select-retro" id="cfgCompilerType">
-            <option value="GCC (GNU Compiler Collection)">GCC / G++ (Встроенный и MinGW-w64)</option>
+          <select class="select-dark" id="cfgCompilerType">
+            <option value="GCC (GNU Compiler Collection)">GCC / G++ (Встроенный / MinGW-w64)</option>
             <option value="Microsoft Visual Studio (cl.exe)">Microsoft Visual Studio (cl.exe / MSVC)</option>
             <option value="Clang / LLVM">Clang / LLVM</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label>Путь к папке компилятора / бинарнику (Visual Studio / MinGW):</label>
-          <input type="text" class="input-retro" id="cfgCompilerPath" value="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\bin\cl.exe">
+        <div class="form-group-dark">
+          <label>Путь к папке компилятора (Visual Studio / MinGW):</label>
+          <input type="text" class="input-dark" id="cfgCompilerPath" value="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\bin\cl.exe">
         </div>
 
-        <div class="form-group">
-          <label>Флаги оптимизации и предупреждений:</label>
-          <input type="text" class="input-retro" id="cfgCompilerFlags" value="-Wall -Wextra -O2">
+        <div class="form-group-dark">
+          <label>Флаги компиляции (-Wall -Wextra -O2):</label>
+          <input type="text" class="input-dark" id="cfgCompilerFlags" value="-Wall -Wextra -O2">
         </div>
 
-        <div class="form-group">
-          <label>Стандарты языков:</label>
-          <div style="display: flex; gap: 8px;">
-            <select class="select-retro" id="cfgCStd" style="flex: 1;">
-              <option value="c99">C99 (ISO/IEC 9899:1999)</option>
-              <option value="c11" selected>C11 (ISO/IEC 9899:2011)</option>
-              <option value="c17">C17 (ISO/IEC 9899:2018)</option>
-            </select>
-            <select class="select-retro" id="cfgCppStd" style="flex: 1;">
-              <option value="c++11">C++11</option>
-              <option value="c++17">C++17</option>
-              <option value="c++20" selected>C++20 (Modern C++)</option>
-              <option value="c++23">C++23</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
+        <div class="form-group-dark">
           <button class="btn-retro" onclick="testCompilerConfig()">Тестировать компилятор...</button>
-          <span id="compilerTestResult" style="color: #000080; margin-top: 4px;"></span>
+          <span id="compilerTestResult" style="color: #4ec9b0; margin-top: 4px;"></span>
         </div>
       </div>
       <div class="dialog-footer">
         <button class="btn-retro primary" onclick="saveCompilerSettings()">Сохранить</button>
-        <button class="btn-retro" onclick="closeSettingsModal()">Отмена</button>
+        <button class="btn-retro" onclick="closeSettingsModal()">Закрыть</button>
       </div>
     </div>
   </div>
@@ -319,12 +386,12 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
   <div class="modal-overlay" id="typesModal">
     <div class="modal-dialog" style="width: 780px;">
       <div class="titlebar-2000">
-        <div class="titlebar-title"><span>📊</span> Справочник фундаментальных типов данных C и C++ (x86 / x64)</div>
+        <div class="titlebar-title"><span>📊</span> Справочник типов данных C / C++ (x86 vs x64)</div>
         <button class="titlebar-btn" onclick="closeTypesModal()">✕</button>
       </div>
-      <div class="dialog-body" style="max-height: 460px; overflow-y: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #fff;" border="1" cellpadding="4" bordercolor="#808080">
-          <thead style="background: #ece9d8;">
+      <div class="dialog-body" style="max-height: 440px; overflow-y: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #181818;" border="1" cellpadding="5" bordercolor="#333333">
+          <thead style="background: #252526; color: #4ec9b0;">
             <tr>
               <th>Тип данных</th>
               <th>x86</th>
@@ -335,7 +402,7 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
             </tr>
           </thead>
           <tbody id="typesTableBody">
-            <!-- Populated dynamically -->
+            <!-- Injected dynamically -->
           </tbody>
         </table>
       </div>
@@ -349,35 +416,34 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
   <div class="modal-overlay" id="aiDownloaderModal">
     <div class="modal-dialog">
       <div class="titlebar-2000">
-        <div class="titlebar-title"><span>🤖</span> Менеджер загрузки нейросетей TrainerAI</div>
+        <div class="titlebar-title"><span>🤖</span> Менеджер нейросетей TrainerAI (GGUF / Llama)</div>
         <button class="titlebar-btn" onclick="closeAiDownloaderModal()">✕</button>
       </div>
       <div class="dialog-body">
-        <p>Выберите модель искусственного интеллекта для локального анализа и помощи в решении задач по C и C++:</p>
-        
+        <p>Выберите нейросеть для локального инференса и анализа кода:</p>
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModelChoice" value="smollm" checked>
+            <input type="radio" name="aiModel" value="smollm" checked>
             <span><strong>SmolLM2-360M-Instruct</strong> (GGUF, ~230 МБ) — Сверхбыстрая работа на любом CPU</span>
           </label>
           <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModelChoice" value="tinyllama">
+            <input type="radio" name="aiModel" value="tinyllama">
             <span><strong>TinyLlama-1.1B-Chat</strong> (GGUF, ~630 МБ) — Сбалансированный код-ассистент</span>
           </label>
           <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModelChoice" value="qwen">
-            <span><strong>Qwen2.5-Coder-1.5B</strong> (GGUF, ~980 МБ) — Мощный эксперт по алгоритмам C++</span>
+            <input type="radio" name="aiModel" value="qwen">
+            <span><strong>Qwen2.5-Coder-1.5B</strong> (GGUF, ~980 МБ) — Эксперт по C++ и WinAPI</span>
           </label>
           <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModelChoice" value="ollama">
-            <span><strong>Локальный сервер Ollama / LM Studio</strong> (http://localhost:11434 / 1234)</span>
+            <input type="radio" name="aiModel" value="ollama">
+            <span><strong>Локальный сервер Ollama</strong> (http://localhost:11434 / LM Studio)</span>
           </label>
         </div>
 
-        <div style="margin-top: 10px;">
-          <div id="aiDownloadStatus" style="margin-bottom: 4px; font-weight: bold;">Статус: Готов к загрузке</div>
-          <div style="background: #fff; border: 1px solid #808080; height: 20px; position: relative;">
-            <div id="aiProgressBar" style="background: #000080; height: 100%; width: 0%; transition: width 0.2s;"></div>
+        <div style="margin-top: 12px;">
+          <div id="aiDownloadStatus" style="margin-bottom: 4px; font-weight: bold; color: #4ec9b0;">Статус: Готов к загрузке</div>
+          <div style="background: #141414; border: 1px solid #3c3c3c; height: 20px; position: relative;">
+            <div id="aiProgressBar" style="background: #0e639c; height: 100%; width: 0%; transition: width 0.2s;"></div>
           </div>
         </div>
       </div>
@@ -390,11 +456,11 @@ GCC 12.2 / G++ 12.2 / MSVC Compatibility Layer Ready.
 
   <!-- Taskbar -->
   <div class="taskbar-2000">
-    <button class="start-btn" onclick="openWizardModal()">
+    <button class="start-btn" onclick="showWelcomeScreen()">
       <span>🪟</span> <strong>Пуск</strong>
     </button>
     <div class="taskbar-tasks">
-      <div class="task-item" onclick="openMainWindow()">
+      <div class="task-item" onclick="showLessonScreen()">
         <span>💻</span> TrainerCode 2000
       </div>
     </div>

@@ -40,6 +40,12 @@ const typesCheat = [
 
 // API: Get Lessons
 app.get('/api/lessons', (req, res) => {
+  try {
+    const raw = fs.readFileSync(lessonsPath, 'utf8');
+    lessons = JSON.parse(raw);
+  } catch (e) {
+    console.error('Error reloading lessons:', e);
+  }
   res.json(lessons);
 });
 

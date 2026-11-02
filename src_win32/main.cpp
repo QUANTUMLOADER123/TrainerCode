@@ -162,25 +162,11 @@ void update_status_bar() {
 // Populate TreeView with lessons
 void populate_tree() {
     TreeView_DeleteAllItems(g_hTree);
-    std::wstring last_module = L"";
-    HTREEITEM hCurrentModule = NULL;
 
     for (size_t i = 0; i < g_lessons.size(); i++) {
         const auto &les = g_lessons[i];
-        if (les.module_name != last_module) {
-            last_module = les.module_name;
-            TVINSERTSTRUCTW tvis = {0};
-            tvis.hParent = TVI_ROOT;
-            tvis.hInsertAfter = TVI_LAST;
-            tvis.item.mask = TVIF_TEXT | TVIF_STATE;
-            tvis.item.pszText = (LPWSTR)last_module.c_str();
-            tvis.item.state = TVIS_EXPANDED;
-            tvis.item.stateMask = TVIS_EXPANDED;
-            hCurrentModule = TreeView_InsertItem(g_hTree, &tvis);
-        }
-
         TVINSERTSTRUCTW tvis = {0};
-        tvis.hParent = hCurrentModule;
+        tvis.hParent = TVI_ROOT;
         tvis.hInsertAfter = TVI_LAST;
         tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
         tvis.item.pszText = (LPWSTR)les.title.c_str();
@@ -202,11 +188,22 @@ void load_lesson(int index) {
     // Build rich theory text
     std::wstringstream th;
     th << L"=== " << les.title << L" ===\r\n";
-    th << L"Модуль: " << les.module_name << L" | Язык: " << les.lang << L" | Сложность: " << les.difficulty << L"\r\n";
+    th << L"Язык: " << les.lang << L" | Сложность: " << les.difficulty << L"\r\n";
     th << L"========================================================================\r\n\r\n";
-    th << les.theory << L"\r\n\r\n";
+    th << L"📖 ШАГ 1: ТЕОРИЯ И АРХИТЕКТУРА:\r\n";
+    th << les.theory_part1 << L"\r\n\r\n";
+    if (!les.theory_part2.empty()) {
+        th << les.theory_part2 << L"\r\n\r\n";
+    }
     th << L"------------------------------------------------------------------------\r\n";
-    th << L"🎯 ЗАДАНИЕ К УРОКУ:\r\n";
+    th << L"❓ ШАГ 2: ПРОВЕРОЧНЫЙ ТЕСТ НА ПОНИМАНИЕ:\r\n";
+    th << les.quiz.question << L"\r\n";
+    for (size_t q = 0; q < les.quiz.options.size(); q++) {
+        th << L"  " << (q + 1) << L") " << les.quiz.options[q].text << L"\r\n";
+    }
+    th << L"\r\n";
+    th << L"------------------------------------------------------------------------\r\n";
+    th << L"💻 ШАГ 3: ПРАКТИЧЕСКОЕ ЗАДАНИЕ:\r\n";
     th << les.task << L"\r\n\r\n";
     if (!les.hints.empty()) {
         th << L"💡 ПОДСКАЗКА:\r\n";
@@ -220,9 +217,9 @@ void load_lesson(int index) {
     SetWindowTextW(g_hEditCode, les.initial_code.c_str());
 
     std::wstringstream con;
-    con << L"[TrainerCode 2000 System Ready]\r\n";
+    con << L"[TrainerCode 2000 Dark System Ready]\r\n";
     con << L"Загружен " << les.title << L".\r\n";
-    con << L"Нажмите кнопку '▶ Запуск (F5)' для компиляции и проверки решения.\r\n";
+    con << L"Нажмите кнопку '▶ Запуск (F5)' для сборки и выполнения.\r\n";
     SetWindowTextW(g_hEditConsole, con.str().c_str());
 
     update_status_bar();
