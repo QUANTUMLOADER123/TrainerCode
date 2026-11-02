@@ -4,129 +4,661 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrainerCode 2000 — Dark Win32 Edition</title>
-  <link rel="stylesheet" href="win2000.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0 !important;
+      font-family: "Tahoma", "MS Sans Serif", "Segoe UI", Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #0a0a0c !important;
+      color: #d4d4d4 !important;
+      overflow: hidden;
+    }
+
+    /* Main Window Frame */
+    .app-window {
+      width: 100vw;
+      height: 100vh;
+      background: #18181a;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid #333338;
+      box-shadow: inset 1px 1px #44444a, inset -1px -1px #0a0a0c;
+    }
+
+    /* Title Bar */
+    .app-titlebar {
+      height: 28px;
+      background: linear-gradient(90deg, #094771, #1177bb);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      font-weight: bold;
+      font-size: 12px;
+      border-bottom: 1px solid #000000;
+      user-select: none;
+    }
+
+    .titlebar-btn {
+      width: 18px;
+      height: 18px;
+      background: #252528;
+      color: #ffffff;
+      border: 1px solid #55555c;
+      box-shadow: inset 1px 1px #444, inset -1px -1px #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .titlebar-btn:hover {
+      background: #3e3e42;
+    }
+
+    /* Menubar */
+    .app-menubar {
+      height: 26px;
+      background: #202024;
+      border-bottom: 1px solid #2d2d32;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .menu-link {
+      color: #cccccc;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .menu-link:hover {
+      background: #094771;
+      color: #ffffff;
+    }
+
+    /* Toolbar */
+    .app-toolbar {
+      height: 38px;
+      background: #28282d;
+      border-bottom: 1px solid #38383e;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 6px;
+    }
+
+    .btn-retro {
+      background: #333338;
+      border: 1px solid #4a4a52;
+      box-shadow: inset 1px 1px #4c4c56, inset -1px -1px #1c1c20;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: #f0f0f0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .btn-retro:hover {
+      background: #3e3e46;
+      border-color: #007acc;
+    }
+
+    .btn-retro:active {
+      box-shadow: inset 1px 1px #101012, inset -1px -1px #4c4c56;
+      padding: 6px 11px 4px 13px;
+    }
+
+    .btn-retro.primary {
+      background: #0e639c;
+      border-color: #1177bb;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .btn-retro.primary:hover {
+      background: #1177bb;
+    }
+
+    .btn-retro.success {
+      background: #1b5e20;
+      border-color: #2e7d32;
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .btn-retro.success:hover {
+      background: #2e7d32;
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      height: 22px;
+      background: #44444c;
+      margin: 0 4px;
+    }
+
+    /* Content Area */
+    .app-content {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+      background: #141416;
+    }
+
+    /* Screen: Onboarding (Steps 0 & 1) */
+    .onboarding-screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #111113;
+    }
+
+    .dark-card {
+      width: 640px;
+      max-width: 95vw;
+      background: #1f1f23;
+      border: 1px solid #3c3c44;
+      box-shadow: inset 1px 1px #2e2e34, inset -1px -1px #111113, 0 10px 30px rgba(0,0,0,0.8);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dark-card h1 {
+      font-size: 20px;
+      color: #4ec9b0;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 8px;
+    }
+
+    .dark-card p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cccccc;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      color: #569cd6;
+      font-size: 12px;
+    }
+
+    .input-dark {
+      background: #121214;
+      color: #ffffff;
+      border: 1px solid #3a3a42;
+      box-shadow: inset 1px 1px #050506;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .input-dark:focus {
+      border-color: #007acc;
+    }
+
+    .select-dark {
+      background: #121214;
+      color: #ffffff;
+      border: 1px solid #3a3a42;
+      padding: 8px 10px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .info-box {
+      background: #162432;
+      border: 1px solid #1f4f7c;
+      padding: 12px 16px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #9cdcfe;
+    }
+
+    .info-box ul {
+      padding-left: 20px;
+      margin-top: 6px;
+    }
+
+    /* Screen: Lesson Workspace */
+    .lesson-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #141416;
+    }
+
+    /* Lesson Navigation Bar */
+    .lesson-navbar {
+      height: 34px;
+      background: #202024;
+      border-bottom: 1px solid #333338;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 10px;
+      user-select: none;
+    }
+
+    .lesson-title-badge {
+      font-size: 13px;
+      font-weight: bold;
+      color: #4ec9b0;
+    }
+
+    .step-pill {
+      padding: 4px 14px;
+      background: #2b2b30;
+      border: 1px solid #404048;
+      color: #aaaaaa;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .step-pill.active {
+      background: #0e639c;
+      color: #ffffff;
+      border-color: #1177bb;
+      font-weight: bold;
+    }
+
+    .step-pill.done {
+      background: #163a20;
+      color: #4ec9b0;
+      border-color: #2e7d32;
+    }
+
+    /* Lesson Stages Split */
+    .lesson-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    /* Theory Stage (Stage 1) */
+    .theory-stage {
+      flex: 1;
+      padding: 24px 30px;
+      overflow-y: auto;
+      line-height: 1.7;
+      font-size: 14px;
+      background: #141416;
+      color: #d4d4d4;
+    }
+
+    .theory-stage h2 {
+      font-size: 18px;
+      color: #4ec9b0;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+    }
+
+    .theory-stage pre {
+      background: #0d0d0f;
+      border: 1px solid #2d2d35;
+      padding: 12px 16px;
+      font-family: "Lucida Console", "Consolas", monospace;
+      font-size: 13px;
+      color: #9cdcfe;
+      margin: 14px 0;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* Quiz Stage (Stage 2) */
+    .quiz-stage {
+      flex: 1;
+      padding: 24px 30px;
+      overflow-y: auto;
+      background: #141416;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .quiz-card {
+      background: #1f1f23;
+      border: 1px solid #3c3c44;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quiz-card h3 {
+      font-size: 16px;
+      color: #dcdcaa;
+    }
+
+    .quiz-option-btn {
+      background: #28282d;
+      border: 1px solid #44444c;
+      padding: 12px 16px;
+      color: #ffffff;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-option-btn:hover {
+      background: #33333a;
+      border-color: #007acc;
+    }
+
+    .quiz-option-btn.correct {
+      background: #1b4d24 !important;
+      border-color: #2e7d32 !important;
+      color: #ffffff !important;
+      font-weight: bold;
+    }
+
+    .quiz-option-btn.wrong {
+      background: #5a1c1c !important;
+      border-color: #c62828 !important;
+      color: #ffffff !important;
+    }
+
+    .quiz-feedback {
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .quiz-feedback.success {
+      background: #14331a;
+      border: 1px solid #2e7d32;
+      color: #4ec9b0;
+    }
+
+    .quiz-feedback.error {
+      background: #3d1414;
+      border: 1px solid #c62828;
+      color: #ef9a9a;
+    }
+
+    /* Editor Stage (Stage 3) */
+    .editor-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #141416;
+    }
+
+    .task-banner {
+      background: #18232e;
+      border-bottom: 1px solid #1f4f7c;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #e0e0e0;
+      line-height: 1.4;
+    }
+
+    .task-banner strong {
+      color: #4ec9b0;
+    }
+
+    .editor-split {
+      flex: 1.2;
+      display: flex;
+      min-height: 0;
+      background: #0d0d0f;
+    }
+
+    .line-numbers {
+      width: 48px;
+      background: #18181c;
+      border-right: 1px solid #2d2d34;
+      color: #666672;
+      font-family: "Lucida Console", "Consolas", monospace;
+      font-size: 13px;
+      line-height: 22px;
+      padding: 10px 6px;
+      text-align: right;
+      user-select: none;
+      overflow: hidden;
+    }
+
+    .code-editor-textarea {
+      flex: 1;
+      background: #0d0d0f;
+      color: #d4d4d4;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: "Lucida Console", "Consolas", monospace;
+      font-size: 13px;
+      line-height: 22px;
+      padding: 10px 14px;
+      tab-size: 4;
+      white-space: pre;
+      overflow: auto;
+      word-break: normal;
+    }
+
+    /* Console & AI Dock */
+    .bottom-dock {
+      flex: 0.9;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #121214;
+      border-top: 2px solid #2d2d34;
+    }
+
+    .dock-tabs {
+      height: 28px;
+      background: #1a1a1e;
+      border-bottom: 1px solid #2d2d34;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 2px;
+    }
+
+    .dock-tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #888892;
+      padding: 4px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .dock-tab-btn.active {
+      color: #ffffff;
+      border-bottom-color: #007acc;
+      font-weight: bold;
+      background: #141416;
+    }
+
+    .console-screen {
+      flex: 1;
+      background: #08080a;
+      color: #4ec9b0;
+      font-family: "Lucida Console", "Consolas", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 10px 14px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      user-select: text;
+    }
+
+    /* AI Chat Screen */
+    .ai-chat-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: #121214;
+    }
+
+    .ai-chat-messages {
+      flex: 1;
+      padding: 10px 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ai-msg {
+      padding: 8px 12px;
+      border: 1px solid #2e2e36;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .ai-msg.user {
+      background: #0d283e;
+      border-color: #007acc;
+      color: #ffffff;
+      align-self: flex-end;
+      max-width: 85%;
+    }
+
+    .ai-msg.bot {
+      background: #1a1a1e;
+      border-color: #383842;
+      color: #cccccc;
+      align-self: flex-start;
+      max-width: 95%;
+    }
+
+    .ai-input-bar {
+      display: flex;
+      padding: 6px;
+      gap: 6px;
+      background: #1e1e22;
+      border-top: 1px solid #2d2d34;
+    }
+
+    /* Status Bar */
+    .app-statusbar {
+      height: 24px;
+      background: #007acc;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 10px;
+      font-size: 11px;
+      user-select: none;
+    }
+
+    .status-segment {
+      padding: 1px 8px;
+      background: rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+    }
+
+    /* Cheat Sheet Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      width: 760px;
+      max-width: 95vw;
+      background: #1c1c20;
+      border: 1px solid #44444c;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Desktop Icons -->
-  <div class="desktop-icons">
-    <div class="desktop-icon" onclick="showWelcomeScreen()">
-      <div style="font-size: 24px;">👤</div>
-      <div class="icon-label">Профиль</div>
-    </div>
-    <div class="desktop-icon" onclick="showLessonScreen()">
-      <div style="font-size: 24px;">💻</div>
-      <div class="icon-label">Уроки C/C++</div>
-    </div>
-    <div class="desktop-icon" onclick="openTypesModal()">
-      <div style="font-size: 24px;">📊</div>
-      <div class="icon-label">Типы данных</div>
-    </div>
-    <div class="desktop-icon" onclick="openSettingsModal()">
-      <div style="font-size: 24px;">⚙</div>
-      <div class="icon-label">Компилятор</div>
-    </div>
-    <div class="desktop-icon" onclick="downloadExe()">
-      <div style="font-size: 24px;">📥</div>
-      <div class="icon-label">Скачать .EXE</div>
-    </div>
-  </div>
-
-  <!-- Main Window -->
-  <div class="window-2000" id="mainWindow">
-    <!-- Title Bar -->
-    <div class="titlebar-2000">
-      <div class="titlebar-title">
-        <span>⚡</span>
-        <span id="windowTitleText">TrainerCode 2000 — Академия Системного Программирования C & C++ (WinAPI Edition)</span>
-      </div>
-      <div class="titlebar-controls">
+  <div class="app-window">
+    <!-- Titlebar -->
+    <div class="app-titlebar">
+      <div>⚡ TrainerCode 2000 — Dark Win32 Edition [C/C++ & WinAPI Academy]</div>
+      <div style="display: flex; gap: 3px;">
         <button class="titlebar-btn" title="Свернуть">_</button>
         <button class="titlebar-btn" title="Развернуть">□</button>
         <button class="titlebar-btn" title="Закрыть" onclick="alert('Закройте вкладку браузера для выхода.')">✕</button>
       </div>
     </div>
 
-    <!-- Menu Bar -->
-    <div class="menubar-2000">
-      <div class="menu-item">
-        <span>Файл</span>
-        <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="showWelcomeScreen()"><span>Профиль ученика</span></div>
-          <div class="dropdown-entry" onclick="saveCodeLocally()"><span>Сохранить код</span><small>Ctrl+S</small></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="downloadExe()"><span>📥 Скачать TrainerCode.exe</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <span>Уроки</span>
-        <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="prevLesson()"><span>Предыдущий урок</span></div>
-          <div class="dropdown-entry" onclick="nextLesson()"><span>Следующий урок</span></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="resetLessonCode()"><span>Сбросить код к начальному</span></div>
-          <div class="dropdown-entry" onclick="showSolution()"><span>Показать эталонное решение</span></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="unlockAllLessons()"><span>Разблокировать все уроки</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <span>Компилятор</span>
-        <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="compileAndRun()"><span>Скомпилировать и Запустить</span><small>F5</small></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="openSettingsModal()"><span>Настройки компилятора...</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <span>ИИ-Ассистент</span>
-        <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="askAi('Найди утечки памяти и ошибки в моем коде')"><span>Найти утечки и баги</span></div>
-          <div class="dropdown-entry" onclick="askAi('Объясни текущий код и как он работает в ОЗУ')"><span>Объяснить код в памяти</span></div>
-          <div class="dropdown-entry" onclick="askAi('Дай подсказку к текущей задаче')"><span>Подсказка к задаче</span></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="openAiDownloaderModal()"><span>Менеджер моделей GGUF / Ollama...</span></div>
-        </div>
-      </div>
-
-      <div class="menu-item">
-        <span>Справка</span>
-        <div class="dropdown-menu">
-          <div class="dropdown-entry" onclick="openTypesModal()"><span>Справочник типов C/C++</span><small>F1</small></div>
-          <div class="dropdown-entry" onclick="showWelcomeScreen()"><span>Инструкция по приложению</span></div>
-          <div class="dropdown-sep"></div>
-          <div class="dropdown-entry" onclick="aboutApp()"><span>О программе TrainerCode 2000</span></div>
-        </div>
-      </div>
+    <!-- Menubar -->
+    <div class="app-menubar">
+      <span class="menu-link" onclick="restartOnboarding()">👤 Профиль</span>
+      <span class="menu-link" onclick="openTypesModal()">📊 Типы C/C++ (F1)</span>
+      <span class="menu-link" onclick="unlockAllLessons()">🔓 Разблокировать все уроки</span>
+      <span class="menu-link" onclick="downloadExe()">📥 Скачать TrainerCode.exe</span>
+      <span class="menu-link" style="margin-left: auto; color: #4ec9b0;" id="userProfileIndicator">Гость</span>
     </div>
 
-    <!-- Toolbar -->
-    <div class="toolbar-2000">
-      <button class="btn-retro primary" onclick="compileAndRun()" title="Горячая клавиша F5">
+    <!-- Toolbar (Always visible in lesson view) -->
+    <div class="app-toolbar" id="mainToolbar" style="display: none;">
+      <button class="btn-retro primary" onclick="compileAndRun()" title="Горячая клавиша: F5">
         <span>▶</span> <strong>Запуск (F5)</strong>
       </button>
 
       <div class="toolbar-sep"></div>
 
-      <button class="btn-retro" onclick="goToStep(1)" id="tbStep1">
+      <button class="btn-retro" onclick="setLessonStep(1)" id="btnNavStep1">
         <span>📖</span> Шаг 1: Теория
       </button>
-      <button class="btn-retro" onclick="goToStep(2)" id="tbStep2">
+      <button class="btn-retro" onclick="setLessonStep(2)" id="btnNavStep2">
         <span>❓</span> Шаг 2: Тест
       </button>
-      <button class="btn-retro" onclick="goToStep(3)" id="tbStep3">
+      <button class="btn-retro" onclick="setLessonStep(3)" id="btnNavStep3">
         <span>💻</span> Шаг 3: Практика
       </button>
 
       <div class="toolbar-sep"></div>
 
-      <button class="btn-retro" onclick="resetLessonCode()" title="Сбросить код">
+      <button class="btn-retro" onclick="resetCode()" title="Сбросить код к начальному шаблону">
         <span>↺</span> Сброс
       </button>
-      <button class="btn-retro" onclick="showSolution()" title="Показать готовое решение">
+      <button class="btn-retro" onclick="showSolution()" title="Показать эталонное решение">
         <span>💡</span> Решение
       </button>
 
@@ -141,332 +673,584 @@
 
       <div class="toolbar-sep"></div>
 
-      <button class="btn-retro accent" onclick="askAi('Найди утечки памяти и ошибки в коде')">
+      <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">
         <span>🔍</span> Баги
       </button>
-      <button class="btn-retro accent" onclick="askAi('Объясни код урока')">
+      <button class="btn-retro" onclick="askAi('Объясни код урока')">
         <span>🤖</span> ИИ-Ментор
       </button>
 
-      <div class="toolbar-sep"></div>
-
-      <button class="btn-retro" onclick="openTypesModal()">
-        <span>📊</span> Типы (F1)
-      </button>
-      <button class="btn-retro" onclick="openSettingsModal()">
-        <span>⚙</span> Настройки
-      </button>
-
       <button class="btn-retro success" onclick="downloadExe()" style="margin-left: auto;">
-        <span>📥</span> <strong>Скачать TrainerCode.exe</strong>
+        <span>📥</span> <strong>Скачать .EXE</strong>
       </button>
     </div>
 
-    <!-- Main Dynamic Workspace -->
-    <div class="workspace-2000" id="mainWorkspace">
+    <!-- Main Content Container -->
+    <div class="app-content">
 
-      <!-- SCREEN 1: Welcome & Onboarding & Instructions -->
-      <div class="welcome-screen-container" id="viewWelcome">
-        <div class="welcome-card" id="welcomeCardForm">
-          <h1>⚡ Добро пожаловать в TrainerCode 2000</h1>
-          <p>Профессиональный тренажер для изучения системного программирования на языках <strong>C</strong> и <strong>Modern C++</strong>. Здесь вы изучите архитектуру памяти, указатели, стек, кучу, структуры, классы, а также системные механизмы Windows API (<strong>OpenProcess, ReadProcessMemory, WriteProcessMemory</strong>).</p>
+      <!-- ONBOARDING: SCREEN 0 (Input Name) -->
+      <div class="onboarding-screen" id="screenStartForm">
+        <div class="dark-card">
+          <h1>⚡ Вход в Академию TrainerCode 2000</h1>
+          <p>Профессиональный тренажер для глубокого изучения языков <strong>C</strong> и <strong>Modern C++</strong> с нуля до архитектора: архитектура памяти x86_64, указатели, стек, куча, классы, выравнивание, а также низкоуровневые вызовы Windows API (<strong>OpenProcess, ReadProcessMemory, WriteProcessMemory</strong>).</p>
 
-          <div class="form-group-dark">
+          <div class="form-group">
             <label>Ваше имя / позывной кодера:</label>
-            <input type="text" class="input-dark" id="inputUserName" value="Александр" placeholder="Введите ваше имя...">
+            <input type="text" class="input-dark" id="userNameInput" value="Александр" placeholder="Введите ваше имя...">
           </div>
 
-          <div class="form-group-dark">
+          <div class="form-group">
             <label>Ваш текущий уровень:</label>
-            <select class="select-dark" id="selectUserLevel">
+            <select class="select-dark" id="userLevelInput">
               <option value="Абсолютный новичок">🟢 Абсолютный новичок (С нуля, без опыта в C/C++)</option>
               <option value="Базовый опыт">🟡 Базовый опыт (Знаю Python / JS / C#, хочу в системное)</option>
-              <option value="Senior / Реверсер">🔴 Опытный программист (Хочу в низкоуровневый C++, WinAPI и трейнеры)</option>
+              <option value="Senior / Реверсер">🔴 Опытный программист (Хочу в WinAPI, память и трейнеры)</option>
             </select>
           </div>
 
-          <div class="form-group-dark">
-            <label>Основная цель обучения:</label>
-            <select class="select-dark" id="selectUserGoal">
-              <option value="WinAPI & Reverse">💻 Написание системных утилит, трейнеров и работа с WinAPI</option>
-              <option value="Systems Programming">⚙ Системное программирование, ОС и высокопроизводительный софт</option>
-              <option value="Complete Master">🚀 Полное освоение C и C++ от типов данных до архитектора</option>
-            </select>
-          </div>
-
-          <button class="btn-retro primary" style="font-size: 14px; padding: 10px; margin-top: 10px;" onclick="submitWelcomeForm()">
-            🚀 НАЧАТЬ ОБУЧЕНИЕ &gt;&gt;
+          <button class="btn-retro primary" style="font-size: 14px; padding: 12px; margin-top: 10px;" onclick="handleStartNext()">
+            ДАЛЕЕ: ИНСТРУКЦИЯ ПО ОБУЧЕНИЮ &gt;&gt;
           </button>
         </div>
+      </div>
 
-        <!-- Instructions Card (Shown after name is entered) -->
-        <div class="welcome-card" id="welcomeCardInstructions" style="display: none;">
-          <h1 id="praiseTitle">✨ Добро пожаловать в высшую лигу, Александр!</h1>
-          <p id="praiseText">«Тот, кто понимает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны регистры, страницы оперативной памяти и системные дескрипторы Windows.»</p>
+      <!-- ONBOARDING: SCREEN 1 (Instructions) -->
+      <div class="onboarding-screen" id="screenInstructions" style="display: none;">
+        <div class="dark-card">
+          <h1 id="instructionsPraiseTitle">✨ Добро пожаловать, Александр!</h1>
+          <p>«Тот, кто знает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны операционные системы, игровые движки, адреса ОЗУ и системные дескрипторы Windows.»</p>
 
-          <div class="instruction-box">
-            <h3>📖 Как устроен процесс обучения в TrainerCode:</h3>
+          <div class="info-box">
+            <strong style="color: #4ec9b0;">📖 Пошаговый процесс каждого урока:</strong>
             <ul>
-              <li><strong>Шаг 1: Теория</strong> — фундаментальное объяснение принципов работы памяти, архитектуры x86_64 и синтаксиса.</li>
-              <li><strong>Шаг 2: Проверочный тест</strong> — интерактивный опрос на закрепление материала. Выберите правильный вариант, чтобы активировать практику!</li>
-              <li><strong>Шаг 3: Практика в Редакторе Кода</strong> — напишите код, нажмите <code>F5</code> для реальной компиляции (GCC/MSVC) и выполните задание.</li>
+              <li><strong>1. Теория</strong> — фундаментальный разбор понятий памяти, регистров и синтаксиса без лишней «воды».</li>
+              <li><strong>2. Проверочный тест</strong> — интерактивный вопрос с вариантами ответов. Правильный ответ открывает допуск к практике!</li>
+              <li><strong>3. Практика в Редакторе Кода</strong> — напишите решение, нажмите <code>F5</code> для реальной компиляции (GCC/MSVC).</li>
             </ul>
           </div>
 
-          <div class="instruction-box">
-            <h3>⌨ Горячие клавиши и управление:</h3>
+          <div class="info-box">
+            <strong style="color: #4ec9b0;">⌨ Горячие клавиши в редакторе:</strong>
             <ul>
               <li><code>F5</code> — Скомпилировать и Запустить код</li>
-              <li><code>Enter</code> — Новая строка (перевод строки в редакторе)</li>
-              <li><code>Tab</code> — Табуляция (4 пробела)</li>
+              <li><code>Enter</code> — Новая строка (перевод строки работает четко)</li>
+              <li><code>Tab</code> — Отступ (4 пробела)</li>
               <li><code>F1</code> — Справочник типов данных C/C++</li>
-              <li><code>Баги</code> / <code>ИИ-Ментор</code> — аудит утечек памяти и подсказки от TrainerAI</li>
             </ul>
           </div>
 
-          <button class="btn-retro success" style="font-size: 14px; padding: 10px;" onclick="startFirstLesson()">
-            ⚡ ПЕРЕЙТИ К УРОКУ 1: АРХИТЕКТУРА ЭВМ И HELLO WORLD &gt;&gt;
+          <button class="btn-retro success" style="font-size: 14px; padding: 12px;" onclick="startLessonsWorkspace()">
+            🚀 НАЧАТЬ УРОК 1: АРХИТЕКТУРА И HELLO WORLD &gt;&gt;
           </button>
         </div>
       </div>
 
-      <!-- SCREEN 2: Interactive Lesson Workspace -->
-      <div class="workspace-2000" id="viewLesson" style="display: none; padding: 0; width: 100%;">
-        <!-- Left Pane: Lessons Sidebar -->
-        <div class="left-pane">
-          <div class="sidebar-header">
-            <span>📚 УРОКИ C / C++</span>
-            <span id="progressPercentBadge" style="font-size: 10px; color: #4ec9b0;">0%</span>
-          </div>
-          <div class="treeview-container" id="lessonsListContainer">
-            <!-- Populated dynamically -->
+      <!-- LESSON WORKSPACE: SCREEN 2 -->
+      <div class="lesson-workspace" id="screenLessonWorkspace" style="display: none;">
+        <!-- Navbar -->
+        <div class="lesson-navbar">
+          <span class="lesson-title-badge" id="lblLessonHeader">Урок 1 / 17</span>
+          <div style="display: flex; gap: 6px; margin-left: auto;">
+            <div class="step-pill active" id="pillStep1" onclick="setLessonStep(1)">1. Теория</div>
+            <div class="step-pill" id="pillStep2" onclick="setLessonStep(2)">2. Тест на понимание</div>
+            <div class="step-pill" id="pillStep3" onclick="setLessonStep(3)">3. Практика в коде</div>
           </div>
         </div>
 
-        <!-- Right Content Area -->
-        <div class="content-pane">
-          <!-- Sequential Steps Navigator Bar -->
-          <div class="lesson-steps-bar">
-            <span style="font-weight: bold; color: #569cd6;" id="lessonTitleHeader">Урок 1</span>
-            <div style="display: flex; gap: 4px; margin-left: auto;">
-              <div class="step-indicator active" id="stepTab1" onclick="goToStep(1)">
-                <span>1</span> Теория
-              </div>
-              <div class="step-indicator" id="stepTab2" onclick="goToStep(2)">
-                <span>2</span> Тест
-              </div>
-              <div class="step-indicator" id="stepTab3" onclick="goToStep(3)">
-                <span>3</span> Практика в Коде
-              </div>
-            </div>
+        <!-- Body: Shows Stage 1, Stage 2, or Stage 3 -->
+        <div class="lesson-body">
+          <!-- STAGE 1: Theory -->
+          <div class="theory-stage" id="stageTheory">
+            <div id="theoryContent"></div>
+            <button class="btn-retro primary" style="font-size: 13px; padding: 10px 20px; margin-top: 20px;" onclick="setLessonStep(2)">
+              ПЕРЕЙТИ К ТЕСТУ (ШАГ 2) &gt;&gt;
+            </button>
           </div>
 
-          <!-- Top Pane: Changes based on Step 1, 2, or 3 -->
-          <div class="pane-top">
-            <!-- Step 1: Theory View -->
-            <div class="theory-container" id="stageTheory">
-              <div id="theoryContentPart1"></div>
-              <button class="btn-retro primary" style="font-size: 13px; padding: 8px 16px; margin-top: 16px;" onclick="goToStep(2)">
-                ПЕРЕЙТИ К ТЕСТУ (ШАГ 2) &gt;&gt;
+          <!-- STAGE 2: Quiz -->
+          <div class="quiz-stage" id="stageQuiz" style="display: none;">
+            <div class="quiz-card">
+              <h3 id="quizQuestion">Вопрос теста</h3>
+              <div id="quizOptionsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
+              <div class="quiz-feedback" id="quizFeedback" style="display: none;"></div>
+              <button class="btn-retro success" id="btnToEditor" style="display: none; font-size: 13px; padding: 10px 20px; align-self: flex-start;" onclick="setLessonStep(3)">
+                ПЕРЕЙТИ К РЕДАКТОРУ КОДА (ШАГ 3) &gt;&gt;
               </button>
             </div>
-
-            <!-- Step 2: Quiz View -->
-            <div class="quiz-container" id="stageQuiz" style="display: none;">
-              <div class="quiz-card">
-                <h3 id="quizQuestionText">Вопрос теста</h3>
-                <div class="quiz-options" id="quizOptionsList">
-                  <!-- Options injected here -->
-                </div>
-                <div class="quiz-feedback" id="quizFeedbackBox" style="display: none;"></div>
-                <button class="btn-retro success" id="btnQuizProceed" style="display: none; font-size: 13px; padding: 8px 16px; align-self: flex-start;" onclick="goToStep(3)">
-                  ПЕРЕЙТИ К РЕДАКТОРУ КОДА (ШАГ 3) &gt;&gt;
-                </button>
-              </div>
-            </div>
-
-            <!-- Step 3: Editor & Task View -->
-            <div id="stageEditor" style="display: none; flex: 1; flex-direction: column; min-height: 0;">
-              <!-- Task Banner -->
-              <div style="background: #1b2631; border-bottom: 1px solid #2874a6; padding: 8px 12px; font-size: 12px; color: #d4d4d4;">
-                <strong style="color: #4ec9b0;">🎯 ЗАДАНИЕ:</strong> <span id="editorTaskText"></span>
-              </div>
-              <!-- Code Editor Wrapper -->
-              <div class="editor-wrapper">
-                <div class="editor-line-numbers" id="lineNumbers">1</div>
-                <textarea class="code-textarea" id="codeEditor" spellcheck="false" placeholder="// Введите ваш код на C / C++..."></textarea>
-              </div>
-            </div>
           </div>
 
-          <!-- Bottom Pane: Console & AI Chat -->
-          <div class="pane-bottom">
-            <div class="bottom-tabs-header">
-              <button class="bot-tab-btn active" id="btnBotTabConsole" onclick="switchBottomTab('console')">📟 Консоль вывода / Компилятор</button>
-              <button class="bot-tab-btn" id="btnBotTabAi" onclick="switchBottomTab('ai')">🤖 ИИ-Ассистент TrainerAI</button>
+          <!-- STAGE 3: Editor & Console -->
+          <div class="editor-stage" id="stageEditor" style="display: none;">
+            <div class="task-banner">
+              <strong>🎯 ЗАДАНИЕ К УРОКУ:</strong> <span id="taskDescription"></span>
             </div>
-
-            <!-- Console Output -->
-            <div class="console-box" id="consoleOutput">
-[TrainerCode 2000 Subsystem Initialized]
-GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
-Нажмите '▶ Запуск (F5)' для сборки и выполнения текущего кода.
+            <div class="editor-split">
+              <div class="line-numbers" id="lineNumbers">1</div>
+              <textarea class="code-editor-textarea" id="codeEditor" spellcheck="false" placeholder="// Введите ваш код на C или C++..."></textarea>
             </div>
-
-            <!-- AI Chat View -->
-            <div class="ai-chat-box" id="aiChatView" style="display: none;">
-              <div class="ai-messages-list" id="aiMessagesList">
-                <div class="ai-msg bot">
-<strong>[TrainerAI • Системный наставник]</strong>
-Готов помочь! Я умею анализировать память, находить утечки malloc/free, разыменования NULL и объяснять, как код работает в регистрах процессора и ОЗУ.
-                </div>
+            <div class="bottom-dock">
+              <div class="dock-tabs">
+                <button class="dock-tab-btn active" id="tabBtnConsole" onclick="switchDockTab('console')">📟 Консоль вывода / Компилятор</button>
+                <button class="dock-tab-btn" id="tabBtnAi" onclick="switchDockTab('ai')">🤖 ИИ-Ассистент TrainerAI</button>
               </div>
-              <div class="ai-input-bar">
-                <input type="text" class="ai-prompt-input" id="aiPromptInput" placeholder="Спросите ИИ-наставника (например: почему ReadProcessMemory возвращает 0?)...">
-                <button class="btn-retro primary" onclick="sendAiPrompt()">Спросить</button>
-                <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">Баги</button>
-                <button class="btn-retro" onclick="askAi('Объясни код урока')">Объяснить</button>
+              <div class="console-screen" id="consoleScreen">
+[TrainerCode 2000 Dark Environment Initialized]
+GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
+Нажмите '▶ Запуск (F5)' для компиляции и проверки программы.
+              </div>
+              <div class="ai-chat-screen" id="aiChatScreen" style="display: none;">
+                <div class="ai-chat-messages" id="aiChatMessages">
+                  <div class="ai-msg bot">
+<strong>[TrainerAI • Системный наставник]</strong>
+Приветствую! Задайте любой вопрос по памяти, указателям или нажмите "Баги" для аудита утечек памяти.
+                  </div>
+                </div>
+                <div class="ai-input-bar">
+                  <input type="text" class="input-dark" style="flex: 1;" id="aiPromptInput" placeholder="Спросить ИИ (например: в чем разница между стеком и кучей?)...">
+                  <button class="btn-retro primary" onclick="sendAiPrompt()">Спросить</button>
+                  <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">Баги</button>
+                  <button class="btn-retro" onclick="askAi('Объясни код урока')">Объяснить</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- Status Bar -->
-    <div class="statusbar-2000">
-      <div class="status-segment" id="sbLesson" style="flex: 2;">Урок 1/17</div>
-      <div class="status-segment" id="sbLang" style="width: 90px;">C11 / C++20</div>
-      <div class="status-segment" id="sbCompiler" style="width: 170px;">GCC / MSVC Ready</div>
-      <div class="status-segment" id="sbAi" style="width: 140px;">ИИ: TrainerAI Active</div>
-      <div class="status-segment" id="sbUser" style="flex: 1.2;">Ученик: Александр (Новичок)</div>
+    <div class="app-statusbar">
+      <div class="status-segment" id="sbLesson">Урок 1/17: Архитектура ЭВМ</div>
+      <div class="status-segment" id="sbLang">Язык: C11</div>
+      <div class="status-segment">GCC 12.2 / MSVC Ready</div>
+      <div class="status-segment">TrainerAI Online</div>
+      <div class="status-segment" style="margin-left: auto;" id="sbUser">Ученик: Александр</div>
     </div>
   </div>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal-dialog">
-      <div class="titlebar-2000">
-        <div class="titlebar-title"><span>⚙</span> Настройки компилятора и путей</div>
-        <button class="titlebar-btn" onclick="closeSettingsModal()">✕</button>
+  <!-- Cheat Sheet Modal -->
+  <div class="modal-backdrop" id="typesModal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 8px;">
+        <strong style="font-size: 14px; color: #4ec9b0;">📊 Справочник фундаментальных типов данных C / C++ (x86 vs x64)</strong>
+        <button class="btn-retro" onclick="closeTypesModal()">✕</button>
       </div>
-      <div class="dialog-body">
-        <div class="form-group-dark">
-          <label>Тип компилятора:</label>
-          <select class="select-dark" id="cfgCompilerType">
-            <option value="GCC (GNU Compiler Collection)">GCC / G++ (Встроенный / MinGW-w64)</option>
-            <option value="Microsoft Visual Studio (cl.exe)">Microsoft Visual Studio (cl.exe / MSVC)</option>
-            <option value="Clang / LLVM">Clang / LLVM</option>
-          </select>
-        </div>
-
-        <div class="form-group-dark">
-          <label>Путь к папке компилятора (Visual Studio / MinGW):</label>
-          <input type="text" class="input-dark" id="cfgCompilerPath" value="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\bin\cl.exe">
-        </div>
-
-        <div class="form-group-dark">
-          <label>Флаги компиляции (-Wall -Wextra -O2):</label>
-          <input type="text" class="input-dark" id="cfgCompilerFlags" value="-Wall -Wextra -O2">
-        </div>
-
-        <div class="form-group-dark">
-          <button class="btn-retro" onclick="testCompilerConfig()">Тестировать компилятор...</button>
-          <span id="compilerTestResult" style="color: #4ec9b0; margin-top: 4px;"></span>
-        </div>
-      </div>
-      <div class="dialog-footer">
-        <button class="btn-retro primary" onclick="saveCompilerSettings()">Сохранить</button>
-        <button class="btn-retro" onclick="closeSettingsModal()">Закрыть</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Data Types Modal -->
-  <div class="modal-overlay" id="typesModal">
-    <div class="modal-dialog" style="width: 780px;">
-      <div class="titlebar-2000">
-        <div class="titlebar-title"><span>📊</span> Справочник типов данных C / C++ (x86 vs x64)</div>
-        <button class="titlebar-btn" onclick="closeTypesModal()">✕</button>
-      </div>
-      <div class="dialog-body" style="max-height: 440px; overflow-y: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #181818;" border="1" cellpadding="5" bordercolor="#333333">
-          <thead style="background: #252526; color: #4ec9b0;">
+      <div style="max-height: 420px; overflow-y: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #141416;" border="1" cellpadding="6" bordercolor="#2d2d34">
+          <thead style="background: #1f1f24; color: #4ec9b0;">
             <tr>
-              <th>Тип данных</th>
+              <th>Тип</th>
               <th>x86</th>
               <th>x64</th>
               <th>printf</th>
               <th>Диапазон значений</th>
-              <th>Описание и назначение</th>
+              <th>Описание</th>
             </tr>
           </thead>
-          <tbody id="typesTableBody">
-            <!-- Injected dynamically -->
-          </tbody>
+          <tbody id="typesTbody"></tbody>
         </table>
       </div>
-      <div class="dialog-footer">
+      <div style="text-align: right; margin-top: 8px;">
         <button class="btn-retro primary" onclick="closeTypesModal()">Закрыть</button>
       </div>
     </div>
   </div>
 
-  <!-- AI Model Downloader Modal -->
-  <div class="modal-overlay" id="aiDownloaderModal">
-    <div class="modal-dialog">
-      <div class="titlebar-2000">
-        <div class="titlebar-title"><span>🤖</span> Менеджер нейросетей TrainerAI (GGUF / Llama)</div>
-        <button class="titlebar-btn" onclick="closeAiDownloaderModal()">✕</button>
-      </div>
-      <div class="dialog-body">
-        <p>Выберите нейросеть для локального инференса и анализа кода:</p>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModel" value="smollm" checked>
-            <span><strong>SmolLM2-360M-Instruct</strong> (GGUF, ~230 МБ) — Сверхбыстрая работа на любом CPU</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModel" value="tinyllama">
-            <span><strong>TinyLlama-1.1B-Chat</strong> (GGUF, ~630 МБ) — Сбалансированный код-ассистент</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModel" value="qwen">
-            <span><strong>Qwen2.5-Coder-1.5B</strong> (GGUF, ~980 МБ) — Эксперт по C++ и WinAPI</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input type="radio" name="aiModel" value="ollama">
-            <span><strong>Локальный сервер Ollama</strong> (http://localhost:11434 / LM Studio)</span>
-          </label>
+  <script>
+    // State
+    let gLessons = [];
+    let gCurrentIdx = 0;
+    let gCurrentStep = 1;
+    let gUserData = {
+      name: localStorage.getItem('tc_user_name') || 'Александр',
+      level: localStorage.getItem('tc_user_level') || 'Абсолютный новичок',
+      completed: JSON.parse(localStorage.getItem('tc_completed') || '[]'),
+      unlocked: JSON.parse(localStorage.getItem('tc_unlocked') || '[1]')
+    };
+
+    // Elements
+    const screenStartForm = document.getElementById('screenStartForm');
+    const screenInstructions = document.getElementById('screenInstructions');
+    const screenLessonWorkspace = document.getElementById('screenLessonWorkspace');
+    const mainToolbar = document.getElementById('mainToolbar');
+
+    const stageTheory = document.getElementById('stageTheory');
+    const stageQuiz = document.getElementById('stageQuiz');
+    const stageEditor = document.getElementById('stageEditor');
+
+    const elEditor = document.getElementById('codeEditor');
+    const elLineNumbers = document.getElementById('lineNumbers');
+    const elConsole = document.getElementById('consoleScreen');
+    const elAiMessages = document.getElementById('aiChatMessages');
+    const elAiPrompt = document.getElementById('aiPromptInput');
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      setupEditorKeys();
+      loadTypes();
+
+      try {
+        const res = await fetch('/api/lessons');
+        gLessons = await res.json();
+      } catch (e) {
+        console.error('Failed to load lessons:', e);
+      }
+
+      // Check if user was already registered
+      if (localStorage.getItem('tc_registered')) {
+        startLessonsWorkspace();
+      } else {
+        screenStartForm.style.display = 'flex';
+        screenInstructions.style.display = 'none';
+        screenLessonWorkspace.style.display = 'none';
+        mainToolbar.style.display = 'none';
+      }
+    });
+
+    // Editor: Enter key, Tab key, Line numbering
+    function setupEditorKeys() {
+      elEditor.addEventListener('input', updateLineNumbers);
+      elEditor.addEventListener('scroll', () => {
+        elLineNumbers.scrollTop = elEditor.scrollTop;
+      });
+
+      elEditor.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const start = elEditor.selectionStart;
+          const end = elEditor.selectionEnd;
+          elEditor.value = elEditor.value.substring(0, start) + '    ' + elEditor.value.substring(end);
+          elEditor.selectionStart = elEditor.selectionEnd = start + 4;
+          updateLineNumbers();
+        } else if (e.key === 'F5') {
+          e.preventDefault();
+          compileAndRun();
+        } else if (e.key === 'F1') {
+          e.preventDefault();
+          openTypesModal();
+        }
+        // Notice: Enter is NOT prevented! Browser naturally inserts \n!
+      });
+    }
+
+    function updateLineNumbers() {
+      const count = elEditor.value.split('\n').length;
+      let s = '';
+      for (let i = 1; i <= Math.max(count, 1); i++) {
+        s += i + '<br>';
+      }
+      elLineNumbers.innerHTML = s;
+    }
+
+    // Onboarding handlers
+    function handleStartNext() {
+      const name = document.getElementById('userNameInput').value.trim() || 'Александр';
+      const level = document.getElementById('userLevelInput').value;
+
+      gUserData.name = name;
+      gUserData.level = level;
+      localStorage.setItem('tc_user_name', name);
+      localStorage.setItem('tc_user_level', level);
+
+      screenStartForm.style.display = 'none';
+      screenInstructions.style.display = 'flex';
+      document.getElementById('instructionsPraiseTitle').textContent = `✨ Добро пожаловать, ${name}!`;
+    }
+
+    function startLessonsWorkspace() {
+      localStorage.setItem('tc_registered', 'true');
+      screenStartForm.style.display = 'none';
+      screenInstructions.style.display = 'none';
+      screenLessonWorkspace.style.display = 'flex';
+      mainToolbar.style.display = 'flex';
+
+      document.getElementById('userProfileIndicator').textContent = `${gUserData.name} (${gUserData.level})`;
+      document.getElementById('sbUser').textContent = `Ученик: ${gUserData.name}`;
+
+      if (gLessons.length > 0) {
+        loadLesson(gCurrentIdx);
+      }
+    }
+
+    function restartOnboarding() {
+      screenLessonWorkspace.style.display = 'none';
+      mainToolbar.style.display = 'none';
+      screenStartForm.style.display = 'flex';
+      screenInstructions.style.display = 'none';
+    }
+
+    // Lesson loader
+    function loadLesson(idx) {
+      if (idx < 0 || idx >= gLessons.length) return;
+      gCurrentIdx = idx;
+      const les = gLessons[idx];
+
+      document.getElementById('lblLessonHeader').textContent = `${les.title} (${les.lang})`;
+      document.getElementById('taskDescription').textContent = les.task;
+      document.getElementById('sbLesson').textContent = `Урок ${les.id}/${gLessons.length}: ${les.title}`;
+      document.getElementById('sbLang').textContent = `Язык: ${les.lang}`;
+
+      // Stage 1: Theory
+      document.getElementById('theoryContent').innerHTML = `
+        <h2>${les.title}</h2>
+        <div style="font-size: 12px; color: #888; margin-bottom: 14px;">
+          Язык: <strong style="color: #4ec9b0;">${les.lang}</strong> | 
+          Сложность: <strong style="color: #dcdcaa;">${les.difficulty}</strong>
         </div>
+        <div style="white-space: pre-wrap;">${escapeHtml(les.theoryPart1)}</div>
+        ${les.theoryPart2 ? `<div style="margin-top: 16px; white-space: pre-wrap;">${escapeHtml(les.theoryPart2)}</div>` : ''}
+      `;
 
-        <div style="margin-top: 12px;">
-          <div id="aiDownloadStatus" style="margin-bottom: 4px; font-weight: bold; color: #4ec9b0;">Статус: Готов к загрузке</div>
-          <div style="background: #141414; border: 1px solid #3c3c3c; height: 20px; position: relative;">
-            <div id="aiProgressBar" style="background: #0e639c; height: 100%; width: 0%; transition: width 0.2s;"></div>
-          </div>
-        </div>
-      </div>
-      <div class="dialog-footer">
-        <button class="btn-retro primary" id="btnStartDownload" onclick="simulateAiDownload()">Скачать модель</button>
-        <button class="btn-retro" onclick="closeAiDownloaderModal()">Закрыть</button>
-      </div>
-    </div>
-  </div>
+      // Stage 2: Quiz
+      document.getElementById('quizQuestion').textContent = les.quiz.question;
+      const optsCont = document.getElementById('quizOptionsContainer');
+      optsCont.innerHTML = '';
+      document.getElementById('quizFeedback').style.display = 'none';
+      document.getElementById('btnToEditor').style.display = 'none';
 
-  <!-- Taskbar -->
-  <div class="taskbar-2000">
-    <button class="start-btn" onclick="showWelcomeScreen()">
-      <span>🪟</span> <strong>Пуск</strong>
-    </button>
-    <div class="taskbar-tasks">
-      <div class="task-item" onclick="showLessonScreen()">
-        <span>💻</span> TrainerCode 2000
-      </div>
-    </div>
-    <div class="tray-clock" id="trayClock">20:00</div>
-  </div>
+      les.quiz.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option-btn';
+        btn.innerHTML = `<span>⚪</span> <span>${escapeHtml(opt.text)}</span>`;
+        btn.onclick = () => handleQuizAnswer(opt, btn);
+        optsCont.appendChild(btn);
+      });
 
-  <script src="app.js"></script>
+      // Stage 3: Editor
+      const saved = localStorage.getItem(`tc_code_${les.id}`);
+      elEditor.value = saved || les.initialCode;
+      updateLineNumbers();
+
+      // Start on Step 1 (Theory)
+      setLessonStep(1);
+    }
+
+    // Step navigation
+    function setLessonStep(step) {
+      gCurrentStep = step;
+
+      document.getElementById('pillStep1').className = `step-pill ${step === 1 ? 'active' : ''}`;
+      document.getElementById('pillStep2').className = `step-pill ${step === 2 ? 'active' : ''}`;
+      document.getElementById('pillStep3').className = `step-pill ${step === 3 ? 'active' : ''}`;
+
+      document.getElementById('btnNavStep1').className = `btn-retro ${step === 1 ? 'primary' : ''}`;
+      document.getElementById('btnNavStep2').className = `btn-retro ${step === 2 ? 'primary' : ''}`;
+      document.getElementById('btnNavStep3').className = `btn-retro ${step === 3 ? 'primary' : ''}`;
+
+      if (step === 1) {
+        stageTheory.style.display = 'block';
+        stageQuiz.style.display = 'none';
+        stageEditor.style.display = 'none';
+      } else if (step === 2) {
+        stageTheory.style.display = 'none';
+        stageQuiz.style.display = 'flex';
+        stageEditor.style.display = 'none';
+      } else if (step === 3) {
+        stageTheory.style.display = 'none';
+        stageQuiz.style.display = 'none';
+        stageEditor.style.display = 'flex';
+        elEditor.focus();
+        updateLineNumbers();
+      }
+    }
+
+    // Quiz evaluation
+    function handleQuizAnswer(opt, btn) {
+      document.querySelectorAll('.quiz-option-btn').forEach(b => b.classList.remove('correct', 'wrong'));
+      const fb = document.getElementById('quizFeedback');
+      fb.style.display = 'block';
+
+      if (opt.correct) {
+        btn.classList.add('correct');
+        btn.querySelector('span').textContent = '✅';
+        fb.className = 'quiz-feedback success';
+        fb.innerHTML = `<strong>🎉 Отлично!</strong><br>${escapeHtml(opt.explanation)}`;
+        document.getElementById('btnToEditor').style.display = 'inline-block';
+        document.getElementById('pillStep2').classList.add('done');
+      } else {
+        btn.classList.add('wrong');
+        btn.querySelector('span').textContent = '❌';
+        fb.className = 'quiz-feedback error';
+        fb.innerHTML = `<strong>Неверно:</strong><br>${escapeHtml(opt.explanation)}<br><em>Выберите другой вариант!</em>`;
+        document.getElementById('btnToEditor').style.display = 'none';
+      }
+    }
+
+    // Compile & Run
+    async function compileAndRun() {
+      setLessonStep(3);
+      switchDockTab('console');
+
+      const les = gLessons[gCurrentIdx];
+      const code = elEditor.value;
+
+      elConsole.textContent = `==================================================\nСборка программы: ${les.title}\nКомпилятор: ${les.lang === 'C++' ? 'G++ 12.2 (-std=c++20)' : 'GCC 12.2 (-std=c11)'}\n==================================================\nКомпиляция... Пожалуйста, подождите.\n`;
+
+      try {
+        const res = await fetch('/api/compile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, lang: les.lang, lessonId: les.id })
+        });
+        const data = await res.json();
+
+        if (!data.success && data.stage === 'compilation') {
+          elConsole.textContent += `❌ ОШИБКА КОМПИЛЯЦИИ (Код ${data.exitCode}):\n${data.stderr}\n\nСборка прервана (${data.timeMs} мс).\nНажмите кнопку 'Баги' для анализа через TrainerAI!`;
+          return;
+        }
+
+        elConsole.textContent += `✅ Компиляция успешна (${data.timeMs} мс).\nЗапуск исполняемого файла:\n--------------------------------------------------\n`;
+        elConsole.textContent += data.stdout || '(Вывод пуст)\n';
+
+        if (data.stderr) {
+          elConsole.textContent += `\n[STDERR]:\n${data.stderr}\n`;
+        }
+
+        elConsole.textContent += `--------------------------------------------------\nКод завершения: ${data.exitCode}\n`;
+
+        if (data.taskCompleted) {
+          elConsole.textContent += `\n🎉 ПОЗДРАВЛЯЕМ! Задание урока выполнено на 100%!\nРезультат программы совпал с ожидаемым.\nСледующий урок разблокирован! Нажмите 'След. ⏭' для перехода.\n`;
+
+          if (!gUserData.completed.includes(les.id)) {
+            gUserData.completed.push(les.id);
+            localStorage.setItem('tc_completed', JSON.stringify(gUserData.completed));
+          }
+
+          const nextId = les.id + 1;
+          if (nextId <= gLessons.length && !gUserData.unlocked.includes(nextId)) {
+            gUserData.unlocked.push(nextId);
+            localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
+          }
+        }
+      } catch (err) {
+        elConsole.textContent += `\nОшибка выполнения: ${err.message}\n`;
+      }
+    }
+
+    // Navigation
+    function prevLesson() {
+      if (gCurrentIdx > 0) loadLesson(gCurrentIdx - 1);
+    }
+
+    function nextLesson() {
+      if (gCurrentIdx + 1 < gLessons.length) {
+        loadLesson(gCurrentIdx + 1);
+      } else {
+        alert('Поздравляем! Вы прошли все 17 уроков курса!');
+      }
+    }
+
+    function resetCode() {
+      if (confirm('Сбросить код к исходному шаблону урока?')) {
+        elEditor.value = gLessons[gCurrentIdx].initialCode;
+        updateLineNumbers();
+      }
+    }
+
+    function showSolution() {
+      if (confirm('Показать эталонное решение автора?')) {
+        elEditor.value = gLessons[gCurrentIdx].solution;
+        updateLineNumbers();
+      }
+    }
+
+    function unlockAllLessons() {
+      gLessons.forEach(l => {
+        if (!gUserData.unlocked.includes(l.id)) gUserData.unlocked.push(l.id);
+      });
+      localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
+      alert('Все 17 уроков разблокированы!');
+    }
+
+    // Dock Tabs
+    function switchDockTab(tab) {
+      if (tab === 'console') {
+        document.getElementById('tabBtnConsole').classList.add('active');
+        document.getElementById('tabBtnAi').classList.remove('active');
+        document.getElementById('consoleScreen').style.display = 'block';
+        document.getElementById('aiChatScreen').style.display = 'none';
+      } else {
+        document.getElementById('tabBtnAi').classList.add('active');
+        document.getElementById('tabBtnConsole').classList.remove('active');
+        document.getElementById('aiChatScreen').style.display = 'flex';
+        document.getElementById('consoleScreen').style.display = 'none';
+        elAiPrompt.focus();
+      }
+    }
+
+    // AI
+    async function sendAiPrompt() {
+      const p = elAiPrompt.value.trim();
+      if (!p) return;
+      askAi(p);
+      elAiPrompt.value = '';
+    }
+
+    async function askAi(promptText) {
+      switchDockTab('ai');
+
+      const userDiv = document.createElement('div');
+      userDiv.className = 'ai-msg user';
+      userDiv.innerHTML = `<strong>👤 Вы:</strong> ${escapeHtml(promptText)}`;
+      elAiMessages.appendChild(userDiv);
+
+      const botDiv = document.createElement('div');
+      botDiv.className = 'ai-msg bot';
+      botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong> Анализирую код...`;
+      elAiMessages.appendChild(botDiv);
+      elAiMessages.scrollTop = elAiMessages.scrollHeight;
+
+      try {
+        const res = await fetch('/api/ai/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: promptText,
+            code: elEditor.value,
+            lessonId: gLessons[gCurrentIdx].id
+          })
+        });
+        const data = await res.json();
+        botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong>\n${escapeHtml(data.response)}`;
+      } catch (e) {
+        botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong> Ошибка связи: ${e.message}`;
+      }
+      elAiMessages.scrollTop = elAiMessages.scrollHeight;
+    }
+
+    // Types Modal
+    async function loadTypes() {
+      try {
+        const res = await fetch('/api/types');
+        const types = await res.json();
+        const tb = document.getElementById('typesTbody');
+        tb.innerHTML = '';
+        types.forEach(t => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong style="color: #4ec9b0;"><code>${t.name}</code></strong></td>
+            <td style="text-align: center; color: #569cd6;">${t.x86}</td>
+            <td style="text-align: center; color: #569cd6;">${t.x64}</td>
+            <td><code style="color: #ce9178;">${t.spec}</code></td>
+            <td style="color: #b5cea8;">${t.range}</td>
+            <td style="color: #d4d4d4;">${t.desc}</td>
+          `;
+          tb.appendChild(tr);
+        });
+      } catch (e) {}
+    }
+
+    function openTypesModal() { document.getElementById('typesModal').style.display = 'flex'; }
+    function closeTypesModal() { document.getElementById('typesModal').style.display = 'none'; }
+
+    function downloadExe() {
+      window.location.href = '/api/download-exe';
+    }
+
+    function escapeHtml(t) {
+      if (!t) return '';
+      return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+  </script>
 </body>
 </html>
