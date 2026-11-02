@@ -3,924 +3,1074 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrainerCode 2000 — Dark Win32 Edition</title>
+  <title>TrainerCode — Современная платформа системного программирования C/C++</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --bg-panel: #11151c;
+      --bg-surface: #161b22;
+      --bg-code: #080b11;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #1f6feb;
+      --accent-blue: #007acc;
+      --accent-cyan: #38bdf8;
+      --accent-green: #10b981;
+      --accent-purple: #a855f7;
+      --accent-yellow: #eab308;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --text-dim: #484f58;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      border-radius: 0 !important;
-      font-family: "Tahoma", "MS Sans Serif", "Segoe UI", Arial, sans-serif;
-      font-size: 12px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     html, body {
       width: 100%;
       height: 100%;
-      background: #0a0a0c !important;
-      color: #d4d4d4 !important;
+      background: var(--bg-dark);
+      color: var(--text-main);
       overflow: hidden;
     }
 
-    /* Main Window Frame */
-    .app-window {
+    /* Main Container */
+    .app-root {
       width: 100vw;
       height: 100vh;
-      background: #18181a;
       display: flex;
       flex-direction: column;
-      border: 2px solid #333338;
-      box-shadow: inset 1px 1px #44444a, inset -1px -1px #0a0a0c;
+      background: radial-gradient(circle at 15% 15%, rgba(0, 122, 204, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                  var(--bg-dark);
     }
 
-    /* Title Bar */
-    .app-titlebar {
-      height: 28px;
-      background: linear-gradient(90deg, #094771, #1177bb);
-      color: #ffffff;
+    /* Top Glass Header */
+    .app-header {
+      height: 52px;
+      background: rgba(17, 21, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 8px;
-      font-weight: bold;
-      font-size: 12px;
-      border-bottom: 1px solid #000000;
-      user-select: none;
+      padding: 0 18px;
+      z-index: 100;
     }
 
-    .titlebar-btn {
-      width: 18px;
-      height: 18px;
-      background: #252528;
-      color: #ffffff;
-      border: 1px solid #55555c;
-      box-shadow: inset 1px 1px #444, inset -1px -1px #111;
+    .header-logo {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #007acc, #38bdf8);
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 6px;
       font-size: 11px;
-      font-weight: bold;
-      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(0, 122, 204, 0.3);
     }
 
-    .titlebar-btn:hover {
-      background: #3e3e42;
-    }
-
-    /* Menubar */
-    .app-menubar {
-      height: 26px;
-      background: #202024;
-      border-bottom: 1px solid #2d2d32;
+    .header-actions {
       display: flex;
       align-items: center;
-      padding: 0 6px;
-      gap: 12px;
-      user-select: none;
+      gap: 10px;
     }
 
-    .menu-link {
-      color: #cccccc;
-      cursor: pointer;
-      padding: 2px 6px;
-    }
-
-    .menu-link:hover {
-      background: #094771;
-      color: #ffffff;
-    }
-
-    /* Toolbar */
-    .app-toolbar {
-      height: 38px;
-      background: #28282d;
-      border-bottom: 1px solid #38383e;
-      display: flex;
-      align-items: center;
-      padding: 0 8px;
-      gap: 6px;
-    }
-
-    .btn-retro {
-      background: #333338;
-      border: 1px solid #4a4a52;
-      box-shadow: inset 1px 1px #4c4c56, inset -1px -1px #1c1c20;
-      padding: 5px 12px;
+    /* Modern Buttons */
+    .btn-modern {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 7px 14px;
+      border-radius: 8px;
       font-size: 12px;
-      color: #f0f0f0;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
     }
 
-    .btn-retro:hover {
-      background: #3e3e46;
-      border-color: #007acc;
+    .btn-modern:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
     }
 
-    .btn-retro:active {
-      box-shadow: inset 1px 1px #101012, inset -1px -1px #4c4c56;
-      padding: 6px 11px 4px 13px;
-    }
-
-    .btn-retro.primary {
-      background: #0e639c;
-      border-color: #1177bb;
+    .btn-modern.primary {
+      background: linear-gradient(135deg, #007acc, #0284c7);
+      border: 1px solid #38bdf8;
       color: #ffffff;
-      font-weight: bold;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(0, 122, 204, 0.35);
     }
 
-    .btn-retro.primary:hover {
-      background: #1177bb;
+    .btn-modern.primary:hover {
+      box-shadow: 0 4px 18px rgba(0, 122, 204, 0.55);
+      transform: translateY(-1px);
     }
 
-    .btn-retro.success {
-      background: #1b5e20;
-      border-color: #2e7d32;
+    .btn-modern.success {
+      background: linear-gradient(135deg, #059669, #10b981);
+      border: 1px solid #34d399;
       color: #ffffff;
-      font-weight: bold;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(16, 185, 129, 0.35);
     }
 
-    .btn-retro.success:hover {
-      background: #2e7d32;
+    .btn-modern.success:hover {
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.55);
+      transform: translateY(-1px);
     }
 
-    .toolbar-sep {
-      width: 1px;
-      height: 22px;
-      background: #44444c;
-      margin: 0 4px;
-    }
-
-    /* Content Area */
-    .app-content {
+    /* Viewport Area */
+    .main-viewport {
       flex: 1;
       display: flex;
       min-height: 0;
-      background: #141416;
+      position: relative;
     }
 
-    /* Screen: Onboarding (Steps 0 & 1) */
-    .onboarding-screen {
+    /* SCREEN 1: Onboarding Card */
+    .onboarding-wrap {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: #111113;
     }
 
-    .dark-card {
-      width: 640px;
+    .card-glass {
+      width: 600px;
       max-width: 95vw;
-      background: #1f1f23;
-      border: 1px solid #3c3c44;
-      box-shadow: inset 1px 1px #2e2e34, inset -1px -1px #111113, 0 10px 30px rgba(0,0,0,0.8);
-      padding: 28px 32px;
+      background: rgba(22, 27, 34, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 32px 36px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
+      animation: fadeInScale 0.35s ease-out;
     }
 
-    .dark-card h1 {
-      font-size: 20px;
-      color: #4ec9b0;
-      border-bottom: 2px solid #007acc;
-      padding-bottom: 8px;
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    .dark-card p {
+    .card-glass h1 {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-glass p {
       font-size: 13px;
       line-height: 1.6;
-      color: #cccccc;
+      color: var(--text-muted);
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
 
     .form-group label {
-      font-weight: bold;
-      color: #569cd6;
       font-size: 12px;
+      font-weight: 600;
+      color: #7dd3fc;
     }
 
-    .input-dark {
-      background: #121214;
+    .input-modern {
+      background: rgba(10, 12, 16, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
       color: #ffffff;
-      border: 1px solid #3a3a42;
-      box-shadow: inset 1px 1px #050506;
-      padding: 8px 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-modern:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .select-modern {
+      background: #0f131a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 10px 12px;
       font-size: 13px;
       outline: none;
     }
 
-    .input-dark:focus {
-      border-color: #007acc;
-    }
-
-    .select-dark {
-      background: #121214;
-      color: #ffffff;
-      border: 1px solid #3a3a42;
-      padding: 8px 10px;
-      font-size: 13px;
-      outline: none;
-    }
-
-    .info-box {
-      background: #162432;
-      border: 1px solid #1f4f7c;
-      padding: 12px 16px;
+    .info-badge-box {
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      padding: 14px 16px;
       font-size: 12px;
       line-height: 1.6;
-      color: #9cdcfe;
+      color: #bae6fd;
     }
 
-    .info-box ul {
-      padding-left: 20px;
+    .info-badge-box ul {
+      padding-left: 18px;
       margin-top: 6px;
     }
 
-    /* Screen: Lesson Workspace */
-    .lesson-workspace {
+    /* SCREEN 2: Modern Learning Workspace */
+    .workspace-wrap {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    /* Left Sidebar: Lessons List */
+    .sidebar-lessons {
+      width: 280px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-top {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-top-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .lessons-scroll-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .lesson-item-row {
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .lesson-item-row:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .lesson-item-row.active {
+      background: rgba(0, 122, 204, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .lesson-item-row.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Right Main Panel */
+    .lesson-main-pane {
       flex: 1;
       display: flex;
       flex-direction: column;
+      min-width: 0;
       min-height: 0;
-      background: #141416;
+      background: var(--bg-dark);
     }
 
-    /* Lesson Navigation Bar */
-    .lesson-navbar {
-      height: 34px;
-      background: #202024;
-      border-bottom: 1px solid #333338;
+    /* Lesson Stepper Header */
+    .lesson-step-header {
+      height: 48px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      padding: 0 10px;
-      gap: 10px;
-      user-select: none;
+      justify-content: space-between;
+      padding: 0 20px;
     }
 
-    .lesson-title-badge {
-      font-size: 13px;
-      font-weight: bold;
-      color: #4ec9b0;
-    }
-
-    .step-pill {
-      padding: 4px 14px;
-      background: #2b2b30;
-      border: 1px solid #404048;
-      color: #aaaaaa;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .step-pill.active {
-      background: #0e639c;
-      color: #ffffff;
-      border-color: #1177bb;
-      font-weight: bold;
-    }
-
-    .step-pill.done {
-      background: #163a20;
-      color: #4ec9b0;
-      border-color: #2e7d32;
-    }
-
-    /* Lesson Stages Split */
-    .lesson-body {
-      flex: 1;
+    .step-pills-bar {
       display: flex;
-      min-height: 0;
+      align-items: center;
+      background: var(--bg-surface);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+      border: 1px solid var(--border-subtle);
     }
 
-    /* Theory Stage (Stage 1) */
-    .theory-stage {
+    .step-pill-btn {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .step-pill-btn.active {
+      background: #007acc;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 122, 204, 0.4);
+    }
+
+    .step-pill-btn.done {
+      color: var(--accent-green);
+    }
+
+    /* STAGE 1: Theory Reader */
+    .theory-viewport {
       flex: 1;
-      padding: 24px 30px;
       overflow-y: auto;
+      padding: 28px 36px;
       line-height: 1.7;
       font-size: 14px;
-      background: #141416;
-      color: #d4d4d4;
+      color: #e2e8f0;
+      max-width: 980px;
     }
 
-    .theory-stage h2 {
-      font-size: 18px;
-      color: #4ec9b0;
-      border-bottom: 2px solid #007acc;
-      padding-bottom: 6px;
-      margin-bottom: 16px;
+    .theory-viewport h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
     }
 
-    .theory-stage pre {
-      background: #0d0d0f;
-      border: 1px solid #2d2d35;
-      padding: 12px 16px;
-      font-family: "Lucida Console", "Consolas", monospace;
+    .theory-section {
+      margin-bottom: 24px;
+    }
+
+    .theory-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #38bdf8;
+      margin: 18px 0 8px 0;
+    }
+
+    .theory-section p {
+      margin-bottom: 12px;
+    }
+
+    .theory-section ul {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    .theory-section li {
+      margin-bottom: 6px;
+    }
+
+    /* CODE BOXES: Styled IDE Windows */
+    .code-box {
+      background: var(--bg-code);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin: 16px 0;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .code-box-header {
+      height: 32px;
+      background: #111620;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50% !important;
+    }
+
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .code-filename {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 2px 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .code-box pre {
+      padding: 14px 18px;
+      font-family: 'Fira Code', monospace;
       font-size: 13px;
-      color: #9cdcfe;
-      margin: 14px 0;
-      white-space: pre-wrap;
-      line-height: 1.5;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: #e2e8f0;
     }
 
-    /* Quiz Stage (Stage 2) */
-    .quiz-stage {
+    /* Syntax Tokens */
+    .tok-pp { color: #f472b6; font-weight: 600; }
+    .tok-str { color: #fca5a5; }
+    .tok-type { color: #38bdf8; font-weight: 600; }
+    .tok-fn { color: #c084fc; font-weight: 500; }
+    .tok-kw { color: #60a5fa; font-weight: 600; }
+    .tok-num { color: #34d399; }
+    .tok-com { color: #64748b; font-style: italic; }
+
+    /* STAGE 2: Interactive Single-Question Quiz */
+    .quiz-viewport {
       flex: 1;
-      padding: 24px 30px;
-      overflow-y: auto;
-      background: #141416;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .quiz-card-modern {
+      width: 680px;
+      max-width: 95vw;
+      background: rgba(22, 27, 34, 0.9);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 30px 34px;
       display: flex;
       flex-direction: column;
       gap: 18px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     }
 
-    .quiz-card {
-      background: #1f1f23;
-      border: 1px solid #3c3c44;
-      padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .quiz-card-modern h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.5;
     }
 
-    .quiz-card h3 {
-      font-size: 16px;
-      color: #dcdcaa;
-    }
-
-    .quiz-option-btn {
-      background: #28282d;
-      border: 1px solid #44444c;
-      padding: 12px 16px;
+    .quiz-btn-option {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 18px;
       color: #ffffff;
       font-size: 13px;
+      line-height: 1.5;
       text-align: left;
       cursor: pointer;
-      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .quiz-btn-option:hover {
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.3);
+      transform: translateX(3px);
+    }
+
+    .quiz-btn-option.correct {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+    }
+
+    .quiz-btn-option.wrong {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+
+    .quiz-explanation-box {
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .quiz-explanation-box.success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .quiz-explanation-box.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    /* STAGE 3: Editor & Console Split */
+    .editor-stage-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .task-bar-modern {
+      background: #111620;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 20px;
+      font-size: 13px;
+      color: #cbd5e1;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .quiz-option-btn:hover {
-      background: #33333a;
-      border-color: #007acc;
+    .task-tag {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
     }
 
-    .quiz-option-btn.correct {
-      background: #1b4d24 !important;
-      border-color: #2e7d32 !important;
-      color: #ffffff !important;
-      font-weight: bold;
-    }
-
-    .quiz-option-btn.wrong {
-      background: #5a1c1c !important;
-      border-color: #c62828 !important;
-      color: #ffffff !important;
-    }
-
-    .quiz-feedback {
-      padding: 12px 16px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .quiz-feedback.success {
-      background: #14331a;
-      border: 1px solid #2e7d32;
-      color: #4ec9b0;
-    }
-
-    .quiz-feedback.error {
-      background: #3d1414;
-      border: 1px solid #c62828;
-      color: #ef9a9a;
-    }
-
-    /* Editor Stage (Stage 3) */
-    .editor-stage {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      background: #141416;
-    }
-
-    .task-banner {
-      background: #18232e;
-      border-bottom: 1px solid #1f4f7c;
-      padding: 10px 16px;
-      font-size: 13px;
-      color: #e0e0e0;
-      line-height: 1.4;
-    }
-
-    .task-banner strong {
-      color: #4ec9b0;
-    }
-
-    .editor-split {
-      flex: 1.2;
+    .editor-code-row {
+      flex: 1.3;
       display: flex;
       min-height: 0;
-      background: #0d0d0f;
+      background: var(--bg-code);
     }
 
-    .line-numbers {
-      width: 48px;
-      background: #18181c;
-      border-right: 1px solid #2d2d34;
-      color: #666672;
-      font-family: "Lucida Console", "Consolas", monospace;
+    .editor-lines {
+      width: 46px;
+      background: #0b0f17;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      color: #475569;
+      font-family: 'Fira Code', monospace;
       font-size: 13px;
       line-height: 22px;
-      padding: 10px 6px;
+      padding: 12px 6px;
       text-align: right;
       user-select: none;
       overflow: hidden;
     }
 
-    .code-editor-textarea {
+    .editor-textarea {
       flex: 1;
-      background: #0d0d0f;
-      color: #d4d4d4;
+      background: var(--bg-code);
+      color: #f1f5f9;
       border: none;
       outline: none;
       resize: none;
-      font-family: "Lucida Console", "Consolas", monospace;
+      font-family: 'Fira Code', monospace;
       font-size: 13px;
       line-height: 22px;
-      padding: 10px 14px;
+      padding: 12px 16px;
       tab-size: 4;
       white-space: pre;
       overflow: auto;
       word-break: normal;
     }
 
-    /* Console & AI Dock */
-    .bottom-dock {
+    /* Bottom Console Dock */
+    .dock-console-wrap {
       flex: 0.9;
       display: flex;
       flex-direction: column;
       min-height: 0;
-      background: #121214;
-      border-top: 2px solid #2d2d34;
+      background: #0a0d14;
+      border-top: 1px solid var(--border-subtle);
     }
 
-    .dock-tabs {
-      height: 28px;
-      background: #1a1a1e;
-      border-bottom: 1px solid #2d2d34;
+    .dock-tabs-bar {
+      height: 32px;
+      background: #11151c;
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      padding: 0 6px;
-      gap: 2px;
+      padding: 0 12px;
+      gap: 4px;
     }
 
-    .dock-tab-btn {
+    .dock-tab {
       background: transparent;
       border: none;
       border-bottom: 2px solid transparent;
-      color: #888892;
-      padding: 4px 12px;
+      color: var(--text-muted);
+      padding: 6px 14px;
       font-size: 12px;
+      font-weight: 500;
       cursor: pointer;
     }
 
-    .dock-tab-btn.active {
+    .dock-tab.active {
       color: #ffffff;
-      border-bottom-color: #007acc;
-      font-weight: bold;
-      background: #141416;
+      border-bottom-color: var(--accent-cyan);
+      font-weight: 600;
     }
 
-    .console-screen {
+    .console-term {
       flex: 1;
-      background: #08080a;
-      color: #4ec9b0;
-      font-family: "Lucida Console", "Consolas", monospace;
+      padding: 12px 18px;
+      font-family: 'Fira Code', monospace;
       font-size: 12px;
-      line-height: 1.5;
-      padding: 10px 14px;
+      line-height: 1.6;
+      color: #34d399;
+      background: #07090e;
       overflow-y: auto;
       white-space: pre-wrap;
       user-select: text;
     }
 
-    /* AI Chat Screen */
-    .ai-chat-screen {
+    /* AI Chat */
+    .ai-chat-term {
       flex: 1;
       display: flex;
       flex-direction: column;
       min-height: 0;
-      background: #121214;
+      background: #0c0f16;
     }
 
-    .ai-chat-messages {
+    .ai-msgs-box {
       flex: 1;
-      padding: 10px 14px;
       overflow-y: auto;
+      padding: 12px 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .ai-msg {
-      padding: 8px 12px;
-      border: 1px solid #2e2e36;
+    .ai-bubble {
+      padding: 10px 14px;
+      border-radius: 8px;
       font-size: 12px;
       line-height: 1.5;
       white-space: pre-wrap;
-    }
-
-    .ai-msg.user {
-      background: #0d283e;
-      border-color: #007acc;
-      color: #ffffff;
-      align-self: flex-end;
       max-width: 85%;
     }
 
-    .ai-msg.bot {
-      background: #1a1a1e;
-      border-color: #383842;
-      color: #cccccc;
+    .ai-bubble.user {
+      background: #1e293b;
+      color: #ffffff;
+      align-self: flex-end;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ai-bubble.bot {
+      background: #131d2a;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: #e2e8f0;
       align-self: flex-start;
       max-width: 95%;
     }
 
-    .ai-input-bar {
+    .ai-input-row {
+      padding: 8px 12px;
+      background: #11151c;
+      border-top: 1px solid var(--border-subtle);
       display: flex;
-      padding: 6px;
-      gap: 6px;
-      background: #1e1e22;
-      border-top: 1px solid #2d2d34;
+      gap: 8px;
     }
 
-    /* Status Bar */
-    .app-statusbar {
-      height: 24px;
-      background: #007acc;
-      color: #ffffff;
+    /* Footer Status Bar */
+    .app-footer-bar {
+      height: 26px;
+      background: #0c0f14;
+      border-top: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      padding: 0 10px;
-      gap: 10px;
+      padding: 0 14px;
+      gap: 12px;
       font-size: 11px;
-      user-select: none;
+      color: var(--text-muted);
     }
 
-    .status-segment {
-      padding: 1px 8px;
-      background: rgba(0, 0, 0, 0.25);
-      white-space: nowrap;
+    .footer-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* Cheat Sheet Modal */
-    .modal-backdrop {
+    /* Types Modal */
+    .modal-overlay-dark {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
       z-index: 9999;
       align-items: center;
       justify-content: center;
     }
 
-    .modal-box {
-      width: 760px;
+    .modal-content-glass {
+      width: 800px;
       max-width: 95vw;
-      background: #1c1c20;
-      border: 1px solid #44444c;
-      padding: 20px;
+      background: #111620;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
   </style>
 </head>
 <body>
 
-  <div class="app-window">
-    <!-- Titlebar -->
-    <div class="app-titlebar">
-      <div>⚡ TrainerCode 2000 — Dark Win32 Edition [C/C++ & WinAPI Academy]</div>
-      <div style="display: flex; gap: 3px;">
-        <button class="titlebar-btn" title="Свернуть">_</button>
-        <button class="titlebar-btn" title="Развернуть">□</button>
-        <button class="titlebar-btn" title="Закрыть" onclick="alert('Закройте вкладку браузера для выхода.')">✕</button>
+  <div class="app-root">
+    <!-- Top Glass Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-badge">TrainerCode</span>
+        <span style="font-weight: 600; color: #f1f5f9;">Системное Программирование C & C++</span>
       </div>
-    </div>
 
-    <!-- Menubar -->
-    <div class="app-menubar">
-      <span class="menu-link" onclick="restartOnboarding()">👤 Профиль</span>
-      <span class="menu-link" onclick="openTypesModal()">📊 Типы C/C++ (F1)</span>
-      <span class="menu-link" onclick="unlockAllLessons()">🔓 Разблокировать все уроки</span>
-      <span class="menu-link" onclick="downloadExe()">📥 Скачать TrainerCode.exe</span>
-      <span class="menu-link" style="margin-left: auto; color: #4ec9b0;" id="userProfileIndicator">Гость</span>
-    </div>
+      <div class="header-actions">
+        <button class="btn-modern" onclick="openTypesModal()">
+          <span>📊</span> Типы C/C++ (F1)
+        </button>
+        <button class="btn-modern" onclick="unlockAllLessons()">
+          <span>🔓</span> Разблокировать все уроки
+        </button>
+        <button class="btn-modern primary" onclick="downloadExe()">
+          <span>📥</span> <strong>Скачать .EXE</strong>
+        </button>
+      </div>
+    </header>
 
-    <!-- Toolbar (Always visible in lesson view) -->
-    <div class="app-toolbar" id="mainToolbar" style="display: none;">
-      <button class="btn-retro primary" onclick="compileAndRun()" title="Горячая клавиша: F5">
-        <span>▶</span> <strong>Запуск (F5)</strong>
-      </button>
+    <!-- Main Viewport -->
+    <main class="main-viewport">
 
-      <div class="toolbar-sep"></div>
-
-      <button class="btn-retro" onclick="setLessonStep(1)" id="btnNavStep1">
-        <span>📖</span> Шаг 1: Теория
-      </button>
-      <button class="btn-retro" onclick="setLessonStep(2)" id="btnNavStep2">
-        <span>❓</span> Шаг 2: Тест
-      </button>
-      <button class="btn-retro" onclick="setLessonStep(3)" id="btnNavStep3">
-        <span>💻</span> Шаг 3: Практика
-      </button>
-
-      <div class="toolbar-sep"></div>
-
-      <button class="btn-retro" onclick="resetCode()" title="Сбросить код к начальному шаблону">
-        <span>↺</span> Сброс
-      </button>
-      <button class="btn-retro" onclick="showSolution()" title="Показать эталонное решение">
-        <span>💡</span> Решение
-      </button>
-
-      <div class="toolbar-sep"></div>
-
-      <button class="btn-retro" onclick="prevLesson()" id="btnPrev">
-        <span>⏮</span> Пред.
-      </button>
-      <button class="btn-retro" onclick="nextLesson()" id="btnNext">
-        След. <span>⏭</span>
-      </button>
-
-      <div class="toolbar-sep"></div>
-
-      <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">
-        <span>🔍</span> Баги
-      </button>
-      <button class="btn-retro" onclick="askAi('Объясни код урока')">
-        <span>🤖</span> ИИ-Ментор
-      </button>
-
-      <button class="btn-retro success" onclick="downloadExe()" style="margin-left: auto;">
-        <span>📥</span> <strong>Скачать .EXE</strong>
-      </button>
-    </div>
-
-    <!-- Main Content Container -->
-    <div class="app-content">
-
-      <!-- ONBOARDING: SCREEN 0 (Input Name) -->
-      <div class="onboarding-screen" id="screenStartForm">
-        <div class="dark-card">
-          <h1>⚡ Вход в Академию TrainerCode 2000</h1>
-          <p>Профессиональный тренажер для глубокого изучения языков <strong>C</strong> и <strong>Modern C++</strong> с нуля до архитектора: архитектура памяти x86_64, указатели, стек, куча, классы, выравнивание, а также низкоуровневые вызовы Windows API (<strong>OpenProcess, ReadProcessMemory, WriteProcessMemory</strong>).</p>
+      <!-- ONBOARDING: SCREEN 1 (Form) -->
+      <section class="onboarding-wrap" id="viewOnboardingForm">
+        <div class="card-glass">
+          <h1>Вход в Академию TrainerCode</h1>
+          <p>Интерактивная среда для глубокого освоения системного программирования: от машинного кода процессора x86_64, памяти RAM, указателей и структур до вызовов <strong>Windows API (OpenProcess, ReadProcessMemory, WriteProcessMemory)</strong>.</p>
 
           <div class="form-group">
-            <label>Ваше имя / позывной кодера:</label>
-            <input type="text" class="input-dark" id="userNameInput" value="Александр" placeholder="Введите ваше имя...">
+            <label>Ваше имя / позывной разработчика:</label>
+            <input type="text" class="input-modern" id="userNameInput" value="Александр" placeholder="Введите ваше имя...">
           </div>
 
           <div class="form-group">
-            <label>Ваш текущий уровень:</label>
-            <select class="select-dark" id="userLevelInput">
-              <option value="Абсолютный новичок">🟢 Абсолютный новичок (С нуля, без опыта в C/C++)</option>
+            <label>Ваш уровень в кодинге:</label>
+            <select class="select-modern" id="userLevelInput">
+              <option value="Новичок">🟢 Абсолютный новичок (С нуля, без опыта в C/C++)</option>
               <option value="Базовый опыт">🟡 Базовый опыт (Знаю Python / JS / C#, хочу в системное)</option>
               <option value="Senior / Реверсер">🔴 Опытный программист (Хочу в WinAPI, память и трейнеры)</option>
             </select>
           </div>
 
-          <button class="btn-retro primary" style="font-size: 14px; padding: 12px; margin-top: 10px;" onclick="handleStartNext()">
-            ДАЛЕЕ: ИНСТРУКЦИЯ ПО ОБУЧЕНИЮ &gt;&gt;
+          <button class="btn-modern primary" style="padding: 12px; font-size: 14px; justify-content: center;" onclick="submitOnboarding()">
+            Далее: Инструкция по обучению &gt;&gt;
           </button>
         </div>
-      </div>
+      </section>
 
-      <!-- ONBOARDING: SCREEN 1 (Instructions) -->
-      <div class="onboarding-screen" id="screenInstructions" style="display: none;">
-        <div class="dark-card">
-          <h1 id="instructionsPraiseTitle">✨ Добро пожаловать, Александр!</h1>
-          <p>«Тот, кто знает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны операционные системы, игровые движки, адреса ОЗУ и системные дескрипторы Windows.»</p>
+      <!-- ONBOARDING: SCREEN 2 (Instruction) -->
+      <section class="onboarding-wrap" id="viewOnboardingInstruction" style="display: none;">
+        <div class="card-glass">
+          <h1 id="praiseTitle">✨ Добро пожаловать, Александр!</h1>
+          <p>«Тот, кто знает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны регистры процессора, оперативная память и системные дескрипторы Windows.»</p>
 
-          <div class="info-box">
-            <strong style="color: #4ec9b0;">📖 Пошаговый процесс каждого урока:</strong>
+          <div class="info-badge-box">
+            <strong style="color: #38bdf8;">📖 Пошаговый процесс каждого урока:</strong>
             <ul>
-              <li><strong>1. Теория</strong> — фундаментальный разбор понятий памяти, регистров и синтаксиса без лишней «воды».</li>
-              <li><strong>2. Проверочный тест</strong> — интерактивный вопрос с вариантами ответов. Правильный ответ открывает допуск к практике!</li>
-              <li><strong>3. Практика в Редакторе Кода</strong> — напишите решение, нажмите <code>F5</code> для реальной компиляции (GCC/MSVC).</li>
+              <li><strong>Шаг 1: Теория</strong> — фундаментальный разбор памяти, регистров процессора и машинного кода без лишней «воды».</li>
+              <li><strong>Шаг 2: Проверочный тест</strong> — интерактивный вопрос с вариантами ответов. Правильный ответ открывает допуск к практике!</li>
+              <li><strong>Шаг 3: Практика в Редакторе</strong> — пишите решение, компилируйте реальным GCC/G++ через <code>F5</code>.</li>
             </ul>
           </div>
 
-          <div class="info-box">
-            <strong style="color: #4ec9b0;">⌨ Горячие клавиши в редакторе:</strong>
+          <div class="info-badge-box">
+            <strong style="color: #38bdf8;">⌨ Удобство в редакторе:</strong>
             <ul>
-              <li><code>F5</code> — Скомпилировать и Запустить код</li>
-              <li><code>Enter</code> — Новая строка (перевод строки работает четко)</li>
-              <li><code>Tab</code> — Отступ (4 пробела)</li>
-              <li><code>F1</code> — Справочник типов данных C/C++</li>
+              <li><code>F5</code> — Скомпилировать и Запустить</li>
+              <li><code>Enter</code> — Новая строка (работает четко и с отступом)</li>
+              <li><code>Tab</code> — Отступ 4 пробела</li>
+              <li><code>F1</code> — Справочник типов данных</li>
             </ul>
           </div>
 
-          <button class="btn-retro success" style="font-size: 14px; padding: 12px;" onclick="startLessonsWorkspace()">
-            🚀 НАЧАТЬ УРОК 1: АРХИТЕКТУРА И HELLO WORLD &gt;&gt;
+          <button class="btn-modern success" style="padding: 12px; font-size: 14px; justify-content: center;" onclick="launchWorkspace()">
+            🚀 Начать Урок 1: Архитектура ЭВМ и Hello World &gt;&gt;
           </button>
         </div>
-      </div>
+      </section>
 
-      <!-- LESSON WORKSPACE: SCREEN 2 -->
-      <div class="lesson-workspace" id="screenLessonWorkspace" style="display: none;">
-        <!-- Navbar -->
-        <div class="lesson-navbar">
-          <span class="lesson-title-badge" id="lblLessonHeader">Урок 1 / 17</span>
-          <div style="display: flex; gap: 6px; margin-left: auto;">
-            <div class="step-pill active" id="pillStep1" onclick="setLessonStep(1)">1. Теория</div>
-            <div class="step-pill" id="pillStep2" onclick="setLessonStep(2)">2. Тест на понимание</div>
-            <div class="step-pill" id="pillStep3" onclick="setLessonStep(3)">3. Практика в коде</div>
+      <!-- SCREEN 3: Modern Workspace -->
+      <section class="workspace-wrap" id="viewWorkspace" style="display: none;">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-lessons">
+          <div class="sidebar-top">
+            <span class="sidebar-top-title">Программа курса</span>
+            <span id="progressBadge" style="font-size: 11px; color: #34d399; font-weight: 700;">0%</span>
           </div>
-        </div>
+          <div class="lessons-scroll-list" id="lessonsContainer"></div>
+        </aside>
 
-        <!-- Body: Shows Stage 1, Stage 2, or Stage 3 -->
-        <div class="lesson-body">
-          <!-- STAGE 1: Theory -->
-          <div class="theory-stage" id="stageTheory">
-            <div id="theoryContent"></div>
-            <button class="btn-retro primary" style="font-size: 13px; padding: 10px 20px; margin-top: 20px;" onclick="setLessonStep(2)">
-              ПЕРЕЙТИ К ТЕСТУ (ШАГ 2) &gt;&gt;
+        <!-- Right Main Lesson Panel -->
+        <section class="lesson-main-pane">
+          <!-- Top Step Bar -->
+          <div class="lesson-step-header">
+            <span style="font-weight: 600; font-size: 13px; color: #f1f5f9;" id="currentLessonTitle">Урок 1</span>
+            
+            <div class="step-pills-bar">
+              <button class="step-pill-btn active" id="pill1" onclick="setStep(1)">1. Теория</button>
+              <button class="step-pill-btn" id="pill2" onclick="setStep(2)">2. Проверочный тест</button>
+              <button class="step-pill-btn" id="pill3" onclick="setStep(3)">3. Практика в коде</button>
+            </div>
+          </div>
+
+          <!-- STAGE 1: Theory View -->
+          <div class="theory-viewport" id="stageTheory">
+            <div id="theoryBody"></div>
+            <button class="btn-modern primary" style="padding: 10px 20px; font-size: 13px; margin-top: 24px;" onclick="setStep(2)">
+              Перейти к тесту (Шаг 2) &gt;&gt;
             </button>
           </div>
 
-          <!-- STAGE 2: Quiz -->
-          <div class="quiz-stage" id="stageQuiz" style="display: none;">
-            <div class="quiz-card">
-              <h3 id="quizQuestion">Вопрос теста</h3>
-              <div id="quizOptionsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
-              <div class="quiz-feedback" id="quizFeedback" style="display: none;"></div>
-              <button class="btn-retro success" id="btnToEditor" style="display: none; font-size: 13px; padding: 10px 20px; align-self: flex-start;" onclick="setLessonStep(3)">
-                ПЕРЕЙТИ К РЕДАКТОРУ КОДА (ШАГ 3) &gt;&gt;
-              </button>
+          <!-- STAGE 2: Interactive Single-Question Quiz -->
+          <div class="quiz-viewport" id="stageQuiz" style="display: none;">
+            <div class="quiz-card-modern">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: #38bdf8; font-weight: 600;" id="quizCounterLabel">Вопрос 1 из 1</span>
+              </div>
+              <h3 id="quizQuestionText">Вопрос</h3>
+              <div id="quizOptionsWrap" style="display: flex; flex-direction: column; gap: 8px;"></div>
+              <div class="quiz-explanation-box" id="quizExplanation" style="display: none;"></div>
+              
+              <div style="display: flex; gap: 10px; margin-top: 6px;">
+                <button class="btn-modern primary" id="btnNextQuiz" style="display: none;" onclick="nextQuizQuestion()">
+                  Следующий вопрос &gt;&gt;
+                </button>
+                <button class="btn-modern success" id="btnProceedEditor" style="display: none;" onclick="setStep(3)">
+                  Перейти к редактору кода (Шаг 3) &gt;&gt;
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- STAGE 3: Editor & Console -->
-          <div class="editor-stage" id="stageEditor" style="display: none;">
-            <div class="task-banner">
-              <strong>🎯 ЗАДАНИЕ К УРОКУ:</strong> <span id="taskDescription"></span>
-            </div>
-            <div class="editor-split">
-              <div class="line-numbers" id="lineNumbers">1</div>
-              <textarea class="code-editor-textarea" id="codeEditor" spellcheck="false" placeholder="// Введите ваш код на C или C++..."></textarea>
-            </div>
-            <div class="bottom-dock">
-              <div class="dock-tabs">
-                <button class="dock-tab-btn active" id="tabBtnConsole" onclick="switchDockTab('console')">📟 Консоль вывода / Компилятор</button>
-                <button class="dock-tab-btn" id="tabBtnAi" onclick="switchDockTab('ai')">🤖 ИИ-Ассистент TrainerAI</button>
+          <div class="editor-stage-wrap" id="stageEditor" style="display: none;">
+            <div class="task-bar-modern">
+              <span class="task-tag">ЗАДАНИЕ</span>
+              <span id="taskText"></span>
+              <div style="margin-left: auto; display: flex; gap: 6px;">
+                <button class="btn-modern" onclick="resetCode()" title="Сброс кода">↺ Сброс</button>
+                <button class="btn-modern" onclick="showSolution()" title="Показать решение">💡 Решение</button>
+                <button class="btn-modern primary" onclick="compileAndRun()">▶ Запуск (F5)</button>
               </div>
-              <div class="console-screen" id="consoleScreen">
-[TrainerCode 2000 Dark Environment Initialized]
-GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
-Нажмите '▶ Запуск (F5)' для компиляции и проверки программы.
+            </div>
+
+            <div class="editor-code-row">
+              <div class="editor-lines" id="editorLines">1</div>
+              <textarea class="editor-textarea" id="codeEditor" spellcheck="false" placeholder="// Пишите ваш код на C или C++ здесь..."></textarea>
+            </div>
+
+            <div class="dock-console-wrap">
+              <div class="dock-tabs-bar">
+                <button class="dock-tab active" id="tabConsole" onclick="switchDock('console')">📟 Терминал вывода / Компилятор</button>
+                <button class="dock-tab" id="tabAi" onclick="switchDock('ai')">🤖 ИИ-Ментор TrainerAI</button>
               </div>
-              <div class="ai-chat-screen" id="aiChatScreen" style="display: none;">
-                <div class="ai-chat-messages" id="aiChatMessages">
-                  <div class="ai-msg bot">
+
+              <div class="console-term" id="consoleOutput">
+[TrainerCode C/C++ Subsystem Ready]
+GCC 12.2 / G++ 12.2 Active.
+Нажмите '▶ Запуск (F5)' для компиляции и выполнения программы.
+              </div>
+
+              <div class="ai-chat-term" id="aiChatDock" style="display: none;">
+                <div class="ai-msgs-box" id="aiMsgsContainer">
+                  <div class="ai-bubble bot">
 <strong>[TrainerAI • Системный наставник]</strong>
-Приветствую! Задайте любой вопрос по памяти, указателям или нажмите "Баги" для аудита утечек памяти.
+Готов помочь! Я умею анализировать память, находить утечки malloc/free, разыменования NULL и объяснять, как ваш код компилируется в машинный ассемблер (ASM).
                   </div>
                 </div>
-                <div class="ai-input-bar">
-                  <input type="text" class="input-dark" style="flex: 1;" id="aiPromptInput" placeholder="Спросить ИИ (например: в чем разница между стеком и кучей?)...">
-                  <button class="btn-retro primary" onclick="sendAiPrompt()">Спросить</button>
-                  <button class="btn-retro" onclick="askAi('Найди утечки памяти и ошибки в коде')">Баги</button>
-                  <button class="btn-retro" onclick="askAi('Объясни код урока')">Объяснить</button>
+                <div class="ai-input-row">
+                  <input type="text" class="input-modern" style="flex: 1;" id="aiPrompt" placeholder="Спросить ИИ (например: почему ReadProcessMemory возвращает 0?)...">
+                  <button class="btn-modern primary" onclick="sendAi()">Спросить</button>
+                  <button class="btn-modern" onclick="askAi('Найди утечки памяти и ошибки в коде')">🔍 Баги</button>
+                  <button class="btn-modern" onclick="askAi('Объясни код урока')">📖 Объяснить</button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+
+        </section>
+      </section>
+
+    </main>
+
+    <!-- Footer Bar -->
+    <footer class="app-footer-bar">
+      <div class="footer-pill">
+        <span style="color: #34d399;">●</span>
+        <span id="footerLesson">Урок 1/18: Архитектура ЭВМ</span>
       </div>
-
-    </div>
-
-    <!-- Status Bar -->
-    <div class="app-statusbar">
-      <div class="status-segment" id="sbLesson">Урок 1/17: Архитектура ЭВМ</div>
-      <div class="status-segment" id="sbLang">Язык: C11</div>
-      <div class="status-segment">GCC 12.2 / MSVC Ready</div>
-      <div class="status-segment">TrainerAI Online</div>
-      <div class="status-segment" style="margin-left: auto;" id="sbUser">Ученик: Александр</div>
-    </div>
+      <div class="footer-pill">GCC 12.2 / MSVC Ready</div>
+      <div class="footer-pill">TrainerAI Online</div>
+      <div class="footer-pill" style="margin-left: auto;" id="footerUser">Ученик: Александр</div>
+    </footer>
   </div>
 
-  <!-- Cheat Sheet Modal -->
-  <div class="modal-backdrop" id="typesModal">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 8px;">
-        <strong style="font-size: 14px; color: #4ec9b0;">📊 Справочник фундаментальных типов данных C / C++ (x86 vs x64)</strong>
-        <button class="btn-retro" onclick="closeTypesModal()">✕</button>
+  <!-- Types Modal -->
+  <div class="modal-overlay-dark" id="typesModal">
+    <div class="modal-content-glass">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <h3 style="font-size: 16px; color: #38bdf8;">📊 Справочник типов данных C и C++ (x86 vs x64)</h3>
+        <button class="btn-modern" onclick="closeTypesModal()">✕</button>
       </div>
       <div style="max-height: 420px; overflow-y: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 11px; background: #141416;" border="1" cellpadding="6" bordercolor="#2d2d34">
-          <thead style="background: #1f1f24; color: #4ec9b0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px;" border="1" cellpadding="7" bordercolor="rgba(255,255,255,0.08)">
+          <thead style="background: rgba(255,255,255,0.05); color: #38bdf8;">
             <tr>
               <th>Тип</th>
               <th>x86</th>
               <th>x64</th>
               <th>printf</th>
-              <th>Диапазон значений</th>
+              <th>Диапазон</th>
               <th>Описание</th>
             </tr>
           </thead>
-          <tbody id="typesTbody"></tbody>
+          <tbody id="typesTableBody"></tbody>
         </table>
       </div>
-      <div style="text-align: right; margin-top: 8px;">
-        <button class="btn-retro primary" onclick="closeTypesModal()">Закрыть</button>
+      <div style="text-align: right;">
+        <button class="btn-modern primary" onclick="closeTypesModal()">Закрыть</button>
       </div>
     </div>
   </div>
 
   <script>
-    // State
+    // Global Application State
     let gLessons = [];
-    let gCurrentIdx = 0;
-    let gCurrentStep = 1;
+    let gCurIdx = 0;
+    let gCurStep = 1; // 1: Theory, 2: Quiz, 3: Editor
+    let gQuizQuestionIdx = 0;
+
     let gUserData = {
       name: localStorage.getItem('tc_user_name') || 'Александр',
-      level: localStorage.getItem('tc_user_level') || 'Абсолютный новичок',
+      level: localStorage.getItem('tc_user_level') || 'Новичок',
       completed: JSON.parse(localStorage.getItem('tc_completed') || '[]'),
       unlocked: JSON.parse(localStorage.getItem('tc_unlocked') || '[1]')
     };
 
     // Elements
-    const screenStartForm = document.getElementById('screenStartForm');
-    const screenInstructions = document.getElementById('screenInstructions');
-    const screenLessonWorkspace = document.getElementById('screenLessonWorkspace');
-    const mainToolbar = document.getElementById('mainToolbar');
+    const viewOnboardingForm = document.getElementById('viewOnboardingForm');
+    const viewOnboardingInstruction = document.getElementById('viewOnboardingInstruction');
+    const viewWorkspace = document.getElementById('viewWorkspace');
 
     const stageTheory = document.getElementById('stageTheory');
     const stageQuiz = document.getElementById('stageQuiz');
     const stageEditor = document.getElementById('stageEditor');
 
     const elEditor = document.getElementById('codeEditor');
-    const elLineNumbers = document.getElementById('lineNumbers');
-    const elConsole = document.getElementById('consoleScreen');
-    const elAiMessages = document.getElementById('aiChatMessages');
-    const elAiPrompt = document.getElementById('aiPromptInput');
+    const elLines = document.getElementById('editorLines');
+    const elConsole = document.getElementById('consoleOutput');
+    const elAiMsgs = document.getElementById('aiMsgsContainer');
+    const elAiPrompt = document.getElementById('aiPrompt');
 
     window.addEventListener('DOMContentLoaded', async () => {
-      setupEditorKeys();
+      setupEditor();
       loadTypes();
 
       try {
         const res = await fetch('/api/lessons');
         gLessons = await res.json();
-      } catch (e) {
-        console.error('Failed to load lessons:', e);
+      } catch (err) {
+        console.error('Failed to load lessons:', err);
       }
 
-      // Check if user was already registered
       if (localStorage.getItem('tc_registered')) {
-        startLessonsWorkspace();
+        launchWorkspace();
       } else {
-        screenStartForm.style.display = 'flex';
-        screenInstructions.style.display = 'none';
-        screenLessonWorkspace.style.display = 'none';
-        mainToolbar.style.display = 'none';
+        viewOnboardingForm.style.display = 'flex';
+        viewOnboardingInstruction.style.display = 'none';
+        viewWorkspace.style.display = 'none';
       }
     });
 
-    // Editor: Enter key, Tab key, Line numbering
-    function setupEditorKeys() {
+    // Editor: Enter key, Tab key, Line Numbers
+    function setupEditor() {
       elEditor.addEventListener('input', updateLineNumbers);
       elEditor.addEventListener('scroll', () => {
-        elLineNumbers.scrollTop = elEditor.scrollTop;
+        elLines.scrollTop = elEditor.scrollTop;
       });
 
       elEditor.addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
           e.preventDefault();
-          const start = elEditor.selectionStart;
+          const s = elEditor.selectionStart;
           const end = elEditor.selectionEnd;
-          elEditor.value = elEditor.value.substring(0, start) + '    ' + elEditor.value.substring(end);
-          elEditor.selectionStart = elEditor.selectionEnd = start + 4;
+          elEditor.value = elEditor.value.substring(0, s) + '    ' + elEditor.value.substring(end);
+          elEditor.selectionStart = elEditor.selectionEnd = s + 4;
           updateLineNumbers();
         } else if (e.key === 'F5') {
           e.preventDefault();
@@ -929,21 +1079,21 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
           e.preventDefault();
           openTypesModal();
         }
-        // Notice: Enter is NOT prevented! Browser naturally inserts \n!
+        // Enter is naturally handled by the browser
       });
     }
 
     function updateLineNumbers() {
-      const count = elEditor.value.split('\n').length;
-      let s = '';
-      for (let i = 1; i <= Math.max(count, 1); i++) {
-        s += i + '<br>';
+      const total = elEditor.value.split('\n').length;
+      let out = '';
+      for (let i = 1; i <= Math.max(total, 1); i++) {
+        out += i + '<br>';
       }
-      elLineNumbers.innerHTML = s;
+      elLines.innerHTML = out;
     }
 
-    // Onboarding handlers
-    function handleStartNext() {
+    // Onboarding Form
+    function submitOnboarding() {
       const name = document.getElementById('userNameInput').value.trim() || 'Александр';
       const level = document.getElementById('userLevelInput').value;
 
@@ -952,90 +1102,100 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
       localStorage.setItem('tc_user_name', name);
       localStorage.setItem('tc_user_level', level);
 
-      screenStartForm.style.display = 'none';
-      screenInstructions.style.display = 'flex';
-      document.getElementById('instructionsPraiseTitle').textContent = `✨ Добро пожаловать, ${name}!`;
+      viewOnboardingForm.style.display = 'none';
+      viewOnboardingInstruction.style.display = 'flex';
+      document.getElementById('praiseTitle').textContent = `✨ Добро пожаловать, ${name}!`;
     }
 
-    function startLessonsWorkspace() {
+    function launchWorkspace() {
       localStorage.setItem('tc_registered', 'true');
-      screenStartForm.style.display = 'none';
-      screenInstructions.style.display = 'none';
-      screenLessonWorkspace.style.display = 'flex';
-      mainToolbar.style.display = 'flex';
+      viewOnboardingForm.style.display = 'none';
+      viewOnboardingInstruction.style.display = 'none';
+      viewWorkspace.style.display = 'flex';
 
-      document.getElementById('userProfileIndicator').textContent = `${gUserData.name} (${gUserData.level})`;
-      document.getElementById('sbUser').textContent = `Ученик: ${gUserData.name}`;
+      document.getElementById('footerUser').textContent = `Ученик: ${gUserData.name} (${gUserData.level})`;
+      renderSidebar();
 
       if (gLessons.length > 0) {
-        loadLesson(gCurrentIdx);
+        loadLesson(gCurIdx);
       }
     }
 
-    function restartOnboarding() {
-      screenLessonWorkspace.style.display = 'none';
-      mainToolbar.style.display = 'none';
-      screenStartForm.style.display = 'flex';
-      screenInstructions.style.display = 'none';
+    // Render Sidebar
+    function renderSidebar() {
+      const list = document.getElementById('lessonsContainer');
+      list.innerHTML = '';
+
+      const doneCount = gUserData.completed.length;
+      const pct = Math.round((doneCount / Math.max(gLessons.length, 1)) * 100);
+      document.getElementById('progressBadge').textContent = `${pct}%`;
+
+      gLessons.forEach((les, idx) => {
+        const isDone = gUserData.completed.includes(les.id);
+        const isUnlocked = gUserData.unlocked.includes(les.id) || isDone;
+
+        const row = document.createElement('div');
+        row.className = `lesson-item-row ${idx === gCurIdx ? 'active' : ''} ${!isUnlocked ? 'locked' : ''}`;
+
+        let icon = '🔒';
+        if (isDone) icon = '🟢';
+        else if (isUnlocked) icon = '⚡';
+
+        row.innerHTML = `
+          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${icon} ${les.title}</span>
+          <span style="font-size: 10px; color: #38bdf8; font-family: monospace;">${les.lang}</span>
+        `;
+
+        if (isUnlocked) {
+          row.onclick = () => loadLesson(idx);
+        }
+
+        list.appendChild(row);
+      });
     }
 
-    // Lesson loader
+    function unlockAllLessons() {
+      gLessons.forEach(l => {
+        if (!gUserData.unlocked.includes(l.id)) gUserData.unlocked.push(l.id);
+      });
+      localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
+      renderSidebar();
+      alert('Все уроки курса разблокированы!');
+    }
+
+    // Load Lesson
     function loadLesson(idx) {
       if (idx < 0 || idx >= gLessons.length) return;
-      gCurrentIdx = idx;
+      gCurIdx = idx;
       const les = gLessons[idx];
 
-      document.getElementById('lblLessonHeader').textContent = `${les.title} (${les.lang})`;
-      document.getElementById('taskDescription').textContent = les.task;
-      document.getElementById('sbLesson').textContent = `Урок ${les.id}/${gLessons.length}: ${les.title}`;
-      document.getElementById('sbLang').textContent = `Язык: ${les.lang}`;
+      document.getElementById('currentLessonTitle').textContent = `${les.title} (${les.lang})`;
+      document.getElementById('footerLesson').textContent = `Урок ${les.id}/${gLessons.length}: ${les.title}`;
+      document.getElementById('taskText').textContent = les.task;
 
       // Stage 1: Theory
-      document.getElementById('theoryContent').innerHTML = `
-        <h2>${les.title}</h2>
-        <div style="font-size: 12px; color: #888; margin-bottom: 14px;">
-          Язык: <strong style="color: #4ec9b0;">${les.lang}</strong> | 
-          Сложность: <strong style="color: #dcdcaa;">${les.difficulty}</strong>
-        </div>
-        <div style="white-space: pre-wrap;">${escapeHtml(les.theoryPart1)}</div>
-        ${les.theoryPart2 ? `<div style="margin-top: 16px; white-space: pre-wrap;">${escapeHtml(les.theoryPart2)}</div>` : ''}
-      `;
+      document.getElementById('theoryBody').innerHTML = les.theory;
 
-      // Stage 2: Quiz
-      document.getElementById('quizQuestion').textContent = les.quiz.question;
-      const optsCont = document.getElementById('quizOptionsContainer');
-      optsCont.innerHTML = '';
-      document.getElementById('quizFeedback').style.display = 'none';
-      document.getElementById('btnToEditor').style.display = 'none';
-
-      les.quiz.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-option-btn';
-        btn.innerHTML = `<span>⚪</span> <span>${escapeHtml(opt.text)}</span>`;
-        btn.onclick = () => handleQuizAnswer(opt, btn);
-        optsCont.appendChild(btn);
-      });
+      // Stage 2: Reset Quiz state to Question 0
+      gQuizQuestionIdx = 0;
+      renderCurrentQuizQuestion();
 
       // Stage 3: Editor
       const saved = localStorage.getItem(`tc_code_${les.id}`);
       elEditor.value = saved || les.initialCode;
       updateLineNumbers();
 
-      // Start on Step 1 (Theory)
-      setLessonStep(1);
+      setStep(1);
+      renderSidebar();
     }
 
-    // Step navigation
-    function setLessonStep(step) {
-      gCurrentStep = step;
+    // Stepper (1 -> 2 -> 3)
+    function setStep(step) {
+      gCurStep = step;
 
-      document.getElementById('pillStep1').className = `step-pill ${step === 1 ? 'active' : ''}`;
-      document.getElementById('pillStep2').className = `step-pill ${step === 2 ? 'active' : ''}`;
-      document.getElementById('pillStep3').className = `step-pill ${step === 3 ? 'active' : ''}`;
-
-      document.getElementById('btnNavStep1').className = `btn-retro ${step === 1 ? 'primary' : ''}`;
-      document.getElementById('btnNavStep2').className = `btn-retro ${step === 2 ? 'primary' : ''}`;
-      document.getElementById('btnNavStep3').className = `btn-retro ${step === 3 ? 'primary' : ''}`;
+      document.getElementById('pill1').className = `step-pill-btn ${step === 1 ? 'active' : ''}`;
+      document.getElementById('pill2').className = `step-pill-btn ${step === 2 ? 'active' : ''}`;
+      document.getElementById('pill3').className = `step-pill-btn ${step === 3 ? 'active' : ''}`;
 
       if (step === 1) {
         stageTheory.style.display = 'block';
@@ -1054,34 +1214,70 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
       }
     }
 
-    // Quiz evaluation
-    function handleQuizAnswer(opt, btn) {
-      document.querySelectorAll('.quiz-option-btn').forEach(b => b.classList.remove('correct', 'wrong'));
-      const fb = document.getElementById('quizFeedback');
-      fb.style.display = 'block';
+    // Sequential Quiz Engine (ONE question at a time!)
+    function renderCurrentQuizQuestion() {
+      const les = gLessons[gCurIdx];
+      const quizzes = les.quizzes || [];
+      if (quizzes.length === 0) return;
+
+      const q = quizzes[gQuizQuestionIdx];
+      document.getElementById('quizCounterLabel').textContent = `Вопрос ${gQuizQuestionIdx + 1} из ${quizzes.length}`;
+      document.getElementById('quizQuestionText').textContent = q.question;
+
+      const wrap = document.getElementById('quizOptionsWrap');
+      wrap.innerHTML = '';
+      document.getElementById('quizExplanation').style.display = 'none';
+      document.getElementById('btnNextQuiz').style.display = 'none';
+      document.getElementById('btnProceedEditor').style.display = 'none';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-btn-option';
+        btn.innerHTML = `<span style="font-size: 14px;">⚪</span> <span>${escapeHtml(opt.text)}</span>`;
+        btn.onclick = () => handleQuizPick(opt, btn, quizzes.length);
+        wrap.appendChild(btn);
+      });
+    }
+
+    function handleQuizPick(opt, btnEl, totalCount) {
+      document.querySelectorAll('.quiz-btn-option').forEach(b => b.classList.remove('correct', 'wrong'));
+      const expBox = document.getElementById('quizExplanation');
+      expBox.style.display = 'block';
 
       if (opt.correct) {
-        btn.classList.add('correct');
-        btn.querySelector('span').textContent = '✅';
-        fb.className = 'quiz-feedback success';
-        fb.innerHTML = `<strong>🎉 Отлично!</strong><br>${escapeHtml(opt.explanation)}`;
-        document.getElementById('btnToEditor').style.display = 'inline-block';
-        document.getElementById('pillStep2').classList.add('done');
+        btnEl.classList.add('correct');
+        btnEl.querySelector('span').textContent = '✅';
+        expBox.className = 'quiz-explanation-box success';
+        expBox.innerHTML = `<strong>🎉 Блестяще! Верно!</strong><br>${escapeHtml(opt.explanation)}`;
+
+        // Check if there are more questions in this lesson
+        if (gQuizQuestionIdx + 1 < totalCount) {
+          document.getElementById('btnNextQuiz').style.display = 'inline-flex';
+        } else {
+          document.getElementById('btnProceedEditor').style.display = 'inline-flex';
+          document.getElementById('pill2').classList.add('done');
+        }
       } else {
-        btn.classList.add('wrong');
-        btn.querySelector('span').textContent = '❌';
-        fb.className = 'quiz-feedback error';
-        fb.innerHTML = `<strong>Неверно:</strong><br>${escapeHtml(opt.explanation)}<br><em>Выберите другой вариант!</em>`;
-        document.getElementById('btnToEditor').style.display = 'none';
+        btnEl.classList.add('wrong');
+        btnEl.querySelector('span').textContent = '❌';
+        expBox.className = 'quiz-explanation-box error';
+        expBox.innerHTML = `<strong>Не совсем так:</strong><br>${escapeHtml(opt.explanation)}<br><em>Попробуйте выбрать другой вариант!</em>`;
+        document.getElementById('btnNextQuiz').style.display = 'none';
+        document.getElementById('btnProceedEditor').style.display = 'none';
       }
     }
 
-    // Compile & Run
-    async function compileAndRun() {
-      setLessonStep(3);
-      switchDockTab('console');
+    function nextQuizQuestion() {
+      gQuizQuestionIdx++;
+      renderCurrentQuizQuestion();
+    }
 
-      const les = gLessons[gCurrentIdx];
+    // Compile & Run Code
+    async function compileAndRun() {
+      setStep(3);
+      switchDock('console');
+
+      const les = gLessons[gCurIdx];
       const code = elEditor.value;
 
       elConsole.textContent = `==================================================\nСборка программы: ${les.title}\nКомпилятор: ${les.lang === 'C++' ? 'G++ 12.2 (-std=c++20)' : 'GCC 12.2 (-std=c11)'}\n==================================================\nКомпиляция... Пожалуйста, подождите.\n`;
@@ -1109,7 +1305,7 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
         elConsole.textContent += `--------------------------------------------------\nКод завершения: ${data.exitCode}\n`;
 
         if (data.taskCompleted) {
-          elConsole.textContent += `\n🎉 ПОЗДРАВЛЯЕМ! Задание урока выполнено на 100%!\nРезультат программы совпал с ожидаемым.\nСледующий урок разблокирован! Нажмите 'След. ⏭' для перехода.\n`;
+          elConsole.textContent += `\n🎉 ПОЗДРАВЛЯЕМ! Задание урока выполнено на 100%!\nРезультат программы совпал с ожидаемым.\nСледующий урок разблокирован!\n`;
 
           if (!gUserData.completed.includes(les.id)) {
             gUserData.completed.push(les.id);
@@ -1121,101 +1317,90 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
             gUserData.unlocked.push(nextId);
             localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
           }
+
+          renderSidebar();
         }
       } catch (err) {
         elConsole.textContent += `\nОшибка выполнения: ${err.message}\n`;
       }
     }
 
-    // Navigation
-    function prevLesson() {
-      if (gCurrentIdx > 0) loadLesson(gCurrentIdx - 1);
-    }
-
-    function nextLesson() {
-      if (gCurrentIdx + 1 < gLessons.length) {
-        loadLesson(gCurrentIdx + 1);
-      } else {
-        alert('Поздравляем! Вы прошли все 17 уроков курса!');
-      }
-    }
-
+    // Code actions
     function resetCode() {
-      if (confirm('Сбросить код к исходному шаблону урока?')) {
-        elEditor.value = gLessons[gCurrentIdx].initialCode;
+      if (confirm('Сбросить код к исходному шаблону?')) {
+        elEditor.value = gLessons[gCurIdx].initialCode;
         updateLineNumbers();
       }
     }
 
     function showSolution() {
-      if (confirm('Показать эталонное решение автора?')) {
-        elEditor.value = gLessons[gCurrentIdx].solution;
+      if (confirm('Показать эталонное решение?')) {
+        elEditor.value = gLessons[gCurIdx].solution;
         updateLineNumbers();
       }
     }
 
-    function unlockAllLessons() {
-      gLessons.forEach(l => {
-        if (!gUserData.unlocked.includes(l.id)) gUserData.unlocked.push(l.id);
-      });
-      localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
-      alert('Все 17 уроков разблокированы!');
+    function copyCodeBox(btn) {
+      const code = btn.closest('.code-box').querySelector('pre').innerText;
+      navigator.clipboard.writeText(code);
+      btn.textContent = 'Скопировано! ✓';
+      setTimeout(() => btn.textContent = 'Копировать', 1500);
     }
 
     // Dock Tabs
-    function switchDockTab(tab) {
+    function switchDock(tab) {
       if (tab === 'console') {
-        document.getElementById('tabBtnConsole').classList.add('active');
-        document.getElementById('tabBtnAi').classList.remove('active');
-        document.getElementById('consoleScreen').style.display = 'block';
-        document.getElementById('aiChatScreen').style.display = 'none';
+        document.getElementById('tabConsole').classList.add('active');
+        document.getElementById('tabAi').classList.remove('active');
+        document.getElementById('consoleOutput').style.display = 'block';
+        document.getElementById('aiChatDock').style.display = 'none';
       } else {
-        document.getElementById('tabBtnAi').classList.add('active');
-        document.getElementById('tabBtnConsole').classList.remove('active');
-        document.getElementById('aiChatScreen').style.display = 'flex';
-        document.getElementById('consoleScreen').style.display = 'none';
+        document.getElementById('tabAi').classList.add('active');
+        document.getElementById('tabConsole').classList.remove('active');
+        document.getElementById('aiChatDock').style.display = 'flex';
+        document.getElementById('consoleOutput').style.display = 'none';
         elAiPrompt.focus();
       }
     }
 
     // AI
-    async function sendAiPrompt() {
+    async function sendAi() {
       const p = elAiPrompt.value.trim();
       if (!p) return;
       askAi(p);
       elAiPrompt.value = '';
     }
 
-    async function askAi(promptText) {
-      switchDockTab('ai');
+    async function askAi(text) {
+      switchDock('ai');
 
-      const userDiv = document.createElement('div');
-      userDiv.className = 'ai-msg user';
-      userDiv.innerHTML = `<strong>👤 Вы:</strong> ${escapeHtml(promptText)}`;
-      elAiMessages.appendChild(userDiv);
+      const u = document.createElement('div');
+      u.className = 'ai-bubble user';
+      u.innerHTML = `<strong>👤 Вы:</strong> ${escapeHtml(text)}`;
+      elAiMsgs.appendChild(u);
 
-      const botDiv = document.createElement('div');
-      botDiv.className = 'ai-msg bot';
-      botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong> Анализирую код...`;
-      elAiMessages.appendChild(botDiv);
-      elAiMessages.scrollTop = elAiMessages.scrollHeight;
+      const b = document.createElement('div');
+      b.className = 'ai-bubble bot';
+      b.innerHTML = `<strong>🤖 TrainerAI:</strong> Анализирую код...`;
+      elAiMsgs.appendChild(b);
+      elAiMsgs.scrollTop = elAiMsgs.scrollHeight;
 
       try {
         const res = await fetch('/api/ai/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            prompt: promptText,
+            prompt: text,
             code: elEditor.value,
-            lessonId: gLessons[gCurrentIdx].id
+            lessonId: gLessons[gCurIdx].id
           })
         });
         const data = await res.json();
-        botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong>\n${escapeHtml(data.response)}`;
+        b.innerHTML = `<strong>🤖 TrainerAI:</strong>\n${escapeHtml(data.response)}`;
       } catch (e) {
-        botDiv.innerHTML = `<strong>🤖 TrainerAI:</strong> Ошибка связи: ${e.message}`;
+        b.innerHTML = `<strong>🤖 TrainerAI:</strong> Ошибка связи: ${e.message}`;
       }
-      elAiMessages.scrollTop = elAiMessages.scrollHeight;
+      elAiMsgs.scrollTop = elAiMsgs.scrollHeight;
     }
 
     // Types Modal
@@ -1223,17 +1408,17 @@ GCC 12.2 / G++ 12.2 / WinAPI Subsystem Ready.
       try {
         const res = await fetch('/api/types');
         const types = await res.json();
-        const tb = document.getElementById('typesTbody');
+        const tb = document.getElementById('typesTableBody');
         tb.innerHTML = '';
         types.forEach(t => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><strong style="color: #4ec9b0;"><code>${t.name}</code></strong></td>
-            <td style="text-align: center; color: #569cd6;">${t.x86}</td>
-            <td style="text-align: center; color: #569cd6;">${t.x64}</td>
-            <td><code style="color: #ce9178;">${t.spec}</code></td>
-            <td style="color: #b5cea8;">${t.range}</td>
-            <td style="color: #d4d4d4;">${t.desc}</td>
+            <td><strong style="color: #38bdf8;"><code>${t.name}</code></strong></td>
+            <td style="text-align: center; color: #818cf8;">${t.x86}</td>
+            <td style="text-align: center; color: #818cf8;">${t.x64}</td>
+            <td><code style="color: #fca5a5;">${t.spec}</code></td>
+            <td style="color: #34d399;">${t.range}</td>
+            <td style="color: #cbd5e1;">${t.desc}</td>
           `;
           tb.appendChild(tr);
         });

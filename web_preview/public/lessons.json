@@ -1,445 +1,508 @@
 [
   {
     "id": 1,
-    "title": "Урок 1: Архитектура ЭВМ, память и первая программа",
+    "title": "Урок 1: Архитектура ЭВМ, машинный код (ASM) и вывод строк в консоль",
     "lang": "C",
     "difficulty": "Новичок",
-    "theoryPart1": "Добро пожаловать в элитную школу системного программирования TrainerCode!\n\nЯзыки C и C++ — это фундамент операционных систем (Windows, Linux), игровых движков (Unreal Engine), античитов, драйверов и высокопроизводительного софта. В отличие от Python или Java, здесь нет интерпретатора и виртуальной машины. Код компилируется напрямую в машинные инструкции процессора (x86/x64).\n\nКак устроен компьютер:\n1. Процессор (CPU): Выполняет инструкции (MOV, ADD, JMP, CALL) на тактовой частоте миллиарды раз в секунду. Внутри CPU есть свербыстрые ячейки — регистры (RAX, RBX, RCX, RDX, RSP, RIP).\n2. Оперативная память (RAM): Огромный массив байт. Каждый байт имеет свой уникальный числовой адрес (например, 0x00401000).\n3. Точка входа в программу: В операционной системе процесс запускается с функции main().\n   Синтаксис в C:\n   #include <stdio.h>\n\n   int main(void) {\n       printf(\"Hello, TrainerCode!\\n\");\n       return 0;\n   }\n\nПрепроцессор (#include <stdio.h>): директива, которая перед компиляцией вставляет объявления стандартных функций ввода-вывода (printf).\nprintf(\"...\\n\"): выводит текст в стандартный поток вывода (консоль). '\\n' — символ перевода строки.\nreturn 0;: возвращает операционной системе код 0, что означает: \"Программа завершилась штатно и без ошибок\".",
-    "quiz": {
-      "question": "Что означает директива `#include <stdio.h>` и зачем в конце `main` пишется `return 0;`?",
-      "options": [
-        {
-          "id": "a",
-          "text": "#include подключает стандартную библиотеку ввода-вывода, а return 0 сообщает ОС об успешном завершении",
-          "correct": true,
-          "explanation": "Верно! #include подключает заголовок stdio.h для printf, а код возврата 0 является стандартным сигналом успеха для операционной системы."
-        },
-        {
-          "id": "b",
-          "text": "Это объявление глобальной переменной для выделения 0 байт памяти",
-          "correct": false,
-          "explanation": "Неверно. #include — директива препроцессора, а return 0 возвращает код завершения из main."
-        },
-        {
-          "id": "c",
-          "text": "return 0 перезагружает компьютер в безопасном режиме",
-          "correct": false,
-          "explanation": "Конечно нет. return 0 просто завершает процесс с кодом выхода 0."
-        }
-      ]
-    },
-    "theoryPart2": "Закрепление материала:\nКомпилятор превращает ваш C-код в машинный файл формата PE (.exe на Windows) или ELF (на Linux).\nВ Windows структура программы включает:\n- Секция .text: исполняемый машинный код\n- Секция .data: глобальные инициализированные переменные\n- Секция .rdata: строковые константы (read-only)\n\nТеперь напишите вашу первую программу в редакторе кода!",
-    "task": "Напишите программу на Си, которая выводит:\nTrainerCode 2000 System Active\nTarget CPU: x86_64\nи возвращает 0.",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    // Выведите требуемый текст:\n    \n    return 0;\n}\n",
-    "solution": "#include <stdio.h>\n\nint main(void) {\n    printf(\"TrainerCode 2000 System Active\\n\");\n    printf(\"Target CPU: x86_64\\n\");\n    return 0;\n}\n",
-    "hints": [
-      "Используйте printf с символом '\\n' в конце каждой строки.",
-      "Проверьте регистр букв: TrainerCode 2000 System Active"
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Как процессор и компьютер выполняют ваш код</h3>\n  <p>Компьютер не понимает текст на английском или русском языке. Внутри процессора (CPU) находятся миллиарды микроскопических транзисторов, которые работают исключительно с электрическими сигналами — <strong>двоичным кодом (0 и 1)</strong>.</p>\n  <p>Процессор умеет делать только одну вещь: циклически считывать из оперативной памяти (RAM) и выполнять <strong>инструкции машинного кода (ASM, ассемблер)</strong> на тактовой частоте несколько миллиардов раз в секунду. Примеры таких базовых инструкций процессора:</p>\n  <ul>\n    <li><code>MOV</code> — переместить байты данных из памяти в регистр или наоборот.</li>\n    <li><code>ADD</code> / <code>SUB</code> — сложить или вычесть числа в арифметико-логическом устройстве (ALU).</li>\n    <li><code>JMP</code> — безусловный прыжок к другому адресу памяти (ветвление).</li>\n    <li><code>CALL</code> — вызов функции с сохранением адреса возврата на стеке.</li>\n    <li><code>RET</code> — возврат из функции в место, откуда она была вызвана.</li>\n  </ul>\n  <p>Внутри процессора есть сверхбыстрые ячейки памяти — <strong>регистры</strong> (в 64-битных процессорах x86_64 это <code>RAX</code>, <code>RBX</code>, <code>RCX</code>, <code>RDX</code>, <code>RSP</code>, <code>RIP</code>). Регистр <code>RIP</code> хранит адрес инструкции, которая выполняется прямо сейчас.</p>\n</div>\n\n<div class=\"theory-section\">\n  <h3>2. Зачем нужен язык Си (C)</h3>\n  <p>Писать программы прямо в машинных кодах (шестнадцатеричных байтах) невероятно сложно. Язык Си был создан Деннисом Ритчи как высокоуровневый язык, который компилируется <strong>напрямую в машинный ассемблерный код</strong> без виртуальных машин и сборщиков мусора. Си даёт вам полный контроль над каждым байтом памяти.</p>\n</div>\n\n<div class=\"theory-section\">\n  <h3>3. Разбор первой программы: каждая строчка и каждый символ</h3>\n  <p>Давайте подробно разберем самую первую программу до мельчайших деталей:</p>\n\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">main.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code><span class=\"tok-pp\">#include</span> <span class=\"tok-str\">&lt;stdio.h&gt;</span>\n\n<span class=\"tok-type\">int</span> <span class=\"tok-fn\">main</span>(<span class=\"tok-type\">void</span>) {\n    <span class=\"tok-fn\">printf</span>(<span class=\"tok-str\">\"Hello, TrainerCode!\n\"</span>);\n    <span class=\"tok-fn\">printf</span>(<span class=\"tok-str\">\"CPU Architecture: x86_64\n\"</span>);\n    <span class=\"tok-kw\">return</span> <span class=\"tok-num\">0</span>;\n}</code></pre>\n  </div>\n\n  <h4>Строка 1: <code>#include &lt;stdio.h&gt;</code></h4>\n  <p>Символ решётки <code>#</code> указывает, что это команда <strong>препроцессора</strong>. Препроцессор работает ДО компилятора. Он находит системный файл <code>stdio.h</code> (Standard Input / Output) и вставляет его содержимое в начало нашей программы. Именно в <code>stdio.h</code> написано объявление функции <code>printf</code>. Без этой строчки компилятор выдаст ошибку: <em>«Я не знаю, что такое printf!»</em>.</p>\n\n  <h4>Строка 3: <code>int main(void)</code></h4>\n  <p>Это главная функция — <strong>точка входа</strong>. Когда операционная система (Windows) запускает ваш <code>.exe</code> файл, она передает управление процессора именно на функцию <code>main</code>.</p>\n  <ul>\n    <li><code>int</code> перед словом <code>main</code> означает: по завершении функция вернет целое число (код возврата ОС).</li>\n    <li><code>(void)</code> в скобках означает: функция не принимает входных параметров при запуске.</li>\n    <li>Фигурная скобка <code>{</code> открывает тело функции (начало инструкций), а закрывающая скобка <code>}</code> в конце — закрывает тело функции.</li>\n  </ul>\n\n  <h4>Строка 4: <code>printf(\"Hello, TrainerCode!\n\");</code></h4>\n  <p>Функция <code>printf</code> (сокращение от <em>print formatted</em> — форматированная печать) берет переданные байты строки и передает их в стандартный поток вывода консоли (stdout).</p>\n  <ul>\n    <li>Круглые скобки <code>( ... )</code> — внутри них передаются аргументы функции.</li>\n    <li>Двойные кавычки <code>\" ... \"</code> — обозначают строковый литерал (последовательность символов в памяти).</li>\n    <li>Спецсимвол <code>\n</code> — это <strong>перевод строки (Newline)</strong>. Символ слэша <code>\\</code> называется экранированием. Без <code>\n</code> следующий текст прилипнет к текущему на той же строчке!</li>\n    <li>Точка с запятой <code>;</code> — <strong>ОБЯЗАТЕЛЬНЫЙ символ конца инструкции в Си</strong>. Каждая команда в Си должна заканчиваться точкой с запятой, иначе компилятор не поймет, где кончается текущая инструкция.</li>\n  </ul>\n\n  <h4>Строка 6: <code>return 0;</code></h4>\n  <p>Инструкция <code>return</code> завершает работу функции <code>main</code> и передает число <code>0</code> обратно операционной системе Windows. Код <code>0</code> — это общепринятый стандарт, означающий: <em>«Программа выполнена успешно, сбоев не произошло»</em>. Любое ненулевое число (например, <code>-1</code> или <code>1</code>) сигнализирует об ошибке.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Что выполняет центральный процессор (CPU) на аппаратном уровне?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Инструкции машинного кода (ASM, ассемблер), такие как MOV, ADD, JMP, CALL, оперируя регистрами и памятью RAM",
+            "correct": true,
+            "explanation": "Абсолютно верно! На аппаратном уровне процессор декодирует и исполняет поток ассемблерных машинных инструкций (MOV, ADD, CALL и т.д.)."
+          },
+          {
+            "id": "b",
+            "text": "Напрямую исполняет текст на русском или английском языке без компиляции",
+            "correct": false,
+            "explanation": "Неверно. Компьютер не понимает человеческий язык напрямую; код всегда компилируется в машинные инструкции."
+          },
+          {
+            "id": "c",
+            "text": "Исключительно рисует графику на экране монитора",
+            "correct": false,
+            "explanation": "Неверно. Вычислениями и командами занимается центральный процессор (CPU)."
+          }
+        ]
+      },
+      {
+        "question": "Зачем в вызове printf(\"Текст\\n\"); нужен символ '\\n' и точка с запятой ';' в конце?",
+        "options": [
+          {
+            "id": "a",
+            "text": "'\\n' переводит курсор на новую строку, а ';' завершает инструкцию языка Си",
+            "correct": true,
+            "explanation": "Именно так! '\\n' означает символ перевода строки (Newline), а точка с запятой сообщает компилятору об окончании текущей инструкции."
+          },
+          {
+            "id": "b",
+            "text": "'\\n' удаляет текст из консоли, а ';' перезапускает программу",
+            "correct": false,
+            "explanation": "Неверно. '\\n' не удаляет текст, а осуществляет перенос строки."
+          }
+        ]
+      }
     ],
-    "expectedOutput": "TrainerCode 2000 System Active\nTarget CPU: x86_64\n"
+    "task": "Напишите законченную программу на языке Си:\n1. Подключите заголовочный файл <stdio.h>\n2. В функции main выведите ровно две строки с помощью printf:\nHello, TrainerCode!\nCPU Architecture: x86_64\n3. Не забудьте символ '\\n' в конце каждой строки, точку с запятой ';' и return 0;",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    // Напишите две команды printf для вывода текста:\n    \n    return 0;\n}\n",
+    "solution": "#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello, TrainerCode!\\n\");\n    printf(\"CPU Architecture: x86_64\\n\");\n    return 0;\n}\n",
+    "hints": [
+      "Используйте: printf(\"Hello, TrainerCode!\\n\");",
+      "На следующей строке: printf(\"CPU Architecture: x86_64\\n\");",
+      "Убедитесь, что каждая строка заканчивается символом '\\n' и точкой с запятой ';'."
+    ],
+    "expectedOutput": "Hello, TrainerCode!\nCPU Architecture: x86_64\n"
   },
   {
     "id": 2,
-    "title": "Урок 2: Фундаментальные типы данных, память и sizeof",
+    "title": "Урок 2: Директива #include: заголовочные файлы (.h) и библиотеки Windows",
     "lang": "C",
     "difficulty": "Новичок",
-    "theoryPart1": "Память компьютера дискретна: минимальная адресуемая ячейка — 1 байт (8 бит).\nВ Си каждый тип данных занимает фиксированное число байт:\n\n1. Целочисленные типы:\n- char (1 байт = 8 бит): от -128 до 127 (символ ASCII или маленькое число).\n- unsigned char (1 байт): от 0 до 255.\n- short (2 байта = 16 бит): от -32,768 до 32,767.\n- int (4 байта = 32 бита): от -2,147,483,648 до 2,147,483,647 (~2 миллиарда).\n- unsigned int (4 байта): от 0 до 4,294,967,295 (~4 миллиарда).\n- long long (8 байт = 64 бита): от -9*10^18 до 9*10^18.\n- unsigned long long (8 байт): до 18*10^18.\n\n2. Дробные типы (с плавающей точкой IEEE 754):\n- float (4 байта): ~7 десятичных цифр точности.\n- double (8 байт): ~15-17 цифр точности.\n\n3. Оператор sizeof:\nОператор sizeof(тип_или_переменная) возвращает точный размер в байтах.\nСпецификатор для вывода sizeof в printf — %zu.\n\nСпецификаторы printf:\n%d — знаковый int\n%u — беззнаковый unsigned int\n%lld — long long\n%f — float / double\n%c — символ char\n%p — адрес указателя в шестнадцатеричном виде (hex)",
-    "quiz": {
-      "question": "Сколько байт занимает тип int на 64-битной архитектуре x86_64 и какой диапазон у unsigned char?",
-      "options": [
-        {
-          "id": "a",
-          "text": "int занимает 4 байта, а unsigned char имеет диапазон от 0 до 255",
-          "correct": true,
-          "explanation": "Абсолютно верно! В стандартных моделях данных (LLP64 на Windows и LP64 на Linux) int равен 32 битам (4 байта), а 8-битный unsigned char хранит числа от 0 до 2^8 - 1 = 255."
-        },
-        {
-          "id": "b",
-          "text": "int занимает 8 байт, а unsigned char от -128 до 127",
-          "correct": false,
-          "explanation": "Неверно. 8 байт занимает long long. А unsigned char не может быть отрицательным."
-        },
-        {
-          "id": "c",
-          "text": "int занимает 1 байт, unsigned char от 0 до 100",
-          "correct": false,
-          "explanation": "Неверно. 1 байт занимает char."
-        }
-      ]
-    },
-    "theoryPart2": "Внимание: Переполнение чисел (Integer Overflow):\nЕсли к signed int прибавить единицу при значении 2,147,483,647, произойдет переполнение в отрицательное число -2,147,483,648 (Undefined Behavior в Си).\nДля системного программиста критично понимать точные размеры типов!",
-    "task": "Объявите переменные:\n- int health = 100;\n- double armor = 45.5;\n- unsigned char level = 5;\nВыведите их значения и размеры в байтах (через sizeof):\nHealth: 100 (4 bytes)\nArmor: 45.50 (8 bytes)\nLevel: 5 (1 bytes)",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    // Объявите переменные и напечатайте результат:\n    \n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Что такое заголовочные файлы (.h / .hpp) и зачем нужен #include</h3>\n  <p>Компилятор Си читает ваш файл сверху вниз. Когда компилятор встречает в коде вызов функции, например <code>printf(...)</code> или вызов WinAPI <code>OpenProcess(...)</code>, он должен <strong>заранее знать</strong>:</p>\n  <ul>\n    <li>Сколько параметров принимает эта функция?</li>\n    <li>Каких типов эти параметры (числа, указатели, строки)?</li>\n    <li>Какой тип значения функция возвращает (int, void, HANDLE)?</li>\n  </ul>\n  <p>Всю эту информацию называют <strong>прототипом функции</strong> (декларацией). Прототипы функций, структуры и константы выносятся в специальные <strong>заголовочные файлы (Header files) с расширением .h</strong> (или .hpp для C++).</p>\n  <p>Директива <code>#include</code> говорит препроцессору: <em>«Возьми весь текст из указанного .h файла и буквально вставь его прямо сюда!»</em>.</p>\n</div>\n\n<div class=\"theory-section\">\n  <h3>2. Разница между кавычками \"...\" и угловыми скобками &lt;...&gt;</h3>\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">headers_example.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code><span class=\"tok-pp\">#include</span> <span class=\"tok-str\">&lt;stdio.h&gt;</span>     <span class=\"tok-com\">// Системный заголовок из стандартной библиотеки компилятора</span>\n<span class=\"tok-pp\">#include</span> <span class=\"tok-str\">\"my_cheat.h\"</span>   <span class=\"tok-com\">// Локальный заголовок из текущей папки вашего проекта</span></code></pre>\n  </div>\n  <ul>\n    <li><code>&lt;имя.h&gt;</code> — компилятор ищет файл в системных каталогах стандартной библиотеки (например, в папке Visual Studio или MinGW).</li>\n    <li><code>\"имя.h\"</code> — компилятор сначала ищет файл в текущей папке проекта, и только если не найдет — идет в системные каталоги.</li>\n  </ul>\n</div>\n\n<div class=\"theory-section\">\n  <h3>3. Главные стандартные библиотеки языка Си</h3>\n  <ul>\n    <li><code>&lt;stdio.h&gt;</code> — Standard I/O: функции <code>printf</code>, <code>scanf</code>, работа с файлами (<code>fopen</code>, <code>fclose</code>, <code>fread</code>).</li>\n    <li><code>&lt;stdlib.h&gt;</code> — Standard Library: управление динамической памятью в куче (<code>malloc</code>, <code>free</code>), завершение процесса (<code>exit</code>), генерация случайных чисел (<code>rand</code>).</li>\n    <li><code>&lt;string.h&gt;</code> — String operations: работа со строками и сырой памятью (<code>strlen</code>, <code>strcpy</code>, <code>memcpy</code>, <code>memset</code>).</li>\n    <li><code>&lt;stdint.h&gt;</code> — Fixed width integers: типы с точным размером (<code>uint8_t</code>, <code>uint32_t</code>, <code>uint64_t</code>, <code>uintptr_t</code>).</li>\n    <li><code>&lt;math.h&gt;</code> — Math library: математические функции (<code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>pow</code>).</li>\n  </ul>\n</div>\n\n<div class=\"theory-section\">\n  <h3>4. Системные заголовочные файлы Windows (WinAPI)</h3>\n  <p>При написании системного ПО под Windows мы подключаем встроенные заголовочные файлы операционной системы:</p>\n  <ul>\n    <li><code>&lt;windows.h&gt;</code> — <strong>Главный заголовочный файл WinAPI</strong>. Подключает типы <code>HANDLE</code>, <code>DWORD</code>, <code>HWND</code>, функции управления памятью, окнами, процессами. Связан с системной библиотекой <code>kernel32.lib</code> и <code>user32.lib</code>.</li>\n    <li><code>&lt;tlhelp32.h&gt;</code> — Toolhelp32: снимки процессов, обход списка запущенных программ через <code>CreateToolhelp32Snapshot</code>, <code>Process32First</code>, <code>Process32Next</code>.</li>\n    <li><code>&lt;psapi.h&gt;</code> — Process Status API: получение модулей процессов, базовых адресов загрузки DLL в ОЗУ.</li>\n  </ul>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "В чем разница между #include <stdio.h> и #include \"my_module.h\"?",
+        "options": [
+          {
+            "id": "a",
+            "text": "<stdio.h> ищется в системных каталогах библиотек компилятора, а \"my_module.h\" сначала ищется в локальной папке проекта",
+            "correct": true,
+            "explanation": "Верно! Угловые скобки предназначены для системных/стандартных библиотек, а кавычки — для локальных файлов вашего проекта."
+          },
+          {
+            "id": "b",
+            "text": "В кавычках подключаются картинки, а в скобках — музыка",
+            "correct": false,
+            "explanation": "Неверно. Обе формы подключают заголовочные файлы C/C++."
+          }
+        ]
+      },
+      {
+        "question": "Какой главный заголовочный файл необходимо подключить для работы с Windows API (дескрипторы HANDLE, память, процессы)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "<windows.h>",
+            "correct": true,
+            "explanation": "Абсолютно верно! <windows.h> подключает все базовые типы (HANDLE, DWORD, LPVOID) и функции ядра Windows."
+          },
+          {
+            "id": "b",
+            "text": "<games.h>",
+            "correct": false,
+            "explanation": "Такого стандартного заголовка WinAPI не существует."
+          }
+        ]
+      }
+    ],
+    "task": "Подключите стандартные заголовочные файлы <stdio.h> и <string.h>.\nИспользуйте функцию strlen(\"WinAPI\") для вычисления длины строки.\nВыведите результат в формате:\nHeader stdio.h and string.h loaded!\nString WinAPI length: 6",
+    "initialCode": "// Подключите необходимые заголовочные файлы:\n#include <stdio.h>\n\nint main(void) {\n    const char *text = \"WinAPI\";\n    // Используйте strlen для вывода:\n    \n    return 0;\n}\n",
+    "solution": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    const char *text = \"WinAPI\";\n    printf(\"Header stdio.h and string.h loaded!\\n\");\n    printf(\"String WinAPI length: %zu\\n\", strlen(text));\n    return 0;\n}\n",
+    "hints": [
+      "Добавьте #include <string.h> на второй строчке.",
+      "Используйте printf(\"Header stdio.h and string.h loaded!\\n\");",
+      "Затем printf(\"String WinAPI length: %zu\\n\", strlen(text));"
+    ],
+    "expectedOutput": "Header stdio.h and string.h loaded!\nString WinAPI length: 6\n"
+  },
+  {
+    "id": 3,
+    "title": "Урок 3: Фундаментальные типы данных, память и оператор sizeof",
+    "lang": "C",
+    "difficulty": "Новичок",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Память — это массив байтов</h3>\n  <p>Вся оперативная память компьютера состоит из байтов (1 байт = 8 бит). Каждый тип данных в Си занимает фиксированное количество байт:</p>\n  <ul>\n    <li><code>char</code> (1 байт = 8 бит): от -128 до 127 (символ ASCII).</li>\n    <li><code>unsigned char</code> (1 байт): от 0 до 255.</li>\n    <li><code>short</code> (2 байта = 16 бит): от -32,768 до 32,767.</li>\n    <li><code>int</code> (4 байта = 32 бита): от -2,147,483,648 до 2,147,483,647 (~2 миллиарда).</li>\n    <li><code>unsigned int</code> (4 байта): от 0 до 4,294,967,295 (~4 миллиарда).</li>\n    <li><code>long long</code> (8 байт = 64 бита): сверхбольшие целые числа до 9*10^18.</li>\n    <li><code>float</code> (4 байта): вещественное число с плавающей точкой (~7 знаков точности).</li>\n    <li><code>double</code> (8 байт): вещественное число двойной точности (~15 знаков точности).</li>\n  </ul>\n</div>\n\n<div class=\"theory-section\">\n  <h3>2. Оператор sizeof</h3>\n  <p>Чтобы узнать, сколько байт переменная или тип занимает в оперативной памяти прямо сейчас, используется оператор <code>sizeof</code>:</p>\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">types.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code><span class=\"tok-type\">int</span> hp = <span class=\"tok-num\">100</span>;\n<span class=\"tok-fn\">printf</span>(<span class=\"tok-str\">\"Size of int: %zu bytes\n\"</span>, <span class=\"tok-kw\">sizeof</span>(hp)); <span class=\"tok-com\">// Напечатает: 4 bytes</span></code></pre>\n  </div>\n  <p>Спецификатор формата для вывода <code>sizeof</code> в printf — <code>%zu</code>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Сколько байт в памяти занимает переменная типа int на 64-битной архитектуре x86_64?",
+        "options": [
+          {
+            "id": "a",
+            "text": "4 байта (32 бита)",
+            "correct": true,
+            "explanation": "Верно! Стандартный размер int в моделях данных Windows и Linux составляет ровно 4 байта."
+          },
+          {
+            "id": "b",
+            "text": "1 байт",
+            "correct": false,
+            "explanation": "1 байт занимает тип char."
+          }
+        ]
+      }
+    ],
+    "task": "Объявите переменные:\nint health = 100;\ndouble armor = 45.5;\nunsigned char level = 5;\nВыведите их значения и размеры в байтах через sizeof:\nHealth: 100 (4 bytes)\nArmor: 45.50 (8 bytes)\nLevel: 5 (1 bytes)",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    // Объявите health, armor, level и напечатайте результат:\n    \n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint main(void) {\n    int health = 100;\n    double armor = 45.5;\n    unsigned char level = 5;\n\n    printf(\"Health: %d (%zu bytes)\\n\", health, sizeof(health));\n    printf(\"Armor: %.2f (%zu bytes)\\n\", armor, sizeof(armor));\n    printf(\"Level: %u (%zu bytes)\\n\", level, sizeof(level));\n    return 0;\n}\n",
     "hints": [
-      "Используйте %.2f для вывода armor с двумя знаками после запятой.",
-      "Используйте %zu для вывода размера sizeof."
+      "Используйте %.2f для armor.",
+      "Используйте %zu для вывода результата sizeof."
     ],
     "expectedOutput": "Health: 100 (4 bytes)\nArmor: 45.50 (8 bytes)\nLevel: 5 (1 bytes)\n"
   },
   {
-    "id": 3,
-    "title": "Урок 3: Функции, аргументы и Стек Вызовов (Call Stack)",
+    "id": 4,
+    "title": "Урок 4: Функции, аргументы по значению и стек вызовов (Call Stack)",
     "lang": "C",
     "difficulty": "Новичок",
-    "theoryPart1": "Что такое функция?\nФункция — это изолированный фрагмент кода с именем, входными аргументами и возвращаемым значением:\nint calculate_damage(int base_dmg, int armor) {\n    return base_dmg - armor;\n}\n\nКак работает передача аргументов в Си:\nВ языке Си ВСЕ аргументы передаются ИСКЛЮЧИТЕЛЬНО ПО ЗНАЧЕНИЮ (Pass by Value).\nКогда вы передаете переменную в функцию, в памяти создается её ТОЧНАЯ КОПИЯ.\nЕсли изменить аргумент внутри функции:\nvoid try_change(int x) {\n    x = 999; // изменится только локальная копия!\n}\nОригинальная переменная в вызвавшей функции останется нетронутой!\n\nСтек вызовов (Call Stack):\nПри каждом вызове функции процессор резервирует память на стеке (Stack Frame):\n- Регистр RSP (указатель вершины стека) сдвигается вниз.\n- На стек помещается адрес возврата (куда вернуться после команды RET).\n- Размещаются локальные переменные функции.\nКогда функция завершается (return), её фрейм мгновенно уничтожается!",
-    "quiz": {
-      "question": "Если передать обычную переменную int a = 10 в функцию void foo(int a) { a = 50; }, изменится ли a в main()?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Нет, не изменится, потому что в C аргументы передаются по значению (создается копия на стеке)",
-          "correct": true,
-          "explanation": "Верно! В языке C все передается по значению. Чтобы изменить оригинал, потребуется передать адрес переменной (указатель)."
-        },
-        {
-          "id": "b",
-          "text": "Да, изменится на 50, так как имя переменной совпадает",
-          "correct": false,
-          "explanation": "Неверно. Область видимости аргумента ограничена телом функции foo, это независимая копия."
-        }
-      ]
-    },
-    "theoryPart2": "Области видимости:\nЛокальные переменные живут на стеке только пока выполняется блок { }.\nЕсли перед локальной переменной поставить ключевое слово static:\nstatic int counter = 0;\nОна переместится со стека в глобальный сегмент данных .data и сохранит свое значение между вызовами функции!",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Передача аргументов по значению (Pass by Value)</h3>\n  <p>В языке Си все аргументы передаются в функцию <strong>ПО ЗНАЧЕНИЮ</strong>. Это значит, что функция получает <strong>копию</strong> переменной на вершине стека вызовов (Call Stack).</p>\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">stack.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code><span class=\"tok-type\">void</span> <span class=\"tok-fn\">try_modify</span>(<span class=\"tok-type\">int</span> x) {\n    x = <span class=\"tok-num\">999</span>; <span class=\"tok-com\">// Изменяется только копия на стеке!</span>\n}\n\n<span class=\"tok-type\">int</span> <span class=\"tok-fn\">main</span>(<span class=\"tok-type\">void</span>) {\n    <span class=\"tok-type\">int</span> a = <span class=\"tok-num\">10</span>;\n    <span class=\"tok-fn\">try_modify</span>(a);\n    <span class=\"tok-com\">// 'a' здесь останется равным 10!</span>\n    <span class=\"tok-kw\">return</span> <span class=\"tok-num\">0</span>;\n}</code></pre>\n  </div>\n  <p>Чтобы функция могла изменить оригинал переменной, требуется передать <strong>адрес в памяти (указатель)</strong>, который мы подробно изучим далее.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Что произойдет с переменной 'a' в функции main, если передать ее в обычную функцию foo(int a) и внутри присвоить a = 50?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Переменная 'a' в main НЕ изменится, так как функция работает со своей локальной копией на стеке",
+            "correct": true,
+            "explanation": "Верно! В C аргументы копируются в стек функции. Чтобы изменить оригинал, нужен указатель."
+          },
+          {
+            "id": "b",
+            "text": "Переменная 'a' изменится на 50",
+            "correct": false,
+            "explanation": "Неверно. Без указателя изменить оригинал переменной невозможно."
+          }
+        ]
+      }
+    ],
     "task": "Напишите функцию int apply_bonus(int score, int multiplier), которая возвращает score * multiplier.\nВ main вызовите ее для score = 150 и multiplier = 3 и выведите:\nFinal Score: 450",
-    "initialCode": "#include <stdio.h>\n\n// Напишите функцию apply_bonus здесь:\n\nint main(void) {\n    int score = 150;\n    int multiplier = 3;\n    \n    // Вызовите функцию и выведите результат:\n    \n    return 0;\n}\n",
+    "initialCode": "#include <stdio.h>\n\n// Напишите функцию apply_bonus:\n\nint main(void) {\n    int score = 150;\n    int multiplier = 3;\n\n    // Вызовите функцию и выведите результат:\n    \n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint apply_bonus(int score, int multiplier) {\n    return score * multiplier;\n}\n\nint main(void) {\n    int score = 150;\n    int multiplier = 3;\n    int total = apply_bonus(score, multiplier);\n    printf(\"Final Score: %d\\n\", total);\n    return 0;\n}\n",
     "hints": [
-      "Сигнатура функции: int apply_bonus(int score, int multiplier)",
-      "В теле функции верните score * multiplier;"
+      "int apply_bonus(int score, int multiplier) { return score * multiplier; }"
     ],
     "expectedOutput": "Final Score: 450\n"
   },
   {
-    "id": 4,
-    "title": "Урок 4: Ключевое слово inline, макросы и оптимизации",
+    "id": 5,
+    "title": "Урок 5: Ключевое слово inline, оптимизации и макросы",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "Накладные расходы на вызов функции:\nКогда процессор вызывает обычную функцию, происходят машинные операции:\n1. Запись регистров-аргументов (RCX, RDX, R8, R9 по соглашению fastcall).\n2. Инструкция CALL: сохранение адреса возврата на вершину стека.\n3. Пролог функции (push rbp, mov rbp, rsp).\n4. Тело функции.\n5. Эпилог функции (pop rbp).\n6. Инструкция RET: снятие адреса со стека и прыжок обратно.\nДля крошечных функций из 1-2 строк эти накладные расходы могут занимать больше времени, чем сами полезные вычисления!\n\nКлючевое слово inline:\ninline int square(int x) {\n    return x * x;\n}\nКлючевое слово inline — это указание компилятору: «Не делай CALL/RET, а просто вставь тело функции прямо в место вызова!».\nВ результате машинный код работает с максимальной скоростью, без работы со стеком.\n\nМакросы препроцессора (#define):\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\nМакросы заменяют текст ДО компиляции. Внимание: в макросах всегда оборачивайте параметры в скобки, иначе возможны баги с приоритетом операций.",
-    "quiz": {
-      "question": "Какова главная цель спецификатора inline перед функцией?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Устранить накладные расходы на инструкции CALL/RET путем подстановки тела функции прямо в точку вызова",
-          "correct": true,
-          "explanation": "Именно! Компилятор подставляет машинный код на месте, экономя такты процессора на работу со стеком."
-        },
-        {
-          "id": "b",
-          "text": "Запретить компилятору использовать оптимизацию",
-          "correct": false,
-          "explanation": "Наоборот, inline является хинтом оптимизации."
-        }
-      ]
-    },
-    "theoryPart2": "В современном C/C++ компиляторы (GCC/MSVC) при включенных флагах оптимизации -O2 / /O2 часто сами решают, какие функции заинлайнить.\nСпецификатор inline также необходим в C++, если вы определяете функцию в .h заголовочном файле, чтобы избежать ошибки линковщика multiple definition.",
-    "task": "Напишите inline функцию:\nstatic inline int clamp(int val, int min, int max)\nкоторая возвращает min если val < min, max если val > max, иначе val.\nВ main проверьте: clamp(150, 0, 100) и clamp(-20, 0, 100):\nClamped 1: 100\nClamped 2: 0",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Зачем нужен inline</h3>\n  <p>При вызове обычной функции процессор выполняет машинные команды <code>CALL</code> и <code>RET</code>, сдвигает регистр стека <code>RSP</code> и сохраняет адреса возврата. Для микро-функций из одной строки это напрасная трата тактов.</p>\n  <p>Спецификатор <code>inline</code> указывает компилятору вставить машинный код функции прямо в место вызова:</p>\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">inline_math.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code><span class=\"tok-kw\">static</span> <span class=\"tok-kw\">inline</span> <span class=\"tok-type\">int</span> <span class=\"tok-fn\">clamp</span>(<span class=\"tok-type\">int</span> val, <span class=\"tok-type\">int</span> min, <span class=\"tok-type\">int</span> max) {\n    <span class=\"tok-kw\">if</span> (val &lt; min) <span class=\"tok-kw\">return</span> min;\n    <span class=\"tok-kw\">if</span> (val &gt; max) <span class=\"tok-kw\">return</span> max;\n    <span class=\"tok-kw\">return</span> val;\n}</code></pre>\n  </div>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "В чем главное преимущество спецификатора inline?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Экономия тактов процессора за счет подстановки кода функции на месте вызова без инструкций CALL/RET",
+            "correct": true,
+            "explanation": "Верно! Тело функции инлайнится в код, устраняя накладные расходы на работу со стеком."
+          },
+          {
+            "id": "b",
+            "text": "Ограничение доступа к переменной",
+            "correct": false,
+            "explanation": "Неверно. За ограничение доступа отвечает static."
+          }
+        ]
+      }
+    ],
+    "task": "Напишите static inline функцию clamp(int val, int min, int max).\nВ main проверьте: clamp(150, 0, 100) и clamp(-20, 0, 100):\nClamped 1: 100\nClamped 2: 0",
     "initialCode": "#include <stdio.h>\n\n// Объявите static inline функцию clamp:\n\nint main(void) {\n    printf(\"Clamped 1: %d\\n\", clamp(150, 0, 100));\n    printf(\"Clamped 2: %d\\n\", clamp(-20, 0, 100));\n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nstatic inline int clamp(int val, int min, int max) {\n    if (val < min) return min;\n    if (val > max) return max;\n    return val;\n}\n\nint main(void) {\n    printf(\"Clamped 1: %d\\n\", clamp(150, 0, 100));\n    printf(\"Clamped 2: %d\\n\", clamp(-20, 0, 100));\n    return 0;\n}\n",
     "hints": [
-      "static inline int clamp(int val, int min, int max)",
-      "if (val < min) return min; if (val > max) return max; return val;"
+      "static inline int clamp(int val, int min, int max) { ... }"
     ],
     "expectedOutput": "Clamped 1: 100\nClamped 2: 0\n"
   },
   {
-    "id": 5,
-    "title": "Урок 5: Побитовые операции, битовые сдвиги и флаги",
+    "id": 6,
+    "title": "Урок 6: Побитовые операции: AND, OR, XOR и битовые маски",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "Побитовые операции — это хлеб системного программиста, разработчика драйверов и трейнеров. Они работают напрямую с битами в регистрах процессора за 1 такт!\n\nОператоры:\n1. & (Побитовое И / AND):\n   1 & 1 = 1, иначе 0. Применяется для проверки или маскирования битов.\n2. | (Побитовое ИЛИ / OR):\n   0 | 0 = 0, если хоть один бит равен 1, то 1. Применяется для установки флагов.\n3. ^ (Исключающее ИЛИ / XOR):\n   1 ^ 1 = 0, 0 ^ 0 = 0, разные биты дают 1. Применяется для инвертирования или шифрования.\n4. ~ (Побитовое НЕ / NOT):\n   Инвертирует все биты числа (0 становится 1, 1 становится 0).\n5. << (Сдвиг влево):\n   x << n сдвигает биты влево на n позиций (эквивалентно умножению на 2^n).\n6. >> (Сдвиг вправо):\n   x >> n делит на 2^n.\n\nИдиомы системного программирования:\n- Установить n-й бит: flags |= (1U << n);\n- Сбросить n-й бит: flags &= ~(1U << n);\n- Проверить n-й бит: if (flags & (1U << n)) { ... }\n- Переключить n-й бит: flags ^= (1U << n);",
-    "quiz": {
-      "question": "Какое выражение устанавливает 3-й бит числа flags в 1, не меняя остальные биты?",
-      "options": [
-        {
-          "id": "a",
-          "text": "flags |= (1 << 3);",
-          "correct": true,
-          "explanation": "Верно! 1 << 3 формирует маску с единицей в третьем бите (0b00001000 = 8), а побитовое ИЛИ (|) устанавливает этот бит в 1."
-        },
-        {
-          "id": "b",
-          "text": "flags &= ~(1 << 3);",
-          "correct": false,
-          "explanation": "Это выражение сбрасывает (обнуляет) 3-й бит, а не устанавливает."
-        },
-        {
-          "id": "c",
-          "text": "flags = flags + 3;",
-          "correct": false,
-          "explanation": "Обычное сложение сломает остальные биты при переносе разряда."
-        }
-      ]
-    },
-    "theoryPart2": "В операционной системе Windows права доступа к памяти и процессам кодируются битовыми масками:\nPROCESS_VM_READ (0x0010), PROCESS_VM_WRITE (0x0020), PROCESS_VM_OPERATION (0x0008).\nОбъединяя их через |, мы получаем комбинированный флаг:\nDWORD desired_access = PROCESS_VM_READ | PROCESS_VM_WRITE;",
-    "task": "Дана переменная unsigned int flags = 0;\n1. Установите бит 2 (значение 4) и бит 4 (значение 16).\n2. Выведите получившееся десятичное число.\n3. Сбросьте бит 2 и выведите результат.\nОжидаемый вывод:\nFlags with bits 2 and 4: 20\nFlags after clearing bit 2: 16",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Побитовая магия</h3>\n  <p>Побитовые операции работают непосредственно с регистрами процессора за 1 такт:</p>\n  <ul>\n    <li><code>&amp;</code> (AND): 1 &amp; 1 = 1, иначе 0 (проверка и маскирование).</li>\n    <li><code>|</code> (OR): установка бита в 1.</li>\n    <li><code>^</code> (XOR): инвертирование бита (1 ^ 1 = 0, 1 ^ 0 = 1).</li>\n    <li><code>&lt;&lt;</code> и <code>&gt;&gt;</code>: сдвиги влево и вправо (умножение/деление на 2^n).</li>\n  </ul>\n  <div class=\"code-box\">\n    <div class=\"code-box-header\">\n      <span class=\"dots\"><span class=\"dot red\"></span><span class=\"dot yellow\"></span><span class=\"dot green\"></span></span>\n      <span class=\"code-filename\">bitflags.c</span>\n      <button class=\"btn-copy\" onclick=\"copyCodeBox(this)\">Копировать</button>\n    </div>\n    <pre><code>flags |= (<span class=\"tok-num\">1</span> &lt;&lt; <span class=\"tok-num\">2</span>);  <span class=\"tok-com\">// Установить 2-й бит в 1</span>\nflags &amp;= ~(<span class=\"tok-num\">1</span> &lt;&lt; <span class=\"tok-num\">2</span>); <span class=\"tok-com\">// Сбросить 2-й бит в 0</span></code></pre>\n  </div>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Какое выражение устанавливает 4-й бит переменной flags в единицу?",
+        "options": [
+          {
+            "id": "a",
+            "text": "flags |= (1 << 4);",
+            "correct": true,
+            "explanation": "Верно! Побитовое ИЛИ (|) со сдвигом 1 << 4 устанавливает 4-й бит."
+          },
+          {
+            "id": "b",
+            "text": "flags &= ~(1 << 4);",
+            "correct": false,
+            "explanation": "Это выражение сбрасывает бит."
+          }
+        ]
+      }
+    ],
+    "task": "Дана unsigned int flags = 0;\nУстановите бит 2 и бит 4.\nВыведите значение.\nЗатем сбросьте бит 2 и выведите результат:\nFlags with bits 2 and 4: 20\nFlags after clearing bit 2: 16",
     "initialCode": "#include <stdio.h>\n\nint main(void) {\n    unsigned int flags = 0;\n    // Установите биты 2 и 4:\n    \n    printf(\"Flags with bits 2 and 4: %u\\n\", flags);\n\n    // Сбросьте бит 2:\n    \n    printf(\"Flags after clearing bit 2: %u\\n\", flags);\n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint main(void) {\n    unsigned int flags = 0;\n    flags |= (1 << 2);\n    flags |= (1 << 4);\n    printf(\"Flags with bits 2 and 4: %u\\n\", flags);\n\n    flags &= ~(1 << 2);\n    printf(\"Flags after clearing bit 2: %u\\n\", flags);\n    return 0;\n}\n",
     "hints": [
-      "Установка бита n: flags |= (1 << n);",
-      "Сброс бита n: flags &= ~(1 << n);"
+      "flags |= (1 << 2); flags |= (1 << 4);",
+      "flags &= ~(1 << 2);"
     ],
     "expectedOutput": "Flags with bits 2 and 4: 20\nFlags after clearing bit 2: 16\n"
   },
   {
-    "id": 6,
-    "title": "Урок 6: УКАЗАТЕЛИ (Pointers) — Фундамент Си и Реверсинга",
+    "id": 7,
+    "title": "Урок 7: УКАЗАТЕЛИ (Pointers) — Адресация в оперативной памяти (RAM)",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "ВНИМАНИЕ! Этот урок — самый важный во всем курсе.\nПонимание указателей отличает настоящего системного программиста от любителя.\n\nЧто такое указатель?\nУказатель — это переменная, значением которой является АДРЕС в оперативной памяти другого объекта!\n\nДва базовых оператора:\n1. Оператор & (Address-of — взятие адреса):\n   int health = 100;\n   // Переменная health лежит в памяти, например, по адресу 0x0019FF2C.\n   int *ptr = &health; // В ptr теперь записан адрес 0x0019FF2C!\n\n2. Оператор * (Dereference — разыменование):\n   Оператор * заставляет процессор пойти по адресу, хранящемуся в указателе, и прочитать/записать значение.\n   *ptr = 250; // Мы изменили значение переменной health на 250 через ее адрес!\n\nРазмер указателя:\nНа 32-битных системах указатель занимает 4 байта.\nНа 64-битных системах (x86_64) указатель занимает 8 байт (так как адреса 64-битные).\nТип указателя (int*, char*, double*) указывает компилятору, сколько байт читать/писать при разыменовании!",
-    "quiz": {
-      "question": "Если int x = 42; int *p = &x; что произойдет при выполнении *p = 99;?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Значение переменной x изменится на 99, потому что p хранит ее адрес памяти",
-          "correct": true,
-          "explanation": "Блестяще! Оператор * разыменовывает указатель p и записывает 99 непосредственно в ячейку памяти переменной x."
-        },
-        {
-          "id": "b",
-          "text": "Изменится адрес самого указателя p, а x останется равным 42",
-          "correct": false,
-          "explanation": "Неверно. Адрес изменился бы при p = ..., а запись *p = ... меняет целевой объект."
-        }
-      ]
-    },
-    "theoryPart2": "NULL и висячие указатели (Dangling Pointers):\nЕсли указатель равен NULL (0x00000000), разыменование (*ptr) вызовет фатальное аппаратное исключение процессора:\nEXCEPTION_ACCESS_VIOLATION (0xC0000005) на Windows или Segmentation fault на Linux.\nВсегда проверяйте указатели перед разыменованием!",
-    "task": "Напишите функцию void add_gold(int *player_gold, int amount), которая через указатель увеличивает золото игрока.\nВ main создайте int gold = 500;, вызовите add_gold(&gold, 250) и напечатайте:\nPlayer Gold: 750",
-    "initialCode": "#include <stdio.h>\n\n// Напишите функцию add_gold здесь:\n\nint main(void) {\n    int gold = 500;\n    // Вызовите add_gold, передав адрес:\n    \n    printf(\"Player Gold: %d\\n\", gold);\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Что такое указатель</h3>\n  <p>Указатель — это переменная, значением которой является <strong>АДРЕС в оперативной памяти</strong> другого объекта!</p>\n  <ul>\n    <li>Оператор <code>&amp;</code> (взятие адреса): <code>int *ptr = &amp;health;</code> — записывает адрес переменной в ptr.</li>\n    <li>Оператор <code>*</code> (разыменование): <code>*ptr = 250;</code> — идет по адресу и перезаписывает значение health!</li>\n  </ul>\n  <p>На 64-битных системах x86_64 любой указатель занимает ровно <strong>8 байт</strong>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Если int x = 42; int *p = &x; что сделает инструкция *p = 99;?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Изменит значение переменной x на 99, обратившись к ней по адресу",
+            "correct": true,
+            "explanation": "Верно! Оператор * разыменовывает адрес и записывает 99 в исходную ячейку памяти."
+          },
+          {
+            "id": "b",
+            "text": "Создаст новую переменную x2",
+            "correct": false,
+            "explanation": "Неверно. Разыменование меняет данные по существующему адресу."
+          }
+        ]
+      }
+    ],
+    "task": "Напишите функцию void add_gold(int *player_gold, int amount), которая через указатель увеличивает золото игрока.\nВ main создайте int gold = 500;, вызовите add_gold(&gold, 250) и выведите:\nPlayer Gold: 750",
+    "initialCode": "#include <stdio.h>\n\n// Напишите add_gold:\n\nint main(void) {\n    int gold = 500;\n    // Вызовите add_gold(&gold, 250):\n    \n    printf(\"Player Gold: %d\\n\", gold);\n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nvoid add_gold(int *player_gold, int amount) {\n    if (player_gold != NULL) {\n        *player_gold += amount;\n    }\n}\n\nint main(void) {\n    int gold = 500;\n    add_gold(&gold, 250);\n    printf(\"Player Gold: %d\\n\", gold);\n    return 0;\n}\n",
     "hints": [
-      "Сигнатура: void add_gold(int *player_gold, int amount)",
-      "Внутри функции: *player_gold += amount;",
-      "При вызове передайте адрес: add_gold(&gold, 250);"
+      "void add_gold(int *player_gold, int amount) { *player_gold += amount; }",
+      "add_gold(&gold, 250);"
     ],
     "expectedOutput": "Player Gold: 750\n"
   },
   {
-    "id": 7,
-    "title": "Урок 7: Адресная арифметика, void* и байтовые смещения",
+    "id": 8,
+    "title": "Урок 8: Адресная арифметика, смещения (Offsets) и указатель void*",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "Адресная арифметика (Pointer Arithmetic):\nКогда вы прибавляете число k к указателю ptr:\nptr + k\nАдрес в памяти увеличивается НЕ на k байт, а на:\nk * sizeof(*ptr) байт!\n\nПример:\nint arr[3] = {10, 20, 30};\nint *p = arr; // указывает на arr[0] (допустим адрес 0x1000)\np + 1;        // адрес станет 0x1004! Потому что sizeof(int) == 4.\n\nУниверсальный указатель void*:\nvoid* — это сырой бестиповый указатель на память.\nОн может хранить адрес любого объекта (int, float, struct).\nОднако void* НЕЛЬЗЯ разыменовать напрямую (*p — ошибка компиляции), потому что компилятор не знает тип и размер данных!\nПеред разыменованием void* необходимо явно привести к нужному типу:\nint val = *(int*)raw_ptr;\n\nУказатели на байты (unsigned char*):\nВ реверс-инжиниринге и трейнерах адреса часто приводят к unsigned char* (или uintptr_t), потому что sizeof(unsigned char) == 1 байт. Это позволяет сдвигаться по памяти ровно на заданное количество байт (Offset)!",
-    "quiz": {
-      "question": "Если указатель int *ptr равен адресу 0x2000, чему будет равен адрес выражения ptr + 2 (при sizeof(int) = 4)?",
-      "options": [
-        {
-          "id": "a",
-          "text": "0x2008 (сместится на 2 * 4 = 8 байт)",
-          "correct": true,
-          "explanation": "Верно! Адресная арифметика умножает приращение на размер базового типа (2 * 4 = 8 байт в шестнадцатеричной системе)."
-        },
-        {
-          "id": "b",
-          "text": "0x2002 (сместится ровно на 2 байта)",
-          "correct": false,
-          "explanation": "Неверно. На 2 байта сместился бы указатель типа char*."
-        }
-      ]
-    },
-    "theoryPart2": "Указатель на указатель (Двойной указатель, **ptr):\nПеременная, которая хранит адрес ДРУГОГО указателя.\nИспользуется, когда функции нужно изменить сам адрес указателя (например, при выделении динамической памяти).",
-    "task": "Дан массив int numbers[4] = {11, 22, 33, 44};\nИспользуя указатель int *ptr = numbers; и адресную арифметику (ptr + 2), прочитайте и выведите третий элемент массива:\nThird element via pointer: 33",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    int numbers[4] = {11, 22, 33, 44};\n    int *ptr = numbers;\n\n    // Получите третий элемент через *(ptr + 2):\n    int val = 0;\n    \n    printf(\"Third element via pointer: %d\\n\", val);\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Адресная арифметика</h3>\n  <p>Прибавив 1 к указателю на int (<code>ptr + 1</code>), адрес увеличится на <code>sizeof(int)</code> (то есть на 4 байта!).</p>\n  <p>Указатель <code>void*</code> — это универсальный сырой адрес на память. Чтобы прочитать из него данные, его приводят к конкретному типу: <code>*(int*)raw_ptr</code>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Если int *ptr равен адресу 0x2000, чему равен ptr + 2 при sizeof(int) = 4?",
+        "options": [
+          {
+            "id": "a",
+            "text": "0x2008 (сместится на 2 * 4 = 8 байт)",
+            "correct": true,
+            "explanation": "Верно! Адрес умножается на размер базового типа (2 * 4 = 8 байт)."
+          },
+          {
+            "id": "b",
+            "text": "0x2002",
+            "correct": false,
+            "explanation": "Неверно. Это правило применимо только к char*."
+          }
+        ]
+      }
+    ],
+    "task": "Дан массив int numbers[4] = {11, 22, 33, 44};\nЧерез указатель int *ptr = numbers; и смещение *(ptr + 2) выведите третий элемент:\nThird element via pointer: 33",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    int numbers[4] = {11, 22, 33, 44};\n    int *ptr = numbers;\n    int val = 0;\n\n    // Получите третий элемент через *(ptr + 2):\n    \n    printf(\"Third element via pointer: %d\\n\", val);\n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint main(void) {\n    int numbers[4] = {11, 22, 33, 44};\n    int *ptr = numbers;\n    int val = *(ptr + 2);\n\n    printf(\"Third element via pointer: %d\\n\", val);\n    return 0;\n}\n",
     "hints": [
-      "arr[i] абсолютно эквивалентно *(ptr + i)",
-      "Для третьего элемента используйте *(ptr + 2)."
+      "val = *(ptr + 2);"
     ],
     "expectedOutput": "Third element via pointer: 33\n"
   },
   {
-    "id": 8,
-    "title": "Урок 8: Динамическая память в куче (Heap): malloc и free",
+    "id": 9,
+    "title": "Урок 9: Динамическая память в куче (Heap): malloc, free и утечки",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "Стек vs Куча (Stack vs Heap):\n- Стек (Stack): Размер фиксирован (~1-2 МБ). Переменные создаются мгновенно, но удаляются при выходе из функции.\n- Куча (Heap): Вся свободная оперативная память компьютера (гигабайты). Выделяется и освобождается вручную разработчиком во время работы программы (Runtime).\n\nФункции работы с кучей (<stdlib.h>):\n1. malloc(size_t size):\n   Выделяет блок памяти указанного размера в байтах. Возвращает void* на начало блока или NULL, если память не удалось выделить.\n   Внимание: malloc НЕ очищает память, там лежит старый 'мусор'!\n   int *arr = (int*)malloc(10 * sizeof(int));\n\n2. free(void *ptr):\n   Возвращает выделенный блок операционной системе.\n   После free(ptr) переменная ptr становится «висячим указателем» (Dangling Pointer). Хорошая практика: сразу занулять его: ptr = NULL;\n\nСмертные грехи:\n- Утечка памяти (Memory Leak): забыли вызвать free(). Программа пожирает RAM до зависания ПК.\n- Double Free: вызов free(ptr) дважды для одного адреса — краш кучи (Heap Corruption).\n- Use-After-Free: чтение или запись по указателю после вызова free.",
-    "quiz": {
-      "question": "Что произойдет, если в цикле вызывать malloc() и не вызывать free()?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Утечка памяти (Memory Leak): программа постепенно потребит всю доступную память системы",
-          "correct": true,
-          "explanation": "Верно. Операционная система не освобождает кучу сама до завершения процесса, поэтому память утекает."
-        },
-        {
-          "id": "b",
-          "text": "Компилятор автоматически вставит free в конце цикла",
-          "correct": false,
-          "explanation": "В языке Си нет сборщика мусора и авто-free."
-        }
-      ]
-    },
-    "theoryPart2": "Безопасный паттерн работы с динамической памятью:\n1. Всегда проверять результат malloc на NULL:\n   if (buf == NULL) { /* обработка нехватки памяти */ }\n2. Освобождать память строго в том же модуле/контексте, где она была создана.\n3. Присваивать NULL после free.",
-    "task": "Выделите в куче массив из 3 целых чисел с помощью malloc.\nЗапишите в них числа: 10, 20, 30.\nВычислите их сумму и выведите:\nAllocated sum: 60\nЗатем освободите память через free().",
-    "initialCode": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    // 1. Выделите память под 3 int через malloc\n    \n    // 2. Проверьте на NULL\n    \n    // 3. Заполните массив и найдите сумму\n    \n    // 4. Освободите память\n    \n    return 0;\n}\n",
-    "solution": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int *arr = (int*)malloc(3 * sizeof(int));\n    if (arr == NULL) return 1;\n\n    arr[0] = 10;\n    arr[1] = 20;\n    arr[2] = 30;\n\n    int sum = arr[0] + arr[1] + arr[2];\n    printf(\"Allocated sum: %d\\n\", sum);\n\n    free(arr);\n    arr = NULL;\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Куча (Heap)</h3>\n  <p>Память в куче выделяется во время работы программы через <code>malloc</code> и обязана освобождаться через <code>free</code>. Забытый <code>free</code> ведет к утечке памяти (Memory Leak).</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Что произойдет, если вызывать malloc() без free()?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Утечка памяти (Memory Leak) — процесс будет бесконечно накапливать занятую RAM",
+            "correct": true,
+            "explanation": "Верно. Без free память кучи не очищается."
+          },
+          {
+            "id": "b",
+            "text": "Память очистится автоматически",
+            "correct": false,
+            "explanation": "В языке Си сборщика мусора нет."
+          }
+        ]
+      }
+    ],
+    "task": "Выделите в куче 3 числа int через malloc, запишите 10, 20, 30, сложите и напечатайте:\nAllocated sum: 60\nЗатем освободите через free().",
+    "initialCode": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    // Выделите память, посчитайте сумму и вызовите free:\n    \n    return 0;\n}\n",
+    "solution": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    int *arr = (int*)malloc(3 * sizeof(int));\n    if (arr == NULL) return 1;\n\n    arr[0] = 10;\n    arr[1] = 20;\n    arr[2] = 30;\n\n    int sum = arr[0] + arr[1] + arr[2];\n    printf(\"Allocated sum: %d\\n\", sum);\n\n    free(arr);\n    return 0;\n}\n",
     "hints": [
       "int *arr = (int*)malloc(3 * sizeof(int));",
-      "Обязательно вызовите free(arr); в конце."
+      "free(arr);"
     ],
     "expectedOutput": "Allocated sum: 60\n"
   },
   {
-    "id": 9,
-    "title": "Урок 9: Структуры (struct), объединения и выравнивание (Padding)",
+    "id": 10,
+    "title": "Урок 10: Структуры (struct), доступ через стрелочку -> и выравнивание (Padding)",
     "lang": "C",
     "difficulty": "Средний",
-    "theoryPart1": "Структура (struct) — это пользовательский составной тип, объединяющий поля разных типов под одной крышей.\n\nОбъявление:\ntypedef struct {\n    char name[32];\n    int health;\n    float speed;\n} Entity;\n\nДоступ к полям:\n1. Через точку (.), если у нас сам объект:\n   Entity player;\n   player.health = 100;\n\n2. Через стрелку (->), если у нас УКАЗАТЕЛЬ на структуру:\n   Entity *ptr = &player;\n   ptr->health = 100; // эквивалентно (*ptr).health = 100\n\nВыравнивание данных в памяти (Structure Padding):\nПроцессоры x86/x64 читают память порциями по 4 или 8 байт.\nПоэтому компилятор выравнивает поля структуры, вставляя невидимые пустые байты (Padding)!\nПример:\nstruct Test {\n    char c; // 1 байт + 3 байта padding!\n    int x;  // 4 байта\n};\nРазмер sizeof(struct Test) равен 8 байтам, а не 5!\nДля упаковки структур в сетевых пакетах и структурах памяти процессов используется директива #pragma pack(push, 1).",
-    "quiz": {
-      "question": "Если у нас есть указатель Entity *p, как правильно обратиться к его полю health?",
-      "options": [
-        {
-          "id": "a",
-          "text": "p->health (или (*p).health)",
-          "correct": true,
-          "explanation": "Верно! Оператор стрелочки (->) совмещает разыменование указателя и доступ к полю структуры."
-        },
-        {
-          "id": "b",
-          "text": "p.health",
-          "correct": false,
-          "explanation": "Неверно. Точка используется только когда переменная является самим объектом, а не указателем."
-        }
-      ]
-    },
-    "theoryPart2": "В игровых движках и системных процессах сущности (игроки, боты, снаряды) всегда представлены структурами в памяти. Зная смещение (Offset) поля health внутри структуры, можно модифицировать здоровье персонажа прямо в ОЗУ!",
-    "task": "Создайте структуру PlayerData с полями: int id, int hp, int ammo.\nНапишите функцию void heal(PlayerData *p, int amount), которая через стрелку -> увеличивает p->hp на amount.\nВ main создайте PlayerData p = {1, 50, 30};, вызовите heal(&p, 50) и выведите:\nPlayer ID 1 HP: 100",
-    "initialCode": "#include <stdio.h>\n\n// Объявите структуру PlayerData и функцию heal:\n\nint main(void) {\n    PlayerData p = {1, 50, 30};\n    // Вызовите heal(&p, 50) и напечатайте результат:\n    \n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Структуры в памяти</h3>\n  <p>Структура объединяет переменные разных типов. Доступ к полям по указателю осуществляется через оператор стрелочки: <code>p-&gt;health</code>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Как обратиться к полю health структуры через указатель Player *p?",
+        "options": [
+          {
+            "id": "a",
+            "text": "p->health",
+            "correct": true,
+            "explanation": "Верно! Стрелочка разыменовывает указатель и обращается к полю."
+          },
+          {
+            "id": "b",
+            "text": "p.health",
+            "correct": false,
+            "explanation": "Точка используется для самого объекта, а не указателя."
+          }
+        ]
+      }
+    ],
+    "task": "Создайте структуру PlayerData с полями int id, int hp, int ammo.\nНапишите heal(PlayerData *p, int amount), увеличивающую hp.\nВ main для p = {1, 50, 30} увеличьте hp на 50 и напечатайте:\nPlayer ID 1 HP: 100",
+    "initialCode": "#include <stdio.h>\n\n// Объявите структуру и функцию:\n\nint main(void) {\n    // Проверьте работу:\n    \n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\ntypedef struct {\n    int id;\n    int hp;\n    int ammo;\n} PlayerData;\n\nvoid heal(PlayerData *p, int amount) {\n    if (p != NULL) {\n        p->hp += amount;\n    }\n}\n\nint main(void) {\n    PlayerData p = {1, 50, 30};\n    heal(&p, 50);\n    printf(\"Player ID %d HP: %d\\n\", p.id, p.hp);\n    return 0;\n}\n",
     "hints": [
-      "Используйте typedef struct { int id; int hp; int ammo; } PlayerData;",
-      "В функции: p->hp += amount;"
+      "p->hp += amount;"
     ],
     "expectedOutput": "Player ID 1 HP: 100\n"
   },
   {
-    "id": 10,
-    "title": "Урок 10: Переход к C++: классы, инкапсуляция и ссылки &",
+    "id": 11,
+    "title": "Урок 11: Переход к C++: ссылки (&), классы и деструкторы",
     "lang": "C++",
     "difficulty": "Средний",
-    "theoryPart1": "Язык C++ создавался как 'C с классами'. C++ сохраняет всю низкоуровневую мощь Си, но добавляет Объектно-Ориентированное Программирование (ООП) с нулевыми накладными расходами (Zero-Cost Abstractions).\n\nСсылки (References, &):\nВ C++ появилась ссылка — безопасный псевдоним существующего объекта:\nvoid modify(int &ref) {\n    ref = 500; // меняет оригинальную переменную без указателей и *!\n}\nВ отличие от указателей, ссылка:\n- Не может быть нулевой (nullptr).\n- Не может быть перепривязана к другому объекту.\n\nКлассы (class) в C++:\nКласс объединяет данные (поля) и функции (методы).\nСпецификаторы доступа:\n- private: доступно только методам самого класса (скрытая реализация).\n- public: внешний интерфейс.\n\nКонструктор и деструктор:\n- Конструктор: вызывается автоматически при рождении объекта.\n- Деструктор (~ClassName): вызывается автоматически при выходе из области видимости { } или при delete. Это основа идиомы RAII!",
-    "quiz": {
-      "question": "В чем главное отличие ссылки (int &ref) от указателя (int *ptr)?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Ссылка не может быть nullptr, инициализируется один раз и не требует оператора разыменования (*)",
-          "correct": true,
-          "explanation": "Верно! Ссылка — это синтаксический псевдоним переменной, гарантирующий валидность объекта."
-        },
-        {
-          "id": "b",
-          "text": "Ссылка занимает 100 байт памяти и работает медленнее указателя",
-          "correct": false,
-          "explanation": "На машинном уровне ссылка компилируется в тот же самый указатель, накладных расходов ноль."
-        }
-      ]
-    },
-    "theoryPart2": "Указатель this:\nВнутри любого нестатического метода класса неявно доступен указатель this, хранящий адрес текущего экземпляра объекта в памяти.",
-    "task": "Создайте класс SafeBox с private полем int secret_.\nСделайте public конструктор SafeBox(int code) и метод int getSecret() const.\nВ main создайте SafeBox box(777); и выведите:\nSecret Code: 777",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Ссылки и ООП</h3>\n  <p>Ссылка (<code>int &amp;ref</code>) — это безопасный синтаксический псевдоним переменной. Классы объединяют приватные поля и публичные методы с конструкторами и деструкторами.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "В чем отличие ссылки int &ref от указателя?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Ссылка не может быть nullptr и не требует разыменования через *",
+            "correct": true,
+            "explanation": "Верно! Ссылка всегда гарантирует наличие объекта."
+          },
+          {
+            "id": "b",
+            "text": "Ссылка работает только на Windows 98",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Создайте класс SafeBox с private полем int secret_.\nКонструктор SafeBox(int code) и метод int getSecret() const.\nВ main создайте SafeBox box(777); и выведите:\nSecret Code: 777",
     "initialCode": "#include <iostream>\n\n// Создайте класс SafeBox:\n\nint main() {\n    SafeBox box(777);\n    std::cout << \"Secret Code: \" << box.getSecret() << std::endl;\n    return 0;\n}\n",
     "solution": "#include <iostream>\n\nclass SafeBox {\nprivate:\n    int secret_;\n\npublic:\n    SafeBox(int code) : secret_(code) {}\n\n    int getSecret() const {\n        return secret_;\n    }\n};\n\nint main() {\n    SafeBox box(777);\n    std::cout << \"Secret Code: \" << box.getSecret() << std::endl;\n    return 0;\n}\n",
     "hints": [
-      "private: int secret_;",
-      "public: SafeBox(int code) : secret_(code) {}"
+      "private: int secret_; public: SafeBox(int code) : secret_(code) {}"
     ],
     "expectedOutput": "Secret Code: 777\n"
   },
   {
-    "id": 11,
-    "title": "Урок 11: Умные указатели Modern C++ (std::unique_ptr, RAII)",
+    "id": 12,
+    "title": "Урок 12: Умные указатели (std::unique_ptr) и идиома RAII",
     "lang": "C++",
     "difficulty": "Продвинутый",
-    "theoryPart1": "Сырые указатели с new и delete — главный источник критических уязвимостей в ПО (70% всех уязвимостей Microsoft и Google происходят из-за ошибок управления памятью).\nModern C++ (начиная с C++11) решил эту проблему раз и навсегда концепцией RAII и Умными Указателями (<memory>).\n\nRAII (Resource Acquisition Is Initialization):\nРесурс (память, файл, хэндл процесса) захватывается в конструкторе и гарантированно освобождается в деструкторе, даже если в программе выброшено исключение!\n\nstd::unique_ptr:\n- Единоличное владение объектом в куче.\n- При выходе unique_ptr из области видимости { }, он автоматически вызывает delete!\n- Нулевые накладные расходы (размер ровно 8 байт, как у сырого указателя).\n- Создание:\n  #include <memory>\n  auto ptr = std::make_unique<int>(100);\n\nstd::shared_ptr:\n- Разделяемое владение со счетчиком ссылок (Reference Count).\n- Объект удаляется только когда последний shared_ptr уничтожен.",
-    "quiz": {
-      "question": "Почему в Modern C++ рекомендуется предпочитать std::unique_ptr вместо сырого `new` / `delete`?",
-      "options": [
-        {
-          "id": "a",
-          "text": "unique_ptr автоматически освобождает память в деструкторе, предотвращая утечки памяти и не создавая накладных расходов",
-          "correct": true,
-          "explanation": "Абсолютно верно! Принцип RAII гарантирует освобождение ресурсов при выходе из скобок {} без риска забыть delete."
-        },
-        {
-          "id": "b",
-          "text": "unique_ptr делает программу на 500% быстрее",
-          "correct": false,
-          "explanation": "Скорость ровно такая же, как у сырого указателя (Zero-Cost)."
-        }
-      ]
-    },
-    "theoryPart2": "unique_ptr нельзя скопировать (конструктор копирования удален), но можно передать владение через std::move:\nstd::unique_ptr<int> p2 = std::move(ptr); // ptr станет nullptr, а p2 завладеет объектом.",
-    "task": "Используя std::make_unique, выделите в куче число int со значением 4096.\nРазыменуйте его и напечатайте:\nUnique value: 4096",
-    "initialCode": "#include <iostream>\n#include <memory>\n\nint main() {\n    // Создайте unique_ptr с помощью std::make_unique:\n    \n    // Разыменуйте и выведите:\n    \n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. RAII и std::unique_ptr</h3>\n  <p><code>std::unique_ptr</code> единолично владеет объектом в куче и автоматически вызывает <code>delete</code> в деструкторе, исключая утечки памяти.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Почему std::unique_ptr безопаснее сырого указателя с new/delete?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Он автоматически освобождает память при выходе из области видимости благодаря RAII",
+            "correct": true,
+            "explanation": "Верно! Деструктор гарантирует вызов delete."
+          },
+          {
+            "id": "b",
+            "text": "Он запрещает компилятору компилировать код",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Используя std::make_unique, выделите int со значением 4096 и выведите:\nUnique value: 4096",
+    "initialCode": "#include <iostream>\n#include <memory>\n\nint main() {\n    // Создайте unique_ptr:\n    \n    return 0;\n}\n",
     "solution": "#include <iostream>\n#include <memory>\n\nint main() {\n    auto ptr = std::make_unique<int>(4096);\n    std::cout << \"Unique value: \" << *ptr << std::endl;\n    return 0;\n}\n",
     "hints": [
-      "auto ptr = std::make_unique<int>(4096);",
-      "Выведите: *ptr"
+      "auto ptr = std::make_unique<int>(4096); std::cout << \"Unique value: \" << *ptr << std::endl;"
     ],
     "expectedOutput": "Unique value: 4096\n"
   },
   {
-    "id": 12,
-    "title": "Урок 12: Введение в Windows API (WinAPI) и типы Win32",
+    "id": 13,
+    "title": "Урок 13: Введение в Windows API: типы Win32 (HANDLE, DWORD, LPVOID)",
     "lang": "C++",
     "difficulty": "Продвинутый",
-    "theoryPart1": "Добро пожаловать в высшую лигу системного программирования для Windows!\nWindows API (WinAPI) — это интерфейс ядра и подсистем Microsoft Windows. Именно на WinAPI написаны системные утилиты, античиты, дебаггеры, трейнеры и сам интерфейс Windows.\n\nПодключение:\n#include <windows.h>\n\nФундаментальные типы Win32 (псевдонимы в windows.h):\n- BOOL: целое число (TRUE = 1, FALSE = 0).\n- BYTE: беззнаковый 8-битный байт (unsigned char).\n- WORD: 16-битное число (2 байта).\n- DWORD: Double Word — 32-битное число (4 байта, unsigned long).\n- QWORD: Quad Word — 64-битное число (8 байт).\n- LPVOID: Long Pointer to Void (void*) — сырой указатель на память.\n- LPCSTR: const char* (указатель на строку ANSI).\n- LPCWSTR: const wchar_t* (указатель на Unicode UTF-16 строку).\n- HANDLE: Непрозрачный числовой дескриптор системного ресурса (процесса, потока, файла, мьютекса) в таблице ядра операционной системы!\n- HWND: Дескриптор окна.\n\nОбработка ошибок:\nБольшинство функций WinAPI в случае ошибки возвращают 0 или NULL.\nЧтобы узнать точную причину ошибки, вызывается функция GetLastError(), возвращающая числовой код ошибки (например, ERROR_ACCESS_DENIED = 5).",
-    "quiz": {
-      "question": "Что представляет собой тип HANDLE в Windows API?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Непрозрачный системный дескриптор (индекс в таблице объектов ядра ОС) для управления процессами, файлами или потоками",
-          "correct": true,
-          "explanation": "Верно! HANDLE — это абстрактный токен ядра, выдаваемый операционной системой для безопасного управления ресурсом."
-        },
-        {
-          "id": "b",
-          "text": "Обычная переменная float для хранения координат мыши",
-          "correct": false,
-          "explanation": "Неверно. HANDLE — ключевой тип дескриптора ядра Windows."
-        }
-      ]
-    },
-    "theoryPart2": "Соглашение об именовании в WinAPI:\nМногие функции существуют в двух вариантах:\n- Функция с суффиксом 'A' (ANSI, char*): MessageBoxA\n- Функция с суффиксом 'W' (Wide/Unicode, wchar_t*): MessageBoxW\nВ современных приложениях всегда рекомендуется использовать Unicode ('W') версию.",
-    "task": "Изучите типы Win32:\nОбъявите переменные:\nDWORD pid = 1337;\nBOOL is_running = 1;\nВыведите в stdout:\nProcess ID: 1337, Status: Active",
-    "initialCode": "#include <stdio.h>\n\n// В эмуляции определим Win32 типы:\ntypedef unsigned long DWORD;\ntypedef int BOOL;\n\nint main(void) {\n    DWORD pid = 1337;\n    BOOL is_running = 1;\n\n    // Выведите строку:\n    \n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Типы Windows API</h3>\n  <p>При подключении <code>&lt;windows.h&gt;</code> становятся доступны системные типы:</p>\n  <ul>\n    <li><code>HANDLE</code> — дескриптор объекта ядра ОС (процесса, файла, потока).</li>\n    <li><code>DWORD</code> — 32-битное число без знака (unsigned long).</li>\n    <li><code>LPVOID</code> — указатель <code>void*</code>.</li>\n    <li><code>BOOL</code> — логический тип Win32 (TRUE/FALSE).</li>\n  </ul>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Что представляет собой HANDLE в Windows API?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Системный дескриптор ядра операционной системы для управления процессами, файлами или потоками",
+            "correct": true,
+            "explanation": "Верно! HANDLE — это индекс в таблице объектов ядра Windows."
+          },
+          {
+            "id": "b",
+            "text": "Обычная строка текста",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Объявите DWORD pid = 1337; BOOL is_running = 1; и выведите:\nProcess ID: 1337, Status: Active",
+    "initialCode": "#include <stdio.h>\n\ntypedef unsigned long DWORD;\ntypedef int BOOL;\n\nint main(void) {\n    DWORD pid = 1337;\n    BOOL is_running = 1;\n\n    // Выведите строку:\n    \n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\ntypedef unsigned long DWORD;\ntypedef int BOOL;\n\nint main(void) {\n    DWORD pid = 1337;\n    BOOL is_running = 1;\n\n    if (is_running) {\n        printf(\"Process ID: %lu, Status: Active\\n\", pid);\n    }\n    return 0;\n}\n",
     "hints": [
-      "Используйте %lu для типа DWORD (unsigned long).",
-      "Выведите: Process ID: 1337, Status: Active"
+      "printf(\"Process ID: %lu, Status: Active\\n\", pid);"
     ],
     "expectedOutput": "Process ID: 1337, Status: Active\n"
   },
   {
-    "id": 13,
-    "title": "Урок 13: Виртуальная память Windows и права доступа к страницам",
+    "id": 14,
+    "title": "Урок 14: Виртуальная память Windows, страницы 4 КБ и права доступа",
     "lang": "C++",
     "difficulty": "Эксперт",
-    "theoryPart1": "Виртуальная память (Virtual Memory Architecture):\nВ современных операционных системах ни один процесс не обращается к физическим планкам RAM напрямую!\nКаждый процесс живет в своем собственном изолированном Виртуальном Адресном Пространстве (Virtual Address Space):\n- В 32-битных приложениях: диапазон адресов 0x00000000 .. 0x7FFFFFFF (2 ГБ пространства пользователя).\n- В 64-битных приложениях: гигантский диапазон до 128 ТБ (0x0000000000000000 .. 0x7FFFFFFFFFFF)!\n\nСтраницы памяти (Pages):\nПамять делится на страницы фиксированного размера — стандартно 4096 байт (4 КБ).\nПроцессор (блок MMU) транслирует виртуальные адреса в физические через таблицы страниц (Page Tables).\n\nФлаги защиты страниц памяти (Page Protection):\nКаждая страница имеет строгие права доступа:\n- PAGE_NOACCESS: обращение запрещено (краш).\n- PAGE_READONLY: разрешено только чтение (попытка записи вызывает Access Violation).\n- PAGE_READWRITE: чтение и запись (обычная память кучи, стека и переменных).\n- PAGE_EXECUTE_READ: исполнение кода и чтение (секция .text программы).\n- PAGE_EXECUTE_READWRITE: чтение, запись и исполнение (часто используется для хуков и инъекций шеллкода).\n\nФункции WinAPI:\n- VirtualAlloc / VirtualFree: выделение виртуальных страниц.\n- VirtualProtect: изменение прав доступа к странице памяти.",
-    "quiz": {
-      "question": "Какой стандартный размер страницы памяти в архитектуре x86/x64 Windows?",
-      "options": [
-        {
-          "id": "a",
-          "text": "4096 байт (4 КБ)",
-          "correct": true,
-          "explanation": "Верно! 4096 байт (0x1000) — стандартный размер страницы виртуальной памяти в архитектуре x86 и x86_64."
-        },
-        {
-          "id": "b",
-          "text": "64 байта",
-          "correct": false,
-          "explanation": "64 байта — это размер строки кэша процессора (Cache Line), а не страницы памяти."
-        }
-      ]
-    },
-    "theoryPart2": "Если попытаться изменить байты в секции кода программы, защищенной PAGE_EXECUTE_READ, программа немедленно упадет с ошибкой 0xC0000005.\nЧтобы пропатчить инструкцию в памяти (например, заменить JNE на NOP), трейнеры сначала вызывают VirtualProtect, устанавливают PAGE_EXECUTE_READWRITE, записывают байты и восстанавливают исходную защиту!",
-    "task": "Изучите размер страницы памяти:\nОбъявите константу size_t page_size = 4096;\nВычислите, сколько целых чисел int (по 4 байта) помещается в одну страницу памяти:\nIntegers in 4KB page: 1024",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    size_t page_size = 4096;\n    size_t int_size = sizeof(int);\n\n    // Посчитайте количество:\n    size_t count = 0;\n    \n    printf(\"Integers in 4KB page: %zu\\n\", count);\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Виртуальная память</h3>\n  <p>Каждый процесс живет в изолированном виртуальном пространстве. Память делится на страницы по <strong>4096 байт (4 КБ)</strong> с правами доступа (<code>PAGE_READWRITE</code>, <code>PAGE_EXECUTE_READWRITE</code>).</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Какой стандартный размер страницы памяти в архитектуре x86/x64 Windows?",
+        "options": [
+          {
+            "id": "a",
+            "text": "4096 байт (4 КБ)",
+            "correct": true,
+            "explanation": "Верно! Стандартная страница равна 4 КБ."
+          },
+          {
+            "id": "b",
+            "text": "16 байт",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Вычислите, сколько целых чисел int (по 4 байта) помещается в страницу 4096 байт и выведите:\nIntegers in 4KB page: 1024",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    size_t page_size = 4096;\n    size_t int_size = sizeof(int);\n\n    // Посчитайте:\n    size_t count = 0;\n    \n    printf(\"Integers in 4KB page: %zu\\n\", count);\n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint main(void) {\n    size_t page_size = 4096;\n    size_t int_size = sizeof(int);\n    size_t count = page_size / int_size;\n\n    printf(\"Integers in 4KB page: %zu\\n\", count);\n    return 0;\n}\n",
     "hints": [
       "count = page_size / int_size;"
@@ -447,137 +510,135 @@
     "expectedOutput": "Integers in 4KB page: 1024\n"
   },
   {
-    "id": 14,
-    "title": "Урок 14: Процессы в Windows, PID и функция OpenProcess",
+    "id": 15,
+    "title": "Урок 15: Процессы в Windows, PID и системный вызов OpenProcess",
     "lang": "C++",
     "difficulty": "Эксперт",
-    "theoryPart1": "Идентификатор процесса (Process ID / PID):\nКаждому запущенному процессу в Windows операционная система присваивает уникальное число — PID (например, 4820).\n\nФункция OpenProcess:\nЧтобы взаимодействовать с чужим процессом (читать память, внедрять поток или изменять переменные), программа должна открыть дескриптор (HANDLE) целевого процесса с помощью функции OpenProcess:\n\nHANDLE OpenProcess(\n    DWORD dwDesiredAccess,  // Требуемые права доступа\n    BOOL  bInheritHandle,   // Наследование дескриптора (обычно FALSE)\n    DWORD dwProcessId       // PID целевого процесса\n);\n\nФлаги доступа (dwDesiredAccess):\n- PROCESS_VM_READ (0x0010): право читать память процесса (ReadProcessMemory).\n- PROCESS_VM_WRITE (0x0020): право записывать в память процесса (WriteProcessMemory).\n- PROCESS_VM_OPERATION (0x0008): право модифицировать виртуальную память (VirtualProtectEx).\n- PROCESS_ALL_ACCESS (0x1F0FFF): полные права доступа на любые действия.\n\nЗакрытие дескриптора:\nПосле завершения работы с процессом дескриптор ОБЯЗАТЕЛЬНО должен быть закрыт:\nCloseHandle(hProcess);\nИначе в ядре операционной системы произойдет утечка дескрипторов (Handle Leak)!",
-    "quiz": {
-      "question": "Какую функцию Windows API необходимо вызвать после окончания работы с открытым HANDLE процесса?",
-      "options": [
-        {
-          "id": "a",
-          "text": "CloseHandle(hProcess);",
-          "correct": true,
-          "explanation": "Верно! CloseHandle закрывает дескриптор ядра и предотвращает утечку ресурсов ОС."
-        },
-        {
-          "id": "b",
-          "text": "free(hProcess);",
-          "correct": false,
-          "explanation": "Неверно. free() освобождает память в куче Си, а дескрипторы ядра закрываются только через CloseHandle."
-        }
-      ]
-    },
-    "theoryPart2": "Если OpenProcess вернул NULL, значит доступ не получен.\nТипичные причины:\n1. Процесс с таким PID уже завершился.\n2. Недостаточно прав (процесс запущен от имени Администратора или защищен античитом / PatchGuard). Требуется привилегия SeDebugPrivilege.",
-    "task": "Смоделируйте логику открытия процесса:\nПусть целевой PID = 2048, флаги доступа = 0x0010 (PROCESS_VM_READ).\nВыведите строку проверки статуса:\nTarget PID: 2048, DesiredAccess: 0x0010, Status: Handle Acquired",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    unsigned long target_pid = 2048;\n    unsigned long desired_access = 0x0010;\n\n    // Выведите результат:\n    \n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. OpenProcess</h3>\n  <p>Функция <code>OpenProcess(dwDesiredAccess, FALSE, pid)</code> открывает дескриптор целевого процесса с флагами доступа (<code>PROCESS_VM_READ</code>, <code>PROCESS_VM_WRITE</code>). После работы дескриптор обязательно закрывается через <code>CloseHandle</code>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Какую функцию необходимо вызвать для закрытия HANDLE процесса?",
+        "options": [
+          {
+            "id": "a",
+            "text": "CloseHandle(hProcess);",
+            "correct": true,
+            "explanation": "Верно! CloseHandle освобождает дескриптор ядра."
+          },
+          {
+            "id": "b",
+            "text": "free(hProcess);",
+            "correct": false,
+            "explanation": "free работает с памятью кучи, а не с объектами ядра."
+          }
+        ]
+      }
+    ],
+    "task": "Смоделируйте открытие процесса для target_pid = 2048 и desired_access = 0x0010:\nTarget PID: 2048, DesiredAccess: 0x0010, Status: Handle Acquired",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    unsigned long target_pid = 2048;\n    unsigned long desired_access = 0x0010;\n\n    // Выведите статус:\n    \n    return 0;\n}\n",
     "solution": "#include <stdio.h>\n\nint main(void) {\n    unsigned long target_pid = 2048;\n    unsigned long desired_access = 0x0010;\n\n    printf(\"Target PID: %lu, DesiredAccess: 0x%04lX, Status: Handle Acquired\\n\", target_pid, desired_access);\n    return 0;\n}\n",
     "hints": [
-      "Используйте формат 0x%04lX для вывода шестнадцатеричного флага доступа."
+      "printf(\"Target PID: %lu, DesiredAccess: 0x%04lX, Status: Handle Acquired\\n\", target_pid, desired_access);"
     ],
     "expectedOutput": "Target PID: 2048, DesiredAccess: 0x0010, Status: Handle Acquired\n"
   },
   {
-    "id": 15,
-    "title": "Урок 15: Чтение памяти другого процесса через ReadProcessMemory",
+    "id": 16,
+    "title": "Урок 16: Чтение памяти другого процесса через ReadProcessMemory",
     "lang": "C++",
     "difficulty": "Эксперт",
-    "theoryPart1": "Мы подошли к главному инструменту анализа памяти в Windows — функции ReadProcessMemory!\nС ее помощью отладчики (x64dbg, Cheat Engine) и трейнеры считывают значения здоровья, патронов, координат или указателей из чужого адресного пространства.\n\nСигнатура функции:\nBOOL ReadProcessMemory(\n    HANDLE  hProcess,             // Дескриптор целевого процесса (из OpenProcess)\n    LPCVOID lpBaseAddress,        // Адрес в памяти целевого процесса, откуда читать\n    LPVOID  lpBuffer,             // Адрес в НАШЕЙ памяти (буфер), куда сохранить данные\n    SIZE_T  nSize,                // Сколько байт прочитать (например, sizeof(int))\n    SIZE_T *lpNumberOfBytesRead   // Сколько байт реально прочитано (можно передать NULL)\n);\n\nКак это работает по шагам:\n1. Пусть в целевой игре переменная здоровья игрока int health = 100 находится по адресу 0x0045A120.\n2. В нашей программе мы заводим локальную переменную:\n   int my_health = 0;\n3. Вызываем ReadProcessMemory:\n   ReadProcessMemory(hProcess, (LPCVOID)0x0045A120, &my_health, sizeof(my_health), NULL);\n4. Ядро Windows приостанавливает поток, считывает 4 байта из страниц памяти целевого процесса и копирует в наш адрес &my_health.\n5. Теперь в переменной my_health лежит точное значение 100!",
-    "quiz": {
-      "question": "Что передается в качестве второго аргумента (lpBaseAddress) в ReadProcessMemory?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Адрес в памяти целевого процесса, откуда нужно прочитать байты",
-          "correct": true,
-          "explanation": "Верно! lpBaseAddress — это виртуальный адрес ячейки памяти внутри целевого процесса."
-        },
-        {
-          "id": "b",
-          "text": "Путь к файлу на жестком диске",
-          "correct": false,
-          "explanation": "Неверно. ReadProcessMemory работает с ОЗУ, а не с диском."
-        }
-      ]
-    },
-    "theoryPart2": "Многоуровневые указатели (Pointer Paths):\nВ реальных играх адреса меняются при каждом перезапуске (динамическая куча).\nПоэтому используется цепочка смещений (Offsets):\nBaseAddress -> [Base + 0x10] -> [Address + 0x48] -> Final Health Value.\nReadProcessMemory вызывается последовательно для каждого указателя в цепочке!",
-    "task": "Смоделируйте чтение значения через эмулятор буфера:\nПусть имитированная память target_ram[4] = {10, 20, 999, 40};\nАдрес смещения offset = 2.\nПрочитайте значение по смещению и выведите:\nReadProcessMemory Result: 999 HP (bytes read: 4)",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    int target_ram[4] = {10, 20, 999, 40};\n    size_t offset = 2;\n\n    int read_buffer = 0;\n    size_t bytes_read = sizeof(int);\n\n    // Скопируйте значение из target_ram[offset] в read_buffer:\n    \n    printf(\"ReadProcessMemory Result: %d HP (bytes read: %zu)\\n\", read_buffer, bytes_read);\n    return 0;\n}\n",
-    "solution": "#include <stdio.h>\n\nint main(void) {\n    int target_ram[4] = {10, 20, 999, 40};\n    size_t offset = 2;\n\n    int read_buffer = target_ram[offset];\n    size_t bytes_read = sizeof(int);\n\n    printf(\"ReadProcessMemory Result: %d HP (bytes read: %zu)\\n\", read_buffer, bytes_read);\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. ReadProcessMemory</h3>\n  <p>Функция <code>ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, NULL)</code> копирует указанное количество байт из чужого адресного пространства в буфер нашей программы.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Что передается вторым аргументом (lpBaseAddress) в ReadProcessMemory?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Адрес в виртуальной памяти целевого процесса, откуда читать данные",
+            "correct": true,
+            "explanation": "Верно! Это адрес целевой ячейки памяти в чужом процессе."
+          },
+          {
+            "id": "b",
+            "text": "Номер кредитной карты",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Смоделируйте чтение памяти: из target_ram[4] = {10, 20, 999, 40} по смещению offset = 2 прочитайте значение и выведите:\nReadProcessMemory Result: 999 HP (bytes read: 4)",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    int target_ram[4] = {10, 20, 999, 40};\n    size_t offset = 2;\n    int read_buffer = 0;\n    size_t bytes_read = sizeof(int);\n\n    // Прочитайте значение:\n    \n    printf(\"ReadProcessMemory Result: %d HP (bytes read: %zu)\\n\", read_buffer, bytes_read);\n    return 0;\n}\n",
+    "solution": "#include <stdio.h>\n\nint main(void) {\n    int target_ram[4] = {10, 20, 999, 40};\n    size_t offset = 2;\n    int read_buffer = target_ram[offset];\n    size_t bytes_read = sizeof(int);\n\n    printf(\"ReadProcessMemory Result: %d HP (bytes read: %zu)\\n\", read_buffer, bytes_read);\n    return 0;\n}\n",
     "hints": [
       "read_buffer = target_ram[offset];"
     ],
     "expectedOutput": "ReadProcessMemory Result: 999 HP (bytes read: 4)\n"
   },
   {
-    "id": 16,
-    "title": "Урок 16: Запись в память процесса через WriteProcessMemory и патчинг NOP",
+    "id": 17,
+    "title": "Урок 17: Модификация памяти, WriteProcessMemory и NOP-патчинг (0x90)",
     "lang": "C++",
     "difficulty": "Эксперт",
-    "theoryPart1": "Изменение памяти (Memory Editing):\nФункция WriteProcessMemory позволяет перезаписать память чужого процесса.\n\nСигнатура:\nBOOL WriteProcessMemory(\n    HANDLE  hProcess,               // Дескриптор процесса (требует PROCESS_VM_WRITE)\n    LPVOID  lpBaseAddress,          // Адрес в чужом процессе, КУДА писать\n    LPCVOID lpBuffer,               // Буфер в нашей программе, ОТКУДА брать байты\n    SIZE_T  nSize,                  // Сколько байт записать\n    SIZE_T *lpNumberOfBytesWritten  // Сколько байт записано реально\n);\n\nПатчинг опкодов (Code Patching) и инструкция NOP:\nВ процессорах архитектуры x86/x64 инструкция уменьшения здоровья выглядит как:\nSUB DWORD PTR [RAX+0x10], EDX   // Вычитание патронов или здоровья (байт-код: 29 50 10)\nЧтобы отключить расход патронов (Infinite Ammo), системный хакер заменяет эти инструкции на «пустые операции» — NOP (No Operation).\nОпкод инструкции NOP в x86/x64 равен одному байту: 0x90!\nКогда процессор доходит до байта 0x90, он ничего не делает и сразу переходит к следующей инструкции. Расход патронов отключен!",
-    "quiz": {
-      "question": "Какой опкод в архитектуре x86/x64 соответствует инструкции NOP (No Operation)?",
-      "options": [
-        {
-          "id": "a",
-          "text": "0x90",
-          "correct": true,
-          "explanation": "Верно! Однобайтовая инструкция 0x90 (NOP) является классическим приемом патчинга в ассемблере x86."
-        },
-        {
-          "id": "b",
-          "text": "0x00",
-          "correct": false,
-          "explanation": "0x00 в опкодах x86 — это часть инструкции ADD [RAX], AL, а не NOP."
-        },
-        {
-          "id": "c",
-          "text": "0xFF",
-          "correct": false,
-          "explanation": "0xFF — это группа опкодов CALL/JMP/INC/DEC."
-        }
-      ]
-    },
-    "theoryPart2": "Перед вызовом WriteProcessMemory для изменения секции кода (.text) необходимо вызвать VirtualProtectEx, чтобы сменить права страницы с PAGE_EXECUTE_READ на PAGE_EXECUTE_READWRITE, иначе функция завершится с кодом ERROR_ACCESS_DENIED.",
-    "task": "Смоделируйте NOP-патчинг:\nДан массив машинных инструкций:\nunsigned char code_bytes[3] = {0x29, 0x50, 0x10}; // sub [rax+10], edx\nЗамените все 3 байта на опкод 0x90 (NOP).\nВыведите результат в шестнадцатеричном виде:\nPatched bytes: 0x90 0x90 0x90 (NOP applied)",
-    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    unsigned char code_bytes[3] = {0x29, 0x50, 0x10};\n\n    // Замените все 3 байта на 0x90:\n    \n    printf(\"Patched bytes: 0x%02X 0x%02X 0x%02X (NOP applied)\\n\",\n           code_bytes[0], code_bytes[1], code_bytes[2]);\n    return 0;\n}\n",
-    "solution": "#include <stdio.h>\n\nint main(void) {\n    unsigned char code_bytes[3] = {0x29, 0x50, 0x10};\n    code_bytes[0] = 0x90;\n    code_bytes[1] = 0x90;\n    code_bytes[2] = 0x90;\n\n    printf(\"Patched bytes: 0x%02X 0x%02X 0x%02X (NOP applied)\\n\",\n           code_bytes[0], code_bytes[1], code_bytes[2]);\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Патчинг опкодов и WriteProcessMemory</h3>\n  <p>Функция <code>WriteProcessMemory</code> перезаписывает байты в памяти чужого процесса. Чтобы отключить вычитание патронов или здоровья (инструкцию SUB), системные реверсеры заменяют её на инструкцию <code>NOP</code> (No Operation), опкод которой равен <code>0x90</code>.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Какой опкод в архитектуре x86/x64 соответствует инструкции NOP (пустая операция)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "0x90",
+            "correct": true,
+            "explanation": "Верно! Байт 0x90 — это инструкция NOP в процессорах Intel/AMD."
+          },
+          {
+            "id": "b",
+            "text": "0x00",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Замените в массиве unsigned char code[3] = {0x29, 0x50, 0x10}; все 3 байта на опкод 0x90 (NOP) и напечатайте:\nPatched bytes: 0x90 0x90 0x90 (NOP applied)",
+    "initialCode": "#include <stdio.h>\n\nint main(void) {\n    unsigned char code[3] = {0x29, 0x50, 0x10};\n\n    // Замените байты на 0x90:\n    \n    printf(\"Patched bytes: 0x%02X 0x%02X 0x%02X (NOP applied)\\n\", code[0], code[1], code[2]);\n    return 0;\n}\n",
+    "solution": "#include <stdio.h>\n\nint main(void) {\n    unsigned char code[3] = {0x29, 0x50, 0x10};\n    code[0] = 0x90;\n    code[1] = 0x90;\n    code[2] = 0x90;\n\n    printf(\"Patched bytes: 0x%02X 0x%02X 0x%02X (NOP applied)\\n\", code[0], code[1], code[2]);\n    return 0;\n}\n",
     "hints": [
-      "code_bytes[0] = 0x90; code_bytes[1] = 0x90; code_bytes[2] = 0x90;"
+      "code[0] = 0x90; code[1] = 0x90; code[2] = 0x90;"
     ],
     "expectedOutput": "Patched bytes: 0x90 0x90 0x90 (NOP applied)\n"
   },
   {
-    "id": 17,
-    "title": "Урок 17: Финальный курсовой проект: Memory Trainer Engine на C++",
+    "id": 18,
+    "title": "Урок 18: Финальный курсовой проект: Собственный Memory Trainer Engine на C++",
     "lang": "C++",
     "difficulty": "Эксперт",
-    "theoryPart1": "Поздравляем! Вы прошли путь от азов языка Си до системной работы с виртуальной памятью и Windows API!\nТеперь вы обладаете полным арсеналом знаний:\n- Понимание архитектуры x86_64, регистров и страниц памяти.\n- Управление указателями, адресами и смещениями.\n- Структуры данных и ООП в C++.\n- Системные вызовы Windows: OpenProcess, ReadProcessMemory, WriteProcessMemory, CloseHandle.\n\nАрхитектура собственного Memory Trainer Engine:\nОформим законченный класс `ProcessMemoryManager`:\n1. Хранит дескриптор `HANDLE hProcess_` и `DWORD pid_`.\n2. Конструктор принимает PID и открывает процесс.\n3. Деструктор автоматически закрывает HANDLE (принцип RAII!).\n4. Шаблонный метод `template <typename T> T Read(uintptr_t address)` для безопасного чтения любого типа (int, float, struct).\n5. Шаблонный метод `template <typename T> bool Write(uintptr_t address, T value)` для записи значений.\n\nС этим классом вы сможете написать реальный трейнер или утилиту диагностики памяти для любой Windows-программы!",
-    "quiz": {
-      "question": "Почему оформление работы с памятью процесса в C++ класс с RAII деструктором является лучшей практикой?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Деструктор класса гарантированно закроет дескриптор CloseHandle(hProcess_), предотвращая утечки ресурсов ядра ОС при выходе из области видимости",
-          "correct": true,
-          "explanation": "Идеально! Это золотой стандарт надежного системного C++ софта."
-        },
-        {
-          "id": "b",
-          "text": "Потому что C++ запрещает использовать Си-функции",
-          "correct": false,
-          "explanation": "C++ полностью обратно совместим с Си и WinAPI."
-        }
-      ]
-    },
-    "theoryPart2": "Выпускное практическое задание:\nРеализуйте каркас системного класса `TrainerMemory`, прочитайте и обновите эмулированное значение переменной здоровья игрока!",
-    "task": "Реализуйте класс TrainerMemory:\n- Метод int readInt(uintptr_t addr)\n- Метод void writeInt(uintptr_t addr, int val)\nВ main примените его к адресу имитированного значения health = 100, запишите 9999 (GodMode) и выведите:\n[TrainerCode Engine] Target Health: 9999 (Freeze Active)",
-    "initialCode": "#include <iostream>\n#include <cstdint>\n\n// Реализуйте класс TrainerMemory для работы с адресами памяти:\nclass TrainerMemory {\nprivate:\n    int simulated_ram_[16];\n\npublic:\n    TrainerMemory() {\n        for (int i = 0; i < 16; i++) simulated_ram_[i] = 0;\n        simulated_ram_[4] = 100; // По адресу смещения 4 лежит здоровье\n    }\n\n    int readInt(uintptr_t offset) {\n        return simulated_ram_[offset];\n    }\n\n    void writeInt(uintptr_t offset, int val) {\n        simulated_ram_[offset] = val;\n    }\n};\n\nint main() {\n    TrainerMemory trainer;\n    // Запишите 9999 по смещению 4 и выведите:\n    \n    return 0;\n}\n",
-    "solution": "#include <iostream>\n#include <cstdint>\n\nclass TrainerMemory {\nprivate:\n    int simulated_ram_[16];\n\npublic:\n    TrainerMemory() {\n        for (int i = 0; i < 16; i++) simulated_ram_[i] = 0;\n        simulated_ram_[4] = 100;\n    }\n\n    int readInt(uintptr_t offset) {\n        return simulated_ram_[offset];\n    }\n\n    void writeInt(uintptr_t offset, int val) {\n        simulated_ram_[offset] = val;\n    }\n};\n\nint main() {\n    TrainerMemory trainer;\n    trainer.writeInt(4, 9999);\n    int current_hp = trainer.readInt(4);\n\n    std::cout << \"[TrainerCode Engine] Target Health: \" << current_hp << \" (Freeze Active)\" << std::endl;\n    return 0;\n}\n",
+    "theory": "<div class=\"theory-section\">\n  <h3>1. Архитектура Memory Trainer Engine</h3>\n  <p>Объединив все знания, мы строим класс <code>TrainerMemory</code> с автоматическим управлением дескриптором (RAII), методами чтения и записи в память.</p>\n</div>\n",
+    "quizzes": [
+      {
+        "question": "Почему оформление работы с памятью в C++ класс с RAII деструктором является лучшей системной практикой?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Деструктор класса гарантированно закроет CloseHandle(hProcess), предотвращая утечки ресурсов ОС при любом выходе",
+            "correct": true,
+            "explanation": "Верно! Это фундаментальный принцип надежности C++ софта."
+          },
+          {
+            "id": "b",
+            "text": "Это не имеет значения",
+            "correct": false,
+            "explanation": "Неверно."
+          }
+        ]
+      }
+    ],
+    "task": "Используя класс TrainerMemory, запишите значение 9999 по смещению 4 и выведите:\n[TrainerCode Engine] Target Health: 9999 (Freeze Active)",
+    "initialCode": "#include <iostream>\n#include <cstdint>\n\nclass TrainerMemory {\nprivate:\n    int ram_[16];\npublic:\n    TrainerMemory() {\n        for (int i = 0; i < 16; i++) ram_[i] = 0;\n        ram_[4] = 100;\n    }\n    int readInt(uintptr_t addr) { return ram_[addr]; }\n    void writeInt(uintptr_t addr, int val) { ram_[addr] = val; }\n};\n\nint main() {\n    TrainerMemory trainer;\n    // Запишите 9999 по адресу 4 и выведите строку:\n    \n    return 0;\n}\n",
+    "solution": "#include <iostream>\n#include <cstdint>\n\nclass TrainerMemory {\nprivate:\n    int ram_[16];\npublic:\n    TrainerMemory() {\n        for (int i = 0; i < 16; i++) ram_[i] = 0;\n        ram_[4] = 100;\n    }\n    int readInt(uintptr_t addr) { return ram_[addr]; }\n    void writeInt(uintptr_t addr, int val) { ram_[addr] = val; }\n};\n\nint main() {\n    TrainerMemory trainer;\n    trainer.writeInt(4, 9999);\n    int current_hp = trainer.readInt(4);\n    std::cout << \"[TrainerCode Engine] Target Health: \" << current_hp << \" (Freeze Active)\" << std::endl;\n    return 0;\n}\n",
     "hints": [
       "trainer.writeInt(4, 9999);",
-      "Выведите: [TrainerCode Engine] Target Health: 9999 (Freeze Active)"
+      "std::cout << \"[TrainerCode Engine] Target Health: \" << current_hp << \" (Freeze Active)\" << std::endl;"
     ],
     "expectedOutput": "[TrainerCode Engine] Target Health: 9999 (Freeze Active)\n"
   }
