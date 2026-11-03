@@ -26,13 +26,15 @@ app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: 0
 }));
 
-// Load lessons
+// Load lessons dynamically
 const lessonsPath = path.join(__dirname, 'public', 'lessons.json');
-let lessons = [];
-try {
-  lessons = JSON.parse(fs.readFileSync(lessonsPath, 'utf8'));
-} catch (e) {
-  console.error('Error loading lessons:', e);
+function getLessons() {
+  try {
+    return JSON.parse(fs.readFileSync(lessonsPath, 'utf8'));
+  } catch (e) {
+    console.error('Error loading lessons:', e);
+    return [];
+  }
 }
 
 // Data types cheat sheet
@@ -112,7 +114,8 @@ app.post('/api/compile', (req, res) => {
       try { fs.unlinkSync(binFile); } catch (e) {}
 
       // Check against expected output if lessonId given
-      const lesson = lessons.find(l => l.id === lessonId);
+      const currentLessons = getLessons();
+      const lesson = currentLessons.find(l => l.id === lessonId);
       let taskCompleted = false;
       if (lesson && lesson.expectedOutput) {
         const normRun = (runStdout || '').trim().replace(/\r\n/g, '\n');

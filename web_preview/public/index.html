@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrainerCode — Современная платформа системного программирования C/C++</title>
+  <title>QuantumCode Academy — Системное Программирование C & C++</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +32,22 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
+    /* CUSTOM SLEEK SCROLLBARS */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-cyan);
+    }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -40,34 +56,33 @@
       overflow: hidden;
     }
 
-    /* Main Container */
     .app-root {
       width: 100vw;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      background: radial-gradient(circle at 15% 15%, rgba(0, 122, 204, 0.08) 0%, transparent 40%),
-                  radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+      background: radial-gradient(circle at 10% 10%, rgba(0, 122, 204, 0.09) 0%, transparent 45%),
+                  radial-gradient(circle at 90% 90%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
                   var(--bg-dark);
     }
 
     /* Top Glass Header */
     .app-header {
       height: 52px;
-      background: rgba(17, 21, 28, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(17, 21, 28, 0.88);
+      backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
+      padding: 0 20px;
       z-index: 100;
     }
 
     .header-logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: 700;
       font-size: 15px;
       letter-spacing: -0.3px;
@@ -76,11 +91,11 @@
     .logo-badge {
       background: linear-gradient(135deg, #007acc, #38bdf8);
       color: #ffffff;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 4px 10px;
+      border-radius: 7px;
       font-size: 11px;
       font-weight: 700;
-      box-shadow: 0 2px 10px rgba(0, 122, 204, 0.3);
+      box-shadow: 0 2px 12px rgba(0, 122, 204, 0.4);
     }
 
     .header-actions {
@@ -89,7 +104,7 @@
       gap: 10px;
     }
 
-    /* Modern Buttons */
+    /* Buttons */
     .btn-modern {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
@@ -108,7 +123,7 @@
 
     .btn-modern:hover {
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.2);
       transform: translateY(-1px);
     }
 
@@ -138,7 +153,14 @@
       transform: translateY(-1px);
     }
 
-    /* Viewport Area */
+    .btn-modern.accent {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      border: 1px solid #c084fc;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Main Viewport */
     .main-viewport {
       flex: 1;
       display: flex;
@@ -146,7 +168,7 @@
       position: relative;
     }
 
-    /* SCREEN 1: Onboarding Card */
+    /* Onboarding Card */
     .onboarding-wrap {
       flex: 1;
       display: flex;
@@ -156,14 +178,14 @@
     }
 
     .card-glass {
-      width: 600px;
+      width: 620px;
       max-width: 95vw;
-      background: rgba(22, 27, 34, 0.85);
-      backdrop-filter: blur(16px);
+      background: rgba(22, 27, 34, 0.88);
+      backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px;
-      padding: 32px 36px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      padding: 34px 38px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -202,7 +224,7 @@
     }
 
     .input-modern {
-      background: rgba(10, 12, 16, 0.8);
+      background: rgba(10, 12, 16, 0.85);
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
       color: #ffffff;
@@ -242,97 +264,40 @@
       margin-top: 6px;
     }
 
-    /* SCREEN 2: Modern Learning Workspace */
+    /* Clean Focused Workspace (No distracting long lists, linear flow with Next Button) */
     .workspace-wrap {
       flex: 1;
       display: flex;
-      min-height: 0;
-    }
-
-    /* Left Sidebar: Lessons List */
-    .sidebar-lessons {
-      width: 280px;
-      background: var(--bg-panel);
-      border-right: 1px solid var(--border-subtle);
-      display: flex;
       flex-direction: column;
-    }
-
-    .sidebar-top {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .sidebar-top-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .lessons-scroll-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .lesson-item-row {
-      padding: 9px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-      border: 1px solid transparent;
-      transition: all 0.15s;
-    }
-
-    .lesson-item-row:hover {
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-main);
-    }
-
-    .lesson-item-row.active {
-      background: rgba(0, 122, 204, 0.15);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: #38bdf8;
-      font-weight: 600;
-    }
-
-    .lesson-item-row.locked {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    /* Right Main Panel */
-    .lesson-main-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
       min-height: 0;
       background: var(--bg-dark);
     }
 
-    /* Lesson Stepper Header */
-    .lesson-step-header {
+    /* Lesson Navigation Bar */
+    .lesson-nav-bar {
       height: 48px;
       background: var(--bg-panel);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 22px;
+    }
+
+    .lesson-meta-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lesson-number-pill {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .step-pills-bar {
@@ -368,15 +333,23 @@
       color: var(--accent-green);
     }
 
-    /* STAGE 1: Theory Reader */
+    /* Split Learning Deck */
+    .deck-container {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    /* Stage 1: Theory Reader */
     .theory-viewport {
       flex: 1;
       overflow-y: auto;
-      padding: 28px 36px;
+      padding: 30px 42px;
       line-height: 1.7;
       font-size: 14px;
       color: #e2e8f0;
-      max-width: 980px;
+      max-width: 1040px;
+      margin: 0 auto;
     }
 
     .theory-viewport h2 {
@@ -387,21 +360,21 @@
     }
 
     .theory-section {
-      margin-bottom: 24px;
+      margin-bottom: 26px;
     }
 
     .theory-section h3 {
       font-size: 16px;
       font-weight: 600;
       color: #38bdf8;
-      margin: 18px 0 8px 0;
+      margin: 20px 0 10px 0;
     }
 
     .theory-section h4 {
       font-size: 14px;
       font-weight: 600;
       color: #818cf8;
-      margin: 14px 0 6px 0;
+      margin: 16px 0 6px 0;
     }
 
     .theory-section p {
@@ -417,7 +390,7 @@
       margin-bottom: 6px;
     }
 
-    /* TOOLTIPS: Beautiful modern tooltips on hover */
+    /* Tooltips */
     .tc-tip {
       border-bottom: 1px dashed #38bdf8;
       color: #7dd3fc;
@@ -436,14 +409,14 @@
       color: #f1f5f9;
       border: 1px solid #38bdf8;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 9px 13px;
       font-size: 12px;
       line-height: 1.5;
       font-weight: 400;
       white-space: normal;
-      width: 280px;
+      width: 290px;
       max-width: 90vw;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
       z-index: 1000;
       pointer-events: none;
       animation: tipFadeIn 0.2s ease-out;
@@ -454,15 +427,15 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* GRAPHS: Interactive Modern Execution Graphs */
+    /* Call Graph */
     .exec-graph {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin: 20px 0;
-      padding: 18px;
+      margin: 22px 0;
+      padding: 20px;
       background: #080c14;
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.22);
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
@@ -522,14 +495,14 @@
       color: #7dd3fc;
     }
 
-    /* CODE BOXES: Styled IDE Windows */
+    /* Clean Code Container */
     .code-box {
       background: var(--bg-code);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      margin: 16px 0;
+      margin: 18px 0;
       overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
     }
 
     .code-box-header {
@@ -590,43 +563,7 @@
       white-space: pre !important;
     }
 
-    /* Syntax Tokens */
-    .tok-pp { color: #f472b6; font-weight: 600; }
-    .tok-str { color: #fca5a5; }
-    .tok-type { color: #38bdf8; font-weight: 600; }
-    .tok-fn { color: #c084fc; font-weight: 500; }
-    .tok-kw { color: #60a5fa; font-weight: 600; }
-    .tok-num { color: #34d399; }
-    .tok-com { color: #64748b; font-style: italic; }
-
-    /* Tables */
-    .table-wrap {
-      overflow-x: auto;
-      margin: 16px 0;
-    }
-
-    .modern-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .modern-table th {
-      background: rgba(255, 255, 255, 0.05);
-      color: #38bdf8;
-      padding: 8px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .modern-table td {
-      padding: 8px 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: #e2e8f0;
-    }
-
-    /* STAGE 2: Interactive Single-Question Quiz */
+    /* Stage 2: Interactive Sequential Quiz */
     .quiz-viewport {
       flex: 1;
       display: flex;
@@ -710,7 +647,7 @@
       color: #fca5a5;
     }
 
-    /* STAGE 3: Editor & Console Split with SYNTAX HIGHLIGHTING */
+    /* Stage 3: Professional Clean Editor */
     .editor-stage-wrap {
       flex: 1;
       display: flex;
@@ -721,93 +658,64 @@
     .task-bar-modern {
       background: #111620;
       border-bottom: 1px solid var(--border-subtle);
-      padding: 10px 20px;
+      padding: 12px 22px;
       font-size: 13px;
       color: #cbd5e1;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .task-tag {
       background: rgba(56, 189, 248, 0.15);
       color: #38bdf8;
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 4px;
       font-size: 11px;
       font-weight: 700;
     }
 
-    /* Modern Synced Code Editor with Syntax Highlighting Overlay */
+    /* Native Clean Editor (Pure raw code, without any HTML tag injection) */
     .editor-code-row {
       flex: 1.3;
       display: flex;
       min-height: 0;
       background: var(--bg-code);
-      position: relative;
     }
 
     .editor-lines {
-      width: 46px;
+      width: 48px;
       background: #0b0f17;
       border-right: 1px solid rgba(255, 255, 255, 0.06);
       color: #475569;
       font-family: 'Fira Code', monospace;
       font-size: 13px;
       line-height: 22px;
-      padding: 12px 6px;
+      padding: 14px 8px;
       text-align: right;
       user-select: none;
       overflow: hidden;
-      z-index: 10;
     }
 
-    .editor-wrapper {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Syntax Highlighted Presentation Layer */
-    .editor-highlight {
-      position: absolute;
-      inset: 0;
-      margin: 0;
-      padding: 12px 16px;
-      font-family: 'Fira Code', monospace;
-      font-size: 13px;
-      line-height: 22px;
-      tab-size: 4;
-      white-space: pre;
-      overflow: hidden;
-      pointer-events: none;
-      color: #f1f5f9;
-      background: transparent;
-      z-index: 1;
-    }
-
-    /* Real Editable Input Layer */
     .editor-textarea {
-      position: absolute;
-      inset: 0;
-      margin: 0;
-      padding: 12px 16px;
-      font-family: 'Fira Code', monospace;
-      font-size: 13px;
-      line-height: 22px;
-      tab-size: 4;
-      white-space: pre;
-      overflow: auto;
-      background: transparent;
-      color: transparent;
-      caret-color: #38bdf8;
+      flex: 1;
+      background: var(--bg-code);
+      color: #38bdf8;
+      caret-color: #ffffff;
       border: none;
       outline: none;
       resize: none;
-      z-index: 2;
+      font-family: 'Fira Code', monospace;
+      font-size: 13.5px;
+      line-height: 22px;
+      padding: 14px 18px;
+      tab-size: 4;
+      white-space: pre;
+      overflow: auto;
+      word-break: normal;
     }
 
-    /* Bottom Console Dock */
+    /* Dock: Console & AI & Notes */
     .dock-console-wrap {
       flex: 0.9;
       display: flex;
@@ -818,13 +726,13 @@
     }
 
     .dock-tabs-bar {
-      height: 32px;
+      height: 34px;
       background: #11151c;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      padding: 0 12px;
-      gap: 4px;
+      padding: 0 14px;
+      gap: 6px;
     }
 
     .dock-tab {
@@ -832,7 +740,7 @@
       border: none;
       border-bottom: 2px solid transparent;
       color: var(--text-muted);
-      padding: 6px 14px;
+      padding: 7px 14px;
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
@@ -846,7 +754,7 @@
 
     .console-term {
       flex: 1;
-      padding: 12px 18px;
+      padding: 14px 18px;
       font-family: 'Fira Code', monospace;
       font-size: 12px;
       line-height: 1.6;
@@ -855,6 +763,32 @@
       overflow-y: auto;
       white-space: pre-wrap;
       user-select: text;
+    }
+
+    /* Notes Dock */
+    .notes-dock-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 18px;
+      background: #080c14;
+    }
+
+    .notes-textarea {
+      flex: 1;
+      background: #0d111a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: #f1f5f9;
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      outline: none;
+      resize: none;
+    }
+
+    .notes-textarea:focus {
+      border-color: var(--accent-cyan);
     }
 
     /* AI Chat */
@@ -907,15 +841,15 @@
       gap: 8px;
     }
 
-    /* Footer Status Bar */
+    /* Footer Bar */
     .app-footer-bar {
       height: 26px;
       background: #0c0f14;
       border-top: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
-      padding: 0 14px;
-      gap: 12px;
+      padding: 0 16px;
+      gap: 14px;
       font-size: 11px;
       color: var(--text-muted);
     }
@@ -926,7 +860,7 @@
       gap: 6px;
     }
 
-    /* Types Modal */
+    /* Modal */
     .modal-overlay-dark {
       display: none;
       position: fixed;
@@ -939,7 +873,7 @@
     }
 
     .modal-content-glass {
-      width: 800px;
+      width: 820px;
       max-width: 95vw;
       background: #111620;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -950,6 +884,27 @@
       flex-direction: column;
       gap: 16px;
     }
+
+    .modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .modern-table th {
+      background: rgba(255, 255, 255, 0.05);
+      color: #38bdf8;
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .modern-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+    }
   </style>
 </head>
 <body>
@@ -958,16 +913,16 @@
     <!-- Top Glass Header -->
     <header class="app-header">
       <div class="header-logo">
-        <span class="logo-badge">TrainerCode</span>
-        <span style="font-weight: 600; color: #f1f5f9;">Системное Программирование C & C++</span>
+        <span class="logo-badge">QuantumCode</span>
+        <span style="font-weight: 600; color: #f1f5f9;">Академия Системного Программирования C & C++</span>
       </div>
 
       <div class="header-actions">
         <button class="btn-modern" onclick="openTypesModal()">
-          <span>📊</span> Типы C/C++ (F1)
+          <span>📊</span> Справочник типов (F1)
         </button>
-        <button class="btn-modern" onclick="unlockAllLessons()">
-          <span>🔓</span> Разблокировать все уроки
+        <button class="btn-modern accent" onclick="openCheatModal()">
+          <span>📖</span> Быстрый справочник WinAPI
         </button>
         <button class="btn-modern primary" onclick="downloadExe()">
           <span>📥</span> <strong>Скачать .EXE</strong>
@@ -978,19 +933,19 @@
     <!-- Main Viewport -->
     <main class="main-viewport">
 
-      <!-- ONBOARDING: SCREEN 1 (Form) -->
+      <!-- ONBOARDING FORM -->
       <section class="onboarding-wrap" id="viewOnboardingForm">
         <div class="card-glass">
-          <h1>Вход в Академию TrainerCode</h1>
-          <p>Интерактивная среда для глубокого освоения системного программирования: от машинного кода процессора x86_64, памяти RAM, указателей и структур до вызовов <strong>Windows API (OpenProcess, ReadProcessMemory, WriteProcessMemory)</strong>.</p>
+          <h1>Вход в Академию QuantumCode</h1>
+          <p>Интерактивная среда для глубокого освоения системного программирования: от архитектуры x86_64, памяти RAM, указателей и ассемблера до системных дескрипторов <strong>Windows API (OpenProcess, ReadProcessMemory, WriteProcessMemory, DLL Injection)</strong>.</p>
 
           <div class="form-group">
             <label>Ваше имя / позывной разработчика:</label>
-            <input type="text" class="input-modern" id="userNameInput" value="Александр" placeholder="Введите ваше имя...">
+            <input type="text" class="input-modern" id="userNameInput" value="Александр" placeholder="Введите имя...">
           </div>
 
           <div class="form-group">
-            <label>Ваш уровень в кодинге:</label>
+            <label>Ваш уровень подготовки:</label>
             <select class="select-modern" id="userLevelInput">
               <option value="Новичок">🟢 Абсолютный новичок (С нуля, без опыта в C/C++)</option>
               <option value="Базовый опыт">🟡 Базовый опыт (Знаю Python / JS / C#, хочу в системное)</option>
@@ -999,62 +954,63 @@
           </div>
 
           <button class="btn-modern primary" style="padding: 12px; font-size: 14px; justify-content: center;" onclick="submitOnboarding()">
-            Далее: Инструкция по обучению &gt;&gt;
+            Далее: Программа и Напутствие &gt;&gt;
           </button>
         </div>
       </section>
 
-      <!-- ONBOARDING: SCREEN 2 (Instruction) -->
+      <!-- ONBOARDING INSTRUCTION -->
       <section class="onboarding-wrap" id="viewOnboardingInstruction" style="display: none;">
         <div class="card-glass">
           <h1 id="praiseTitle">✨ Добро пожаловать, Александр!</h1>
-          <p>«Тот, кто знает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны регистры процессора, оперативная память и системные дескрипторы Windows.»</p>
+          <p>«Тот, кто знает C и C++, управляет каждым байтом и каждым тактом процессора. Вам подвластны регистры x86_64, память RAM и ядро Windows.»</p>
 
           <div class="info-badge-box">
-            <strong style="color: #38bdf8;">📖 Пошаговый процесс каждого урока:</strong>
+            <strong style="color: #38bdf8;">📖 Чистый пошаговый процесс:</strong>
             <ul>
-              <li><strong>Шаг 1: Теория</strong> — фундаментальный разбор памяти, регистров процессора, графов вызова и интерактивных терминов.</li>
-              <li><strong>Шаг 2: Проверочный тест</strong> — один вопрос за раз с подробными объяснениями и случайным порядком вариантов.</li>
-              <li><strong>Шаг 3: Практика в Редакторе</strong> — пишите код с подсветкой синтаксиса, компилируйте реальным GCC/G++ через <code>F5</code>.</li>
+              <li><strong>Теория</strong> — детальный разбор машинного кода, памяти и графов вызовов.</li>
+              <li><strong>Проверочный тест</strong> — один точный вопрос за раз с подробным объяснением.</li>
+              <li><strong>Редактор кода</strong> — реальная компиляция без эмуляций, блокнот для заметок и ИИ-наставник.</li>
             </ul>
           </div>
 
           <button class="btn-modern success" style="padding: 12px; font-size: 14px; justify-content: center;" onclick="launchWorkspace()">
-            🚀 Начать Урок 1: Архитектура ЭВМ и Hello World &gt;&gt;
+            🚀 Начать Урок 1: Архитектура ЭВМ &gt;&gt;
           </button>
         </div>
       </section>
 
-      <!-- SCREEN 3: Modern Workspace -->
+      <!-- FOCUSED WORKSPACE (Clean, no distracting left lesson bar, sequential flow) -->
       <section class="workspace-wrap" id="viewWorkspace" style="display: none;">
-        <!-- Left Sidebar -->
-        <aside class="sidebar-lessons">
-          <div class="sidebar-top">
-            <span class="sidebar-top-title">Программа курса</span>
-            <span id="progressBadge" style="font-size: 11px; color: #34d399; font-weight: 700;">0%</span>
-          </div>
-          <div class="lessons-scroll-list" id="lessonsContainer"></div>
-        </aside>
-
-        <!-- Right Main Lesson Panel -->
-        <section class="lesson-main-pane">
-          <!-- Top Step Bar -->
-          <div class="lesson-step-header">
-            <span style="font-weight: 600; font-size: 13px; color: #f1f5f9;" id="currentLessonTitle">Урок 1</span>
-            
-            <div class="step-pills-bar">
-              <button class="step-pill-btn active" id="pill1" onclick="setStep(1)">1. Теория</button>
-              <button class="step-pill-btn" id="pill2" onclick="setStep(2)">2. Проверочный тест</button>
-              <button class="step-pill-btn" id="pill3" onclick="setStep(3)">3. Практика в коде</button>
-            </div>
+        
+        <!-- Navigation Header with Progress & Next Lesson Button -->
+        <div class="lesson-nav-bar">
+          <div class="lesson-meta-info">
+            <span class="lesson-number-pill" id="lessonCounterPill">Урок 1 из 18</span>
+            <span style="font-weight: 600; font-size: 14px; color: #f1f5f9;" id="currentLessonTitle">Архитектура ЭВМ</span>
           </div>
 
+          <div class="step-pills-bar">
+            <button class="step-pill-btn active" id="pill1" onclick="setStep(1)">1. Теория</button>
+            <button class="step-pill-btn" id="pill2" onclick="setStep(2)">2. Тест</button>
+            <button class="step-pill-btn" id="pill3" onclick="setStep(3)">3. Практика в коде</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="btn-modern" id="btnPrevLesson" onclick="prevLesson()" title="Предыдущий урок">← Назад</button>
+            <button class="btn-modern primary" id="btnNextLesson" onclick="nextLesson()" title="Следующий урок">Следующий урок →</button>
+          </div>
+        </div>
+
+        <div class="deck-container">
           <!-- STAGE 1: Theory View -->
           <div class="theory-viewport" id="stageTheory">
             <div id="theoryBody"></div>
-            <button class="btn-modern primary" style="padding: 10px 20px; font-size: 13px; margin-top: 24px;" onclick="setStep(2)">
-              Перейти к тесту (Шаг 2) &gt;&gt;
-            </button>
+            <div style="margin-top: 28px; text-align: right;">
+              <button class="btn-modern primary" style="padding: 11px 22px; font-size: 13px;" onclick="setStep(2)">
+                Перейти к проверочному тесту (Шаг 2) &gt;&gt;
+              </button>
+            </div>
           </div>
 
           <!-- STAGE 2: Interactive Single-Question Quiz -->
@@ -1078,56 +1034,59 @@
             </div>
           </div>
 
-          <!-- STAGE 3: Editor & Console -->
+          <!-- STAGE 3: Editor & Console & Notes -->
           <div class="editor-stage-wrap" id="stageEditor" style="display: none;">
             <div class="task-bar-modern">
               <span class="task-tag">ЗАДАНИЕ</span>
               <span id="taskText"></span>
               <div style="margin-left: auto; display: flex; gap: 6px;">
                 <button class="btn-modern" onclick="resetCode()" title="Сброс кода">↺ Сброс</button>
-                <button class="btn-modern" onclick="showSolution()" title="Показать решение">💡 Решение</button>
+                <button class="btn-modern" onclick="showSolution()" title="Показать эталонное решение">💡 Решение</button>
                 <button class="btn-modern primary" onclick="compileAndRun()">▶ Запуск (F5)</button>
               </div>
             </div>
 
+            <!-- Native Clean Textarea with Line Numbers -->
             <div class="editor-code-row">
               <div class="editor-lines" id="editorLines">1</div>
-              <div class="editor-wrapper">
-                <pre class="editor-highlight" id="editorHighlight"><code></code></pre>
-                <textarea class="editor-textarea" id="codeEditor" spellcheck="false" placeholder="// Пишите ваш код на C или C++ здесь..."></textarea>
-              </div>
+              <textarea class="editor-textarea" id="codeEditor" spellcheck="false" placeholder="// Пишите ваш код на C или C++ здесь..."></textarea>
             </div>
 
             <div class="dock-console-wrap">
               <div class="dock-tabs-bar">
                 <button class="dock-tab active" id="tabConsole" onclick="switchDock('console')">📟 Терминал вывода / Компилятор</button>
-                <button class="dock-tab" id="tabAi" onclick="switchDock('ai')">🤖 ИИ-Ментор TrainerAI</button>
+                <button class="dock-tab" id="tabNotes" onclick="switchDock('notes')">📝 Мои заметки по уроку</button>
+                <button class="dock-tab" id="tabAi" onclick="switchDock('ai')">🤖 ИИ-Ментор QuantumAI</button>
               </div>
 
               <div class="console-term" id="consoleOutput">
-[TrainerCode C/C++ Subsystem Ready]
+[QuantumCode C/C++ Subsystem Ready]
 GCC 12.2 / G++ 12.2 Active.
-Нажмите '▶ Запуск (F5)' для компиляции и выполнения программы.
+Нажмите '▶ Запуск (F5)' для сборки и исполнения вашей программы.
+              </div>
+
+              <div class="notes-dock-wrap" id="notesDock" style="display: none;">
+                <textarea class="notes-textarea" id="lessonNotesText" placeholder="Здесь вы можете записать свои мысли, адреса памяти, конспекты или шпаргалки по текущему уроку (сохраняется автоматически)..."></textarea>
               </div>
 
               <div class="ai-chat-term" id="aiChatDock" style="display: none;">
                 <div class="ai-msgs-box" id="aiMsgsContainer">
                   <div class="ai-bubble bot">
-<strong>[TrainerAI • Системный наставник]</strong>
-Готов помочь! Я умею анализировать память, находить утечки malloc/free, разыменования NULL и объяснять, как ваш код компилируется в машинный ассемблер (ASM).
+<strong>[QuantumAI • Системный наставник]</strong>
+Готов помочь! Я умею анализировать память, находить синтаксические ошибки, утечки malloc/free и объяснять, как ваш код компилируется в машинный ассемблер (ASM).
                   </div>
                 </div>
                 <div class="ai-input-row">
-                  <input type="text" class="input-modern" style="flex: 1;" id="aiPrompt" placeholder="Спросить ИИ (например: почему ReadProcessMemory возвращает 0?)...">
+                  <input type="text" class="input-modern" style="flex: 1;" id="aiPrompt" placeholder="Спросить ИИ (например: почему упал компилятор?)...">
                   <button class="btn-modern primary" onclick="sendAi()">Спросить</button>
-                  <button class="btn-modern" onclick="askAi('Найди утечки памяти и ошибки в коде')">🔍 Баги</button>
+                  <button class="btn-modern" onclick="askAi('Найди ошибки в коде и объясни')">🔍 Баги</button>
                   <button class="btn-modern" onclick="askAi('Объясни код урока')">📖 Объяснить</button>
                 </div>
               </div>
             </div>
           </div>
 
-        </section>
+        </div>
       </section>
 
     </main>
@@ -1138,8 +1097,8 @@ GCC 12.2 / G++ 12.2 Active.
         <span style="color: #34d399;">●</span>
         <span id="footerLesson">Урок 1/18: Архитектура ЭВМ</span>
       </div>
-      <div class="footer-pill">GCC 12.2 / MSVC Ready</div>
-      <div class="footer-pill">TrainerAI Online</div>
+      <div class="footer-pill">GCC 12.2 / Native x64 Ready</div>
+      <div class="footer-pill">QuantumAI Engine Online</div>
       <div class="footer-pill" style="margin-left: auto;" id="footerUser">Ученик: Александр</div>
     </footer>
   </div>
@@ -1152,8 +1111,8 @@ GCC 12.2 / G++ 12.2 Active.
         <button class="btn-modern" onclick="closeTypesModal()">✕</button>
       </div>
       <div style="max-height: 420px; overflow-y: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 12px;" border="1" cellpadding="7" bordercolor="rgba(255,255,255,0.08)">
-          <thead style="background: rgba(255,255,255,0.05); color: #38bdf8;">
+        <table class="modern-table" border="1" cellpadding="7" bordercolor="rgba(255,255,255,0.08)">
+          <thead>
             <tr>
               <th>Тип</th>
               <th>x86</th>
@@ -1172,11 +1131,31 @@ GCC 12.2 / G++ 12.2 Active.
     </div>
   </div>
 
+  <!-- WinAPI Cheat Modal -->
+  <div class="modal-overlay-dark" id="cheatModal">
+    <div class="modal-content-glass">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px;">
+        <h3 style="font-size: 16px; color: #c084fc;">📖 Системный справочник функций Windows API (Win32)</h3>
+        <button class="btn-modern" onclick="closeCheatModal()">✕</button>
+      </div>
+      <div style="max-height: 420px; overflow-y: auto; font-size: 12.5px; line-height: 1.6;">
+        <p style="margin-bottom: 8px;"><strong style="color: #38bdf8;">OpenProcess</strong>: Получение дескриптора процесса по его PID.<br><code>HANDLE OpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwProcessId);</code></p>
+        <p style="margin-bottom: 8px;"><strong style="color: #38bdf8;">ReadProcessMemory</strong>: Чтение байт из виртуальной памяти другого процесса.<br><code>BOOL ReadProcessMemory(HANDLE hProcess, LPCVOID lpBaseAddress, LPVOID lpBuffer, SIZE_T nSize, SIZE_T *lpNumberOfBytesRead);</code></p>
+        <p style="margin-bottom: 8px;"><strong style="color: #38bdf8;">WriteProcessMemory</strong>: Запись байт в память другого процесса.<br><code>BOOL WriteProcessMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPCVOID lpBuffer, SIZE_T nSize, SIZE_T *lpNumberOfBytesWritten);</code></p>
+        <p style="margin-bottom: 8px;"><strong style="color: #38bdf8;">VirtualProtectEx</strong>: Смена прав доступа страницы памяти (PAGE_EXECUTE_READWRITE для NOP-патчинга).<br><code>BOOL VirtualProtectEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect);</code></p>
+        <p style="margin-bottom: 8px;"><strong style="color: #38bdf8;">CreateToolhelp32Snapshot</strong>: Создание снимка запущенных процессов и модулей.<br><code>HANDLE CreateToolhelp32Snapshot(DWORD dwFlags, DWORD th32ProcessID);</code></p>
+      </div>
+      <div style="text-align: right;">
+        <button class="btn-modern primary" onclick="closeCheatModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Global Application State
+    // Global State
     let gLessons = [];
     let gCurIdx = 0;
-    let gCurStep = 1; // 1: Theory, 2: Quiz, 3: Editor
+    let gCurStep = 1;
     let gQuizQuestionIdx = 0;
 
     let gUserData = {
@@ -1196,11 +1175,11 @@ GCC 12.2 / G++ 12.2 Active.
     const stageEditor = document.getElementById('stageEditor');
 
     const elEditor = document.getElementById('codeEditor');
-    const elHighlight = document.getElementById('editorHighlight');
     const elLines = document.getElementById('editorLines');
     const elConsole = document.getElementById('consoleOutput');
     const elAiMsgs = document.getElementById('aiMsgsContainer');
     const elAiPrompt = document.getElementById('aiPrompt');
+    const elNotes = document.getElementById('lessonNotesText');
 
     window.addEventListener('DOMContentLoaded', async () => {
       setupEditor();
@@ -1222,49 +1201,11 @@ GCC 12.2 / G++ 12.2 Active.
       }
     });
 
-    // Real-Time C/C++ Syntax Highlighting Engine
-    function highlightCCode(code) {
-      if (!code) return '';
-      // Escape HTML entities first
-      let html = escapeHtml(code);
-
-      // Comments: // ... and /* ... */
-      html = html.replace(/(\/\/[^\n]*)/g, '<span class="tok-com">$1</span>');
-      html = html.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok-com">$1</span>');
-
-      // Preprocessor directives: #include, #define, #pragma, etc.
-      html = html.replace(/(^\s*#\s*[a-zA-Z_][a-zA-Z0-9_]*)/gm, '<span class="tok-pp">$1</span>');
-
-      // Strings: "..."
-      html = html.replace(/(&quot;[^\n&]*?&quot;)/g, '<span class="tok-str">$1</span>');
-
-      // Keywords: return, if, else, for, while, const, sizeof, struct, class, etc.
-      html = html.replace(/\b(return|if|else|for|while|do|switch|case|break|continue|default|sizeof|struct|class|public|private|protected|virtual|override|namespace|using|new|delete|const|static|volatile|extern|inline|typedef)\b/g, '<span class="tok-kw">$1</span>');
-
-      // Types: int, char, void, double, float, size_t, HANDLE, DWORD, LPVOID, etc.
-      html = html.replace(/\b(int|char|void|double|float|short|long|unsigned|signed|size_t|uint8_t|uint16_t|uint32_t|uint64_t|int8_t|int16_t|int32_t|int64_t|uintptr_t|intptr_t|HANDLE|DWORD|LPVOID|LPCVOID|BOOL|HWND|HINSTANCE|SIZE_T|BYTE|WORD)\b/g, '<span class="tok-type">$1</span>');
-
-      // Numbers: hex (0x...) or decimal
-      html = html.replace(/\b(0x[0-9a-fA-F]+|\d+)\b/g, '<span class="tok-num">$1</span>');
-
-      // Standard and WinAPI function calls
-      html = html.replace(/\b(printf|scanf|strlen|strcpy|memcpy|memset|malloc|free|fopen|fclose|fread|fwrite|OpenProcess|ReadProcessMemory|WriteProcessMemory|VirtualAllocEx|VirtualProtectEx|CreateRemoteThread|CloseHandle|GetProcAddress|LoadLibraryA|CreateToolhelp32Snapshot|Process32First|Process32Next)\b(?=\s*\()/g, '<span class="tok-fn">$1</span>');
-
-      return html;
-    }
-
-    // Editor: Enter key, Tab key, Line Numbers, Synced Highlighting
+    // Clean Native Editor with Real Line Numbers
     function setupEditor() {
-      const updateAll = () => {
-        updateLineNumbers();
-        elHighlight.querySelector('code').innerHTML = highlightCCode(elEditor.value) + '\n ';
-      };
-
-      elEditor.addEventListener('input', updateAll);
+      elEditor.addEventListener('input', updateLineNumbers);
       elEditor.addEventListener('scroll', () => {
         elLines.scrollTop = elEditor.scrollTop;
-        elHighlight.scrollTop = elEditor.scrollTop;
-        elHighlight.scrollLeft = elEditor.scrollLeft;
       });
 
       elEditor.addEventListener('keydown', (e) => {
@@ -1274,13 +1215,20 @@ GCC 12.2 / G++ 12.2 Active.
           const end = elEditor.selectionEnd;
           elEditor.value = elEditor.value.substring(0, s) + '    ' + elEditor.value.substring(end);
           elEditor.selectionStart = elEditor.selectionEnd = s + 4;
-          updateAll();
+          updateLineNumbers();
         } else if (e.key === 'F5') {
           e.preventDefault();
           compileAndRun();
         } else if (e.key === 'F1') {
           e.preventDefault();
           openTypesModal();
+        }
+      });
+
+      // Notes autosave
+      elNotes.addEventListener('input', () => {
+        if (gLessons[gCurIdx]) {
+          localStorage.setItem(`qc_notes_${gLessons[gCurIdx].id}`, elNotes.value);
         }
       });
     }
@@ -1316,53 +1264,10 @@ GCC 12.2 / G++ 12.2 Active.
       viewWorkspace.style.display = 'flex';
 
       document.getElementById('footerUser').textContent = `Ученик: ${gUserData.name} (${gUserData.level})`;
-      renderSidebar();
 
       if (gLessons.length > 0) {
         loadLesson(gCurIdx);
       }
-    }
-
-    // Render Sidebar
-    function renderSidebar() {
-      const list = document.getElementById('lessonsContainer');
-      list.innerHTML = '';
-
-      const doneCount = gUserData.completed.length;
-      const pct = Math.round((doneCount / Math.max(gLessons.length, 1)) * 100);
-      document.getElementById('progressBadge').textContent = `${pct}%`;
-
-      gLessons.forEach((les, idx) => {
-        const isDone = gUserData.completed.includes(les.id);
-        const isUnlocked = gUserData.unlocked.includes(les.id) || isDone;
-
-        const row = document.createElement('div');
-        row.className = `lesson-item-row ${idx === gCurIdx ? 'active' : ''} ${!isUnlocked ? 'locked' : ''}`;
-
-        let icon = '🔒';
-        if (isDone) icon = '🟢';
-        else if (isUnlocked) icon = '⚡';
-
-        row.innerHTML = `
-          <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${icon} ${les.title}</span>
-          <span style="font-size: 10px; color: #38bdf8; font-family: monospace;">${les.lang}</span>
-        `;
-
-        if (isUnlocked) {
-          row.onclick = () => loadLesson(idx);
-        }
-
-        list.appendChild(row);
-      });
-    }
-
-    function unlockAllLessons() {
-      gLessons.forEach(l => {
-        if (!gUserData.unlocked.includes(l.id)) gUserData.unlocked.push(l.id);
-      });
-      localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
-      renderSidebar();
-      alert('Все уроки курса разблокированы!');
     }
 
     // Load Lesson
@@ -1371,6 +1276,7 @@ GCC 12.2 / G++ 12.2 Active.
       gCurIdx = idx;
       const les = gLessons[idx];
 
+      document.getElementById('lessonCounterPill').textContent = `Урок ${les.id} из ${gLessons.length}`;
       document.getElementById('currentLessonTitle').textContent = `${les.title} (${les.lang})`;
       document.getElementById('footerLesson').textContent = `Урок ${les.id}/${gLessons.length}: ${les.title}`;
       document.getElementById('taskText').textContent = les.task;
@@ -1378,21 +1284,38 @@ GCC 12.2 / G++ 12.2 Active.
       // Stage 1: Theory
       document.getElementById('theoryBody').innerHTML = les.theory;
 
-      // Stage 2: Reset Quiz state to Question 0
+      // Stage 2: Quiz
       gQuizQuestionIdx = 0;
       renderCurrentQuizQuestion();
 
-      // Stage 3: Editor
+      // Stage 3: Clean Initial Code
       const saved = localStorage.getItem(`tc_code_${les.id}`);
       elEditor.value = saved || les.initialCode;
       updateLineNumbers();
-      elHighlight.querySelector('code').innerHTML = highlightCCode(elEditor.value) + '\n ';
+
+      // Notes
+      elNotes.value = localStorage.getItem(`qc_notes_${les.id}`) || '';
+
+      // Update Navigation Buttons State
+      document.getElementById('btnPrevLesson').disabled = (idx === 0);
+      document.getElementById('btnPrevLesson').style.opacity = (idx === 0) ? '0.4' : '1';
 
       setStep(1);
-      renderSidebar();
     }
 
-    // Stepper (1 -> 2 -> 3)
+    function prevLesson() {
+      if (gCurIdx > 0) loadLesson(gCurIdx - 1);
+    }
+
+    function nextLesson() {
+      if (gCurIdx + 1 < gLessons.length) {
+        loadLesson(gCurIdx + 1);
+      } else {
+        alert('Поздравляем! Вы успешно завершили все уроки академии!');
+      }
+    }
+
+    // Stepper
     function setStep(step) {
       gCurStep = step;
 
@@ -1417,7 +1340,7 @@ GCC 12.2 / G++ 12.2 Active.
       }
     }
 
-    // Sequential Quiz Engine with STRICTLY RANDOMIZED Options
+    // Sequential Quiz Engine with Strictly Randomized Options
     function renderCurrentQuizQuestion() {
       const les = gLessons[gCurIdx];
       const quizzes = les.quizzes || [];
@@ -1433,7 +1356,7 @@ GCC 12.2 / G++ 12.2 Active.
       document.getElementById('btnNextQuiz').style.display = 'none';
       document.getElementById('btnProceedEditor').style.display = 'none';
 
-      // RANDOMIZE options order so the correct answer is NEVER always the first one!
+      // RANDOMIZE options order so the correct answer is NEVER always first!
       const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
 
       shuffledOptions.forEach(opt => {
@@ -1456,7 +1379,6 @@ GCC 12.2 / G++ 12.2 Active.
         expBox.className = 'quiz-explanation-box success';
         expBox.innerHTML = `<strong>🎉 Блестяще! Верно!</strong><br>${escapeHtml(opt.explanation)}`;
 
-        // Check if there are more questions in this lesson
         if (gQuizQuestionIdx + 1 < totalCount) {
           document.getElementById('btnNextQuiz').style.display = 'inline-flex';
         } else {
@@ -1478,7 +1400,7 @@ GCC 12.2 / G++ 12.2 Active.
       renderCurrentQuizQuestion();
     }
 
-    // Compile & Run Code
+    // Real Server Compilation & Run
     async function compileAndRun() {
       setStep(3);
       switchDock('console');
@@ -1497,7 +1419,7 @@ GCC 12.2 / G++ 12.2 Active.
         const data = await res.json();
 
         if (!data.success && data.stage === 'compilation') {
-          elConsole.textContent += `❌ ОШИБКА КОМПИЛЯЦИИ (Код ${data.exitCode}):\n${data.stderr}\n\nСборка прервана (${data.timeMs} мс).\nНажмите кнопку 'Баги' для анализа через TrainerAI!`;
+          elConsole.textContent += `❌ ОШИБКА КОМПИЛЯЦИИ (Код ${data.exitCode}):\n${data.stderr}\n\nСборка прервана (${data.timeMs} мс).\nНажмите кнопку 'Баги' для анализа через QuantumAI!`;
           return;
         }
 
@@ -1511,20 +1433,12 @@ GCC 12.2 / G++ 12.2 Active.
         elConsole.textContent += `--------------------------------------------------\nКод завершения: ${data.exitCode}\n`;
 
         if (data.taskCompleted) {
-          elConsole.textContent += `\n🎉 ПОЗДРАВЛЯЕМ! Задание урока выполнено на 100%!\nРезультат программы совпал с ожидаемым.\nСледующий урок разблокирован!\n`;
+          elConsole.textContent += `\n🎉 ПОЗДРАВЛЯЕМ! Задание урока выполнено на 100%!\nРезультат программы совпал с ожидаемым.\nКнопка 'Следующий урок' готова!\n`;
 
           if (!gUserData.completed.includes(les.id)) {
             gUserData.completed.push(les.id);
             localStorage.setItem('tc_completed', JSON.stringify(gUserData.completed));
           }
-
-          const nextId = les.id + 1;
-          if (nextId <= gLessons.length && !gUserData.unlocked.includes(nextId)) {
-            gUserData.unlocked.push(nextId);
-            localStorage.setItem('tc_unlocked', JSON.stringify(gUserData.unlocked));
-          }
-
-          renderSidebar();
         }
       } catch (err) {
         elConsole.textContent += `\nОшибка выполнения: ${err.message}\n`;
@@ -1536,7 +1450,6 @@ GCC 12.2 / G++ 12.2 Active.
       if (confirm('Сбросить код к исходному шаблону?')) {
         elEditor.value = gLessons[gCurIdx].initialCode;
         updateLineNumbers();
-        elHighlight.querySelector('code').innerHTML = highlightCCode(elEditor.value) + '\n ';
       }
     }
 
@@ -1544,7 +1457,6 @@ GCC 12.2 / G++ 12.2 Active.
       if (confirm('Показать эталонное решение?')) {
         elEditor.value = gLessons[gCurIdx].solution;
         updateLineNumbers();
-        elHighlight.querySelector('code').innerHTML = highlightCCode(elEditor.value) + '\n ';
       }
     }
 
@@ -1557,16 +1469,23 @@ GCC 12.2 / G++ 12.2 Active.
 
     // Dock Tabs
     function switchDock(tab) {
+      document.getElementById('tabConsole').classList.remove('active');
+      document.getElementById('tabNotes').classList.remove('active');
+      document.getElementById('tabAi').classList.remove('active');
+
+      document.getElementById('consoleOutput').style.display = 'none';
+      document.getElementById('notesDock').style.display = 'none';
+      document.getElementById('aiChatDock').style.display = 'none';
+
       if (tab === 'console') {
         document.getElementById('tabConsole').classList.add('active');
-        document.getElementById('tabAi').classList.remove('active');
         document.getElementById('consoleOutput').style.display = 'block';
-        document.getElementById('aiChatDock').style.display = 'none';
+      } else if (tab === 'notes') {
+        document.getElementById('tabNotes').classList.add('active');
+        document.getElementById('notesDock').style.display = 'flex';
       } else {
         document.getElementById('tabAi').classList.add('active');
-        document.getElementById('tabConsole').classList.remove('active');
         document.getElementById('aiChatDock').style.display = 'flex';
-        document.getElementById('consoleOutput').style.display = 'none';
         elAiPrompt.focus();
       }
     }
@@ -1589,7 +1508,7 @@ GCC 12.2 / G++ 12.2 Active.
 
       const b = document.createElement('div');
       b.className = 'ai-bubble bot';
-      b.innerHTML = `<strong>🤖 TrainerAI:</strong> Анализирую код...`;
+      b.innerHTML = `<strong>🤖 QuantumAI:</strong> Анализирую код...`;
       elAiMsgs.appendChild(b);
       elAiMsgs.scrollTop = elAiMsgs.scrollHeight;
 
@@ -1604,9 +1523,9 @@ GCC 12.2 / G++ 12.2 Active.
           })
         });
         const data = await res.json();
-        b.innerHTML = `<strong>🤖 TrainerAI:</strong>\n${escapeHtml(data.response)}`;
+        b.innerHTML = `<strong>🤖 QuantumAI:</strong>\n${escapeHtml(data.response)}`;
       } catch (e) {
-        b.innerHTML = `<strong>🤖 TrainerAI:</strong> Ошибка связи: ${e.message}`;
+        b.innerHTML = `<strong>🤖 QuantumAI:</strong> Ошибка связи: ${e.message}`;
       }
       elAiMsgs.scrollTop = elAiMsgs.scrollHeight;
     }
@@ -1635,6 +1554,9 @@ GCC 12.2 / G++ 12.2 Active.
 
     function openTypesModal() { document.getElementById('typesModal').style.display = 'flex'; }
     function closeTypesModal() { document.getElementById('typesModal').style.display = 'none'; }
+
+    function openCheatModal() { document.getElementById('cheatModal').style.display = 'flex'; }
+    function closeCheatModal() { document.getElementById('cheatModal').style.display = 'none'; }
 
     function downloadExe() {
       window.location.href = '/api/download-exe';
